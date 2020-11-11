@@ -15,8 +15,9 @@ namespace BL.Models
 
         public event EventHandler<EventArgs> ReadyToContinue;
 
-        public async void StartWaitingInStation(int delayInMS)
+        public async Task StartWaitingInStationAsync(int delayInMS)
         {
+            if (delayInMS < 0) throw new ArgumentOutOfRangeException(nameof(delayInMS), "Delay time cannot be negative!");
             await Task.Delay(delayInMS);
             ReadyToContinue?.Invoke(this, EventArgs.Empty);
         }
