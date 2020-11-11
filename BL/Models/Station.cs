@@ -34,7 +34,7 @@ namespace BL.Models
         {
             if (CurrentFlight != null) return false;
             CurrentFlight = flight;
-            CurrentFlight.StartWaitingInStation(WaitingTimeMS);
+            CurrentFlight.StartWaitingInStationAsync(WaitingTimeMS);
             CurrentFlight.ReadyToContinue += CurrentFlight_ReadyToContinue;
             return true;
         }
