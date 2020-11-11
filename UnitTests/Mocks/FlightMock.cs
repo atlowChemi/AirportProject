@@ -3,6 +3,7 @@ using Common.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace UnitTests.Mocks
 {
@@ -14,9 +15,9 @@ namespace UnitTests.Mocks
 
         public event EventHandler<EventArgs> ReadyToContinue;
 
-        public void StartWaitingInStation(int delayInMS)
+        public Task StartWaitingInStationAsync(int delayInMS)
         {
-            
+            return Task.Run(() => { });
         }
         public void StopWaiting()
         {
