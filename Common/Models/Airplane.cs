@@ -1,29 +1,20 @@
 ﻿using Common.Enums;
-using Common.Interfaces;
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace Common.Models
 {
-    class Airplane : IAirplane
+    public class Airplane
     {
         public int Id { get; set; }
-        public AirplaneDirection Direction { get; set; }
+        public string AirLine { get; set; }
+        public virtual ICollection<Flight> Flights { get; set; }
         [NotMapped]
-        private readonly Random random;
-        public event EventHandler ReadyToContinue;
-
-        public Airplane()
-        {
-            random = new Random(DateTime.UtcNow.Millisecond);
-        }
-
-        public async void StartWaitingInStation()
-        {
-            await Task.Delay(random.Next(1000 * 5, 1000 * 60));
-            ReadyToContinue?.Invoke(this, null);
-        }
+        public IEnumerable<Flight> Takeoffs => Flights?.Where(f => f.Direction == FlightDirection.Takeoff);
+        [NotMapped]
+        public IEnumerable<Flight> Landings => Flights?.Where(f => f.Direction == FlightDirection.Landing);
     }
 }
