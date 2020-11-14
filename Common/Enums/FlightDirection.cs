@@ -1,6 +1,6 @@
 ﻿namespace Common.Enums
 {
-    public enum AirplaneDirection
+    public enum FlightDirection
     {
         Landing,
         Takeoff
