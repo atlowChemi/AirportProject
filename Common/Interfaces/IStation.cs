@@ -2,11 +2,13 @@
 
 namespace Common.Interfaces
 {
-    public interface IStation : IAirplaneHandler
+    public interface IStation : IFlightHandler
     {
-        public int Id { get; set; }
-        public IAirplane Airplane { get; }
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public IFlight CurrentFlight { get; }
         public bool IsStationAvailable { get; }
-        public event EventHandler AvailabiltyChange;
+        public int WaitingTimeMS { get; }
+        public event EventHandler<EventArgs> AvailabiltyChange;
     }
 }

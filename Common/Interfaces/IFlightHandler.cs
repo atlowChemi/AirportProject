@@ -4,11 +4,10 @@ using System.Text;
 
 namespace Common.Interfaces
 {
-    public interface IAirplaneHandler
+    public interface IFlightHandler
     {
-        public string Name { get; set; }
         ICollection<IStation> TakeoffStations { get; }
         ICollection<IStation> LandingStations { get; }
-        void PlaneArrived(IAirplane airplane);
+        bool FlightArrived(IFlight flight);
     }
 }

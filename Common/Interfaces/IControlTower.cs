@@ -2,9 +2,8 @@
 
 namespace Common.Interfaces
 {
-    interface IKontrollturm : IAirplaneHandler
+    public interface IControlTower : IFlightHandler
     {
-        List<IAirplane> AirplanesInAir { get; }
         Queue<IAirplane> AirplanesWaitingToLand { get; }
         Queue<IAirplane> AirplanesWaitingToTakeoff { get; }
     }
