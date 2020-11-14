@@ -2,10 +2,10 @@ using BL.Models;
 using Common.Enums;
 using Common.Interfaces;
 using System;
-using UnitTests.Mocks;
+using UnitTests.BL.Mocks;
 using Xunit;
 
-namespace UnitTests
+namespace UnitTests.BL
 {
     public class StationTests
     {
