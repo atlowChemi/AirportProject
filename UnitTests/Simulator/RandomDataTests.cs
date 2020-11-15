@@ -15,13 +15,6 @@ namespace UnitTests.Simulator
             Assert.ThrowsAsync<ArgumentOutOfRangeException>("minSeconds", () => randomDataService.RandomDelay(-1, 0));
         }
         [Fact]
-        public void RandomDelayShouldThrowIfMaxIsNegative()
-        {
-            IRandomDataService randomDataService = new RandomDataService();
-            
-            Assert.ThrowsAsync<ArgumentOutOfRangeException>("maxSeconds",() => randomDataService.RandomDelay(0, -2));
-        }
-        [Fact]
         public void RandomDelayShouldThrowIfMaxIsSmallerThanMin()
         {
             IRandomDataService randomDataService = new RandomDataService();
