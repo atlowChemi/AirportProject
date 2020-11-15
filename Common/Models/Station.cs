@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Common.Models
@@ -8,9 +9,10 @@ namespace Common.Models
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public Guid CurrentFlightId { get; set; }
-        public Flight CurrentFlight { get; set; }
-        public virtual ICollection<Station> TakeoffStations { get; set; }
-        public virtual ICollection<Station> LandingStations { get; set; }
+        public virtual Guid? CurrentFlightId { get; set; }
+        public virtual Flight CurrentFlight { get; set; }
+
+        public virtual ICollection<StationRelation> ParentStations { get; set; }
+        public virtual ICollection<StationRelation> ChildrenStations { get; set; }
     }
 }
