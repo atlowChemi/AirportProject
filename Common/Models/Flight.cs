@@ -14,6 +14,9 @@ namespace Common.Models
         public FlightDirection Direction { get; set; }
         public virtual int AirplaneId { get; set; }
         public virtual Airplane Airplane { get; set; }
+        public virtual Guid? ControlTowerId { get; set; }
+        public virtual ControlTower ControlTower { get; set; }
+
         public virtual ICollection<FlightHistory> History { get; set; }
     }
 }
