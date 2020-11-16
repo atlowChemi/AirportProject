@@ -24,7 +24,7 @@ namespace Simulator.Services
         public async Task<Flight> CreateFlight(Flight flight)
         {
             if (flight == null) throw new ArgumentNullException(nameof(flight), "The flight must not be null!");
-            return await InvokeAsync<Flight>("CreateFlight", flight);
+            return await InvokeAsync<Flight>("FlightArrival", flight);
         }
 
         public async Task<ICollection<Airplane>> GetAirplanes()
