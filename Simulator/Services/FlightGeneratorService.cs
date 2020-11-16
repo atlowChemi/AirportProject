@@ -48,7 +48,7 @@ namespace Simulator.Services
 
         private (string from, string to) PickRandomTarget(FlightDirection direction)
         {
-            int randomIndex = randomDataService.RandomNumber(max: airports.Length - 1);
+            int randomIndex = randomDataService.RandomNumber(max: airports.Length);
             if (direction == FlightDirection.Landing)
             {
                 return (airports[randomIndex], "TLV");
