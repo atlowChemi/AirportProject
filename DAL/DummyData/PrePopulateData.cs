@@ -133,7 +133,7 @@ namespace DAL.DummyData
 
         public static ControlTower[] ControlTowers =
         {
-            new ControlTower{ Id= guids[2][0] },
+            new ControlTower{ Id= guids[2][0], Name = "TLV" },
         };
 
         public static StationControlTowerRelation[] StationControlTowerRelations =

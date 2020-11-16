@@ -8,6 +8,7 @@ namespace Common.Models
     public class ControlTower
     {
         public Guid Id { get; set; }
+        public string Name { get; set; }
 
         public virtual ICollection<StationControlTowerRelation> FirstStations { get; set; }
 
