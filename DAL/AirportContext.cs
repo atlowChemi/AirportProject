@@ -1,8 +1,6 @@
 ﻿using Common.Models;
 using DAL.DummyData;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.IO;
 
 namespace DAL
 {
@@ -18,6 +16,7 @@ namespace DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<ControlTower>().HasIndex(ct => ct.Name).IsUnique();
             modelBuilder.Entity<StationRelation>(entity =>
             {
                 entity.HasKey(sr => new { sr.StationToId, sr.StationFromId, sr.Direction });

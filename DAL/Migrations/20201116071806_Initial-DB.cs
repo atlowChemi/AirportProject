@@ -157,6 +157,12 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_ControlTowers_Name",
+                table: "ControlTowers",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_FlightHistories_FlightId",
                 table: "FlightHistories",
                 column: "FlightId");
