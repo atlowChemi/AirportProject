@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(AirportContext))]
-    [Migration("20201116071806_Initial-DB")]
+    [Migration("20201116092417_Initial-DB")]
     partial class InitialDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -231,13 +231,13 @@ namespace DAL.Migrations
             modelBuilder.Entity("Common.Models.StationRelation", b =>
                 {
                     b.HasOne("Common.Models.Station", "StationFrom")
-                        .WithMany("ParentStations")
+                        .WithMany("ChildrenStations")
                         .HasForeignKey("StationFromId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Common.Models.Station", "StationTo")
-                        .WithMany("ChildrenStations")
+                        .WithMany("ParentStations")
                         .HasForeignKey("StationToId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

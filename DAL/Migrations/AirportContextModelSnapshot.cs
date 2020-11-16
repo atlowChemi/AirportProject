@@ -96,7 +96,7 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("e25df7f2-f08c-4b23-b479-4ede7f1d92b4"),
+                            Id = new Guid("f0ca5a36-02c4-4e74-820e-eeed20605191"),
                             Name = "TLV"
                         });
                 });
@@ -133,7 +133,7 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a7de0043-fbf5-44e3-bcfe-7610d0ad49cc"),
+                            Id = new Guid("62b120ef-33e2-4190-b796-c73427933f0e"),
                             AirplaneId = 1,
                             Direction = 0,
                             From = "JFK",
@@ -141,7 +141,7 @@ namespace DAL.Migrations
                         },
                         new
                         {
-                            Id = new Guid("00ad3e68-9e10-46da-96a8-3f7ac3332483"),
+                            Id = new Guid("5358068e-0385-4753-90dc-12d0461c04d4"),
                             AirplaneId = 2,
                             Direction = 0,
                             From = "IST",
@@ -149,7 +149,7 @@ namespace DAL.Migrations
                         },
                         new
                         {
-                            Id = new Guid("3abf2fd5-c083-42a0-bc3e-f36bf8049271"),
+                            Id = new Guid("b7cf621c-31c7-4c15-8d6f-7fbd60c7cf95"),
                             AirplaneId = 3,
                             Direction = 0,
                             From = "SAW",
@@ -157,16 +157,16 @@ namespace DAL.Migrations
                         },
                         new
                         {
-                            Id = new Guid("8fbea07d-77fb-4e51-b83e-a69eda4f5038"),
+                            Id = new Guid("dfd8b75c-b624-4a30-8d6e-c77afd746201"),
                             AirplaneId = 4,
-                            ControlTowerId = new Guid("e25df7f2-f08c-4b23-b479-4ede7f1d92b4"),
+                            ControlTowerId = new Guid("f0ca5a36-02c4-4e74-820e-eeed20605191"),
                             Direction = 0,
                             From = "STN",
                             To = "TLV"
                         },
                         new
                         {
-                            Id = new Guid("7f18e7fc-70cc-4394-b505-f7192710f397"),
+                            Id = new Guid("afedcee1-1c84-4a84-8391-e8652f5a38ed"),
                             AirplaneId = 1,
                             Direction = 1,
                             From = "TLV",
@@ -174,7 +174,7 @@ namespace DAL.Migrations
                         },
                         new
                         {
-                            Id = new Guid("791b2552-05d9-47a7-95ac-081f8d9a4418"),
+                            Id = new Guid("7f18b05f-4117-48f1-8263-04f19255fe8c"),
                             AirplaneId = 2,
                             Direction = 1,
                             From = "TLV",
@@ -211,153 +211,153 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("44539f4b-3a81-40f7-8243-0546e694707b"),
+                            Id = new Guid("520155bb-706f-4a20-9e65-196350e11ae4"),
                             EnterStationTime = new DateTime(2020, 11, 15, 4, 18, 30, 0, DateTimeKind.Unspecified),
-                            FlightId = new Guid("a7de0043-fbf5-44e3-bcfe-7610d0ad49cc"),
+                            FlightId = new Guid("62b120ef-33e2-4190-b796-c73427933f0e"),
                             LeaveStationTime = new DateTime(2020, 11, 15, 4, 22, 14, 0, DateTimeKind.Unspecified),
-                            StationId = new Guid("6acecce8-1ab7-42e6-8ec0-deb96ad77008")
+                            StationId = new Guid("bf14e8cb-4fee-4709-bba6-f398e0ad44e0")
                         },
                         new
                         {
-                            Id = new Guid("9fc78eb4-d6fb-4bb1-b794-751ad6ac1289"),
+                            Id = new Guid("1b0db67e-aadd-4c9d-813d-04857fcc6207"),
                             EnterStationTime = new DateTime(2020, 11, 15, 4, 22, 14, 0, DateTimeKind.Unspecified),
-                            FlightId = new Guid("a7de0043-fbf5-44e3-bcfe-7610d0ad49cc"),
+                            FlightId = new Guid("62b120ef-33e2-4190-b796-c73427933f0e"),
                             LeaveStationTime = new DateTime(2020, 11, 15, 4, 23, 7, 0, DateTimeKind.Unspecified),
-                            StationId = new Guid("20df2404-6a0b-4237-b1a5-228ea7120355")
+                            StationId = new Guid("fce398cc-0d39-4292-99b8-b84bc5144f34")
                         },
                         new
                         {
-                            Id = new Guid("7ad1d42e-82b8-439c-bc93-4608c999d1e4"),
+                            Id = new Guid("068f2bae-b304-4b54-8398-f776b278238a"),
                             EnterStationTime = new DateTime(2020, 11, 15, 4, 23, 7, 0, DateTimeKind.Unspecified),
-                            FlightId = new Guid("a7de0043-fbf5-44e3-bcfe-7610d0ad49cc"),
+                            FlightId = new Guid("62b120ef-33e2-4190-b796-c73427933f0e"),
                             LeaveStationTime = new DateTime(2020, 11, 15, 4, 26, 38, 0, DateTimeKind.Unspecified),
-                            StationId = new Guid("9ba75bc1-7cbc-44c4-ade9-1c8eb7b5ab9d")
+                            StationId = new Guid("1a00ce5a-8a1c-44f1-846d-335250f9d3dd")
                         },
                         new
                         {
-                            Id = new Guid("8af01802-88fa-48d1-9728-cd1b41bbd073"),
+                            Id = new Guid("163e5855-813a-43c8-8a49-17c2cc045f57"),
                             EnterStationTime = new DateTime(2020, 11, 15, 4, 26, 38, 0, DateTimeKind.Unspecified),
-                            FlightId = new Guid("a7de0043-fbf5-44e3-bcfe-7610d0ad49cc"),
+                            FlightId = new Guid("62b120ef-33e2-4190-b796-c73427933f0e"),
                             LeaveStationTime = new DateTime(2020, 11, 15, 4, 27, 20, 0, DateTimeKind.Unspecified),
-                            StationId = new Guid("89214a22-3793-4e62-8f43-efa4512e7045")
+                            StationId = new Guid("619c1cef-6380-4d84-a3a5-a426526c2aee")
                         },
                         new
                         {
-                            Id = new Guid("4531e577-fe21-4243-987c-be69984adc54"),
+                            Id = new Guid("26aa3702-2d8c-4958-8526-6b12707e59f1"),
                             EnterStationTime = new DateTime(2020, 11, 15, 4, 24, 48, 0, DateTimeKind.Unspecified),
-                            FlightId = new Guid("00ad3e68-9e10-46da-96a8-3f7ac3332483"),
+                            FlightId = new Guid("5358068e-0385-4753-90dc-12d0461c04d4"),
                             LeaveStationTime = new DateTime(2020, 11, 15, 4, 25, 31, 0, DateTimeKind.Unspecified),
-                            StationId = new Guid("6acecce8-1ab7-42e6-8ec0-deb96ad77008")
+                            StationId = new Guid("bf14e8cb-4fee-4709-bba6-f398e0ad44e0")
                         },
                         new
                         {
-                            Id = new Guid("2b03cf38-a107-48d8-8d82-b16f013267de"),
+                            Id = new Guid("0b93fe0c-7b08-43fa-af91-3f8ec703d78f"),
                             EnterStationTime = new DateTime(2020, 11, 15, 4, 25, 31, 0, DateTimeKind.Unspecified),
-                            FlightId = new Guid("00ad3e68-9e10-46da-96a8-3f7ac3332483"),
+                            FlightId = new Guid("5358068e-0385-4753-90dc-12d0461c04d4"),
                             LeaveStationTime = new DateTime(2020, 11, 15, 4, 30, 1, 0, DateTimeKind.Unspecified),
-                            StationId = new Guid("73c1cdd7-f7d6-411f-a4d8-f42ba4dca73c")
+                            StationId = new Guid("a0d07c8d-91e8-4382-b004-f14c15b7b9b2")
                         },
                         new
                         {
-                            Id = new Guid("66c8cdce-0270-4de5-ab60-014acb44df52"),
+                            Id = new Guid("37cf10bf-e950-4276-9fe1-91ed7db9e2fa"),
                             EnterStationTime = new DateTime(2020, 11, 15, 4, 30, 1, 0, DateTimeKind.Unspecified),
-                            FlightId = new Guid("00ad3e68-9e10-46da-96a8-3f7ac3332483"),
+                            FlightId = new Guid("5358068e-0385-4753-90dc-12d0461c04d4"),
                             LeaveStationTime = new DateTime(2020, 11, 15, 4, 34, 12, 0, DateTimeKind.Unspecified),
-                            StationId = new Guid("9ba75bc1-7cbc-44c4-ade9-1c8eb7b5ab9d")
+                            StationId = new Guid("1a00ce5a-8a1c-44f1-846d-335250f9d3dd")
                         },
                         new
                         {
-                            Id = new Guid("dff6995b-78ba-4e8a-ab33-7f21bfc94f0d"),
+                            Id = new Guid("9e0f0200-621b-4874-9e03-4bdbb7bed9a8"),
                             EnterStationTime = new DateTime(2020, 11, 15, 4, 34, 12, 0, DateTimeKind.Unspecified),
-                            FlightId = new Guid("00ad3e68-9e10-46da-96a8-3f7ac3332483"),
+                            FlightId = new Guid("5358068e-0385-4753-90dc-12d0461c04d4"),
                             LeaveStationTime = new DateTime(2020, 11, 15, 4, 38, 10, 0, DateTimeKind.Unspecified),
-                            StationId = new Guid("89214a22-3793-4e62-8f43-efa4512e7045")
+                            StationId = new Guid("619c1cef-6380-4d84-a3a5-a426526c2aee")
                         },
                         new
                         {
-                            Id = new Guid("03c3721a-85b1-4058-9006-fff0c1f59845"),
+                            Id = new Guid("27642efe-6f3a-4b38-a096-0338d70838e0"),
                             EnterStationTime = new DateTime(2020, 11, 15, 4, 26, 38, 0, DateTimeKind.Unspecified),
-                            FlightId = new Guid("3abf2fd5-c083-42a0-bc3e-f36bf8049271"),
-                            StationId = new Guid("6acecce8-1ab7-42e6-8ec0-deb96ad77008")
+                            FlightId = new Guid("b7cf621c-31c7-4c15-8d6f-7fbd60c7cf95"),
+                            StationId = new Guid("bf14e8cb-4fee-4709-bba6-f398e0ad44e0")
                         },
                         new
                         {
-                            Id = new Guid("90406242-f971-4b74-be0d-6e4e800098ec"),
+                            Id = new Guid("be5c2155-e808-43f1-ba29-dabcc78062f0"),
                             EnterStationTime = new DateTime(2020, 11, 15, 4, 18, 46, 0, DateTimeKind.Unspecified),
-                            FlightId = new Guid("7f18e7fc-70cc-4394-b505-f7192710f397"),
+                            FlightId = new Guid("afedcee1-1c84-4a84-8391-e8652f5a38ed"),
                             LeaveStationTime = new DateTime(2020, 11, 15, 4, 20, 20, 0, DateTimeKind.Unspecified),
-                            StationId = new Guid("83aa9985-4090-44f1-957e-5d306ecc86d5")
+                            StationId = new Guid("b47a8452-55ac-412e-8c6a-f2bbde178239")
                         },
                         new
                         {
-                            Id = new Guid("433b4b8e-aecd-4336-a6c4-d50037404c3c"),
+                            Id = new Guid("9cff5f24-0845-4fa9-9eee-afba08d6f2db"),
                             EnterStationTime = new DateTime(2020, 11, 15, 4, 20, 20, 0, DateTimeKind.Unspecified),
-                            FlightId = new Guid("7f18e7fc-70cc-4394-b505-f7192710f397"),
+                            FlightId = new Guid("afedcee1-1c84-4a84-8391-e8652f5a38ed"),
                             LeaveStationTime = new DateTime(2020, 11, 15, 4, 23, 21, 0, DateTimeKind.Unspecified),
-                            StationId = new Guid("89214a22-3793-4e62-8f43-efa4512e7045")
+                            StationId = new Guid("619c1cef-6380-4d84-a3a5-a426526c2aee")
                         },
                         new
                         {
-                            Id = new Guid("539183d5-e906-4083-909d-56a8f1d6a6c3"),
+                            Id = new Guid("b2a12006-9d89-4b20-8d85-a365f748978b"),
                             EnterStationTime = new DateTime(2020, 11, 15, 4, 23, 21, 0, DateTimeKind.Unspecified),
-                            FlightId = new Guid("7f18e7fc-70cc-4394-b505-f7192710f397"),
+                            FlightId = new Guid("afedcee1-1c84-4a84-8391-e8652f5a38ed"),
                             LeaveStationTime = new DateTime(2020, 11, 15, 4, 24, 19, 0, DateTimeKind.Unspecified),
-                            StationId = new Guid("7eb43542-a744-4399-a5d2-c0fe2832bee6")
+                            StationId = new Guid("3487aa5c-1660-4833-a1a4-7809055fde13")
                         },
                         new
                         {
-                            Id = new Guid("1ac2b483-c1be-4122-9e30-4958936b6235"),
+                            Id = new Guid("4a825c82-5858-4636-bc02-80fdb4d1df30"),
                             EnterStationTime = new DateTime(2020, 11, 15, 4, 24, 19, 0, DateTimeKind.Unspecified),
-                            FlightId = new Guid("7f18e7fc-70cc-4394-b505-f7192710f397"),
+                            FlightId = new Guid("afedcee1-1c84-4a84-8391-e8652f5a38ed"),
                             LeaveStationTime = new DateTime(2020, 11, 15, 4, 28, 39, 0, DateTimeKind.Unspecified),
-                            StationId = new Guid("55b905c0-aa79-430a-9c72-300c0356b302")
+                            StationId = new Guid("2bed4f6f-1cb3-45ee-9d3b-06b60b32acad")
                         },
                         new
                         {
-                            Id = new Guid("89baf05e-2014-4273-b25a-a9539984e584"),
+                            Id = new Guid("b37f421f-bb6e-478e-a03c-6ec253b5983c"),
                             EnterStationTime = new DateTime(2020, 11, 15, 4, 28, 39, 0, DateTimeKind.Unspecified),
-                            FlightId = new Guid("7f18e7fc-70cc-4394-b505-f7192710f397"),
+                            FlightId = new Guid("afedcee1-1c84-4a84-8391-e8652f5a38ed"),
                             LeaveStationTime = new DateTime(2020, 11, 15, 4, 29, 3, 0, DateTimeKind.Unspecified),
-                            StationId = new Guid("c24a35ac-84f2-4aa2-9fc5-d9581c83c598")
+                            StationId = new Guid("a4780f67-afe2-4ba8-b751-da6fa950ee36")
                         },
                         new
                         {
-                            Id = new Guid("0c6ad9b4-081c-4cbe-b9c7-3fb24967cb17"),
+                            Id = new Guid("c8ef531a-0641-4dba-a7fa-7098898e64b5"),
                             EnterStationTime = new DateTime(2020, 11, 15, 5, 38, 16, 0, DateTimeKind.Unspecified),
-                            FlightId = new Guid("791b2552-05d9-47a7-95ac-081f8d9a4418"),
+                            FlightId = new Guid("7f18b05f-4117-48f1-8263-04f19255fe8c"),
                             LeaveStationTime = new DateTime(2020, 11, 15, 5, 40, 9, 0, DateTimeKind.Unspecified),
-                            StationId = new Guid("83aa9985-4090-44f1-957e-5d306ecc86d5")
+                            StationId = new Guid("b47a8452-55ac-412e-8c6a-f2bbde178239")
                         },
                         new
                         {
-                            Id = new Guid("ea80c4fb-1b3b-4563-b597-f44dbe644b35"),
+                            Id = new Guid("8b65acc7-6e06-4699-b3da-71c3d4cc6eb2"),
                             EnterStationTime = new DateTime(2020, 11, 15, 5, 40, 9, 0, DateTimeKind.Unspecified),
-                            FlightId = new Guid("791b2552-05d9-47a7-95ac-081f8d9a4418"),
+                            FlightId = new Guid("7f18b05f-4117-48f1-8263-04f19255fe8c"),
                             LeaveStationTime = new DateTime(2020, 11, 15, 5, 42, 47, 0, DateTimeKind.Unspecified),
-                            StationId = new Guid("89214a22-3793-4e62-8f43-efa4512e7045")
+                            StationId = new Guid("619c1cef-6380-4d84-a3a5-a426526c2aee")
                         },
                         new
                         {
-                            Id = new Guid("7a983e9d-92b5-454b-937c-aca653b22bcf"),
+                            Id = new Guid("02d8b3ab-9a33-4e6b-a41e-69f7a31e3e95"),
                             EnterStationTime = new DateTime(2020, 11, 15, 5, 42, 47, 0, DateTimeKind.Unspecified),
-                            FlightId = new Guid("791b2552-05d9-47a7-95ac-081f8d9a4418"),
+                            FlightId = new Guid("7f18b05f-4117-48f1-8263-04f19255fe8c"),
                             LeaveStationTime = new DateTime(2020, 11, 15, 5, 44, 31, 0, DateTimeKind.Unspecified),
-                            StationId = new Guid("7eb43542-a744-4399-a5d2-c0fe2832bee6")
+                            StationId = new Guid("3487aa5c-1660-4833-a1a4-7809055fde13")
                         },
                         new
                         {
-                            Id = new Guid("206e0220-4cc4-41a2-b61f-ed53df704b2e"),
+                            Id = new Guid("1b240fc7-82e7-45b3-b3c3-e457e42ad718"),
                             EnterStationTime = new DateTime(2020, 11, 15, 5, 44, 31, 0, DateTimeKind.Unspecified),
-                            FlightId = new Guid("791b2552-05d9-47a7-95ac-081f8d9a4418"),
+                            FlightId = new Guid("7f18b05f-4117-48f1-8263-04f19255fe8c"),
                             LeaveStationTime = new DateTime(2020, 11, 15, 5, 48, 57, 0, DateTimeKind.Unspecified),
-                            StationId = new Guid("a727aa36-b382-4ce1-ab7a-c6eb064c5b69")
+                            StationId = new Guid("94356a19-e4b3-4a88-95d2-8645c8f9b7db")
                         },
                         new
                         {
-                            Id = new Guid("4b886d17-b357-40c6-b7d3-fe23d489684c"),
+                            Id = new Guid("fd5d2fa2-994a-4b45-b7b2-9293baec9ad1"),
                             EnterStationTime = new DateTime(2020, 11, 15, 5, 48, 57, 0, DateTimeKind.Unspecified),
-                            FlightId = new Guid("791b2552-05d9-47a7-95ac-081f8d9a4418"),
-                            StationId = new Guid("c24a35ac-84f2-4aa2-9fc5-d9581c83c598")
+                            FlightId = new Guid("7f18b05f-4117-48f1-8263-04f19255fe8c"),
+                            StationId = new Guid("a4780f67-afe2-4ba8-b751-da6fa950ee36")
                         });
                 });
 
@@ -382,54 +382,54 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("6acecce8-1ab7-42e6-8ec0-deb96ad77008"),
-                            CurrentFlightId = new Guid("3abf2fd5-c083-42a0-bc3e-f36bf8049271"),
+                            Id = new Guid("bf14e8cb-4fee-4709-bba6-f398e0ad44e0"),
+                            CurrentFlightId = new Guid("b7cf621c-31c7-4c15-8d6f-7fbd60c7cf95"),
                             Name = "Land port 1"
                         },
                         new
                         {
-                            Id = new Guid("73c1cdd7-f7d6-411f-a4d8-f42ba4dca73c"),
+                            Id = new Guid("a0d07c8d-91e8-4382-b004-f14c15b7b9b2"),
                             Name = "Drop passengers"
                         },
                         new
                         {
-                            Id = new Guid("20df2404-6a0b-4237-b1a5-228ea7120355"),
+                            Id = new Guid("fce398cc-0d39-4292-99b8-b84bc5144f34"),
                             Name = "Drop passengers"
                         },
                         new
                         {
-                            Id = new Guid("9ba75bc1-7cbc-44c4-ade9-1c8eb7b5ab9d"),
+                            Id = new Guid("1a00ce5a-8a1c-44f1-846d-335250f9d3dd"),
                             Name = "Drop lugage"
                         },
                         new
                         {
-                            Id = new Guid("89214a22-3793-4e62-8f43-efa4512e7045"),
+                            Id = new Guid("619c1cef-6380-4d84-a3a5-a426526c2aee"),
                             Name = "Refuel"
                         },
                         new
                         {
-                            Id = new Guid("83aa9985-4090-44f1-957e-5d306ecc86d5"),
+                            Id = new Guid("b47a8452-55ac-412e-8c6a-f2bbde178239"),
                             Name = "Takeoff port 1"
                         },
                         new
                         {
-                            Id = new Guid("7eb43542-a744-4399-a5d2-c0fe2832bee6"),
+                            Id = new Guid("3487aa5c-1660-4833-a1a4-7809055fde13"),
                             Name = "Pick lugage"
                         },
                         new
                         {
-                            Id = new Guid("55b905c0-aa79-430a-9c72-300c0356b302"),
+                            Id = new Guid("2bed4f6f-1cb3-45ee-9d3b-06b60b32acad"),
                             Name = "Pick passengers"
                         },
                         new
                         {
-                            Id = new Guid("a727aa36-b382-4ce1-ab7a-c6eb064c5b69"),
+                            Id = new Guid("94356a19-e4b3-4a88-95d2-8645c8f9b7db"),
                             Name = "Pick passengers"
                         },
                         new
                         {
-                            Id = new Guid("c24a35ac-84f2-4aa2-9fc5-d9581c83c598"),
-                            CurrentFlightId = new Guid("791b2552-05d9-47a7-95ac-081f8d9a4418"),
+                            Id = new Guid("a4780f67-afe2-4ba8-b751-da6fa950ee36"),
+                            CurrentFlightId = new Guid("7f18b05f-4117-48f1-8263-04f19255fe8c"),
                             Name = "Takeoff"
                         });
                 });
@@ -457,15 +457,15 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            StationId = new Guid("6acecce8-1ab7-42e6-8ec0-deb96ad77008"),
+                            StationId = new Guid("bf14e8cb-4fee-4709-bba6-f398e0ad44e0"),
                             Direction = 0,
-                            ControlTowerId = new Guid("e25df7f2-f08c-4b23-b479-4ede7f1d92b4")
+                            ControlTowerId = new Guid("f0ca5a36-02c4-4e74-820e-eeed20605191")
                         },
                         new
                         {
-                            StationId = new Guid("83aa9985-4090-44f1-957e-5d306ecc86d5"),
+                            StationId = new Guid("b47a8452-55ac-412e-8c6a-f2bbde178239"),
                             Direction = 1,
-                            ControlTowerId = new Guid("e25df7f2-f08c-4b23-b479-4ede7f1d92b4")
+                            ControlTowerId = new Guid("f0ca5a36-02c4-4e74-820e-eeed20605191")
                         });
                 });
 
@@ -489,68 +489,68 @@ namespace DAL.Migrations
                     b.HasData(
                         new
                         {
-                            StationToId = new Guid("73c1cdd7-f7d6-411f-a4d8-f42ba4dca73c"),
-                            StationFromId = new Guid("6acecce8-1ab7-42e6-8ec0-deb96ad77008"),
+                            StationToId = new Guid("a0d07c8d-91e8-4382-b004-f14c15b7b9b2"),
+                            StationFromId = new Guid("bf14e8cb-4fee-4709-bba6-f398e0ad44e0"),
                             Direction = 0
                         },
                         new
                         {
-                            StationToId = new Guid("20df2404-6a0b-4237-b1a5-228ea7120355"),
-                            StationFromId = new Guid("6acecce8-1ab7-42e6-8ec0-deb96ad77008"),
+                            StationToId = new Guid("fce398cc-0d39-4292-99b8-b84bc5144f34"),
+                            StationFromId = new Guid("bf14e8cb-4fee-4709-bba6-f398e0ad44e0"),
                             Direction = 0
                         },
                         new
                         {
-                            StationToId = new Guid("9ba75bc1-7cbc-44c4-ade9-1c8eb7b5ab9d"),
-                            StationFromId = new Guid("73c1cdd7-f7d6-411f-a4d8-f42ba4dca73c"),
+                            StationToId = new Guid("1a00ce5a-8a1c-44f1-846d-335250f9d3dd"),
+                            StationFromId = new Guid("a0d07c8d-91e8-4382-b004-f14c15b7b9b2"),
                             Direction = 0
                         },
                         new
                         {
-                            StationToId = new Guid("9ba75bc1-7cbc-44c4-ade9-1c8eb7b5ab9d"),
-                            StationFromId = new Guid("20df2404-6a0b-4237-b1a5-228ea7120355"),
+                            StationToId = new Guid("1a00ce5a-8a1c-44f1-846d-335250f9d3dd"),
+                            StationFromId = new Guid("fce398cc-0d39-4292-99b8-b84bc5144f34"),
                             Direction = 0
                         },
                         new
                         {
-                            StationToId = new Guid("89214a22-3793-4e62-8f43-efa4512e7045"),
-                            StationFromId = new Guid("9ba75bc1-7cbc-44c4-ade9-1c8eb7b5ab9d"),
+                            StationToId = new Guid("619c1cef-6380-4d84-a3a5-a426526c2aee"),
+                            StationFromId = new Guid("1a00ce5a-8a1c-44f1-846d-335250f9d3dd"),
                             Direction = 0
                         },
                         new
                         {
-                            StationToId = new Guid("7eb43542-a744-4399-a5d2-c0fe2832bee6"),
-                            StationFromId = new Guid("89214a22-3793-4e62-8f43-efa4512e7045"),
+                            StationToId = new Guid("3487aa5c-1660-4833-a1a4-7809055fde13"),
+                            StationFromId = new Guid("619c1cef-6380-4d84-a3a5-a426526c2aee"),
                             Direction = 1
                         },
                         new
                         {
-                            StationToId = new Guid("89214a22-3793-4e62-8f43-efa4512e7045"),
-                            StationFromId = new Guid("83aa9985-4090-44f1-957e-5d306ecc86d5"),
+                            StationToId = new Guid("619c1cef-6380-4d84-a3a5-a426526c2aee"),
+                            StationFromId = new Guid("b47a8452-55ac-412e-8c6a-f2bbde178239"),
                             Direction = 1
                         },
                         new
                         {
-                            StationToId = new Guid("55b905c0-aa79-430a-9c72-300c0356b302"),
-                            StationFromId = new Guid("7eb43542-a744-4399-a5d2-c0fe2832bee6"),
+                            StationToId = new Guid("2bed4f6f-1cb3-45ee-9d3b-06b60b32acad"),
+                            StationFromId = new Guid("3487aa5c-1660-4833-a1a4-7809055fde13"),
                             Direction = 1
                         },
                         new
                         {
-                            StationToId = new Guid("a727aa36-b382-4ce1-ab7a-c6eb064c5b69"),
-                            StationFromId = new Guid("7eb43542-a744-4399-a5d2-c0fe2832bee6"),
+                            StationToId = new Guid("94356a19-e4b3-4a88-95d2-8645c8f9b7db"),
+                            StationFromId = new Guid("3487aa5c-1660-4833-a1a4-7809055fde13"),
                             Direction = 1
                         },
                         new
                         {
-                            StationToId = new Guid("c24a35ac-84f2-4aa2-9fc5-d9581c83c598"),
-                            StationFromId = new Guid("55b905c0-aa79-430a-9c72-300c0356b302"),
+                            StationToId = new Guid("a4780f67-afe2-4ba8-b751-da6fa950ee36"),
+                            StationFromId = new Guid("2bed4f6f-1cb3-45ee-9d3b-06b60b32acad"),
                             Direction = 1
                         },
                         new
                         {
-                            StationToId = new Guid("c24a35ac-84f2-4aa2-9fc5-d9581c83c598"),
-                            StationFromId = new Guid("a727aa36-b382-4ce1-ab7a-c6eb064c5b69"),
+                            StationToId = new Guid("a4780f67-afe2-4ba8-b751-da6fa950ee36"),
+                            StationFromId = new Guid("94356a19-e4b3-4a88-95d2-8645c8f9b7db"),
                             Direction = 1
                         });
                 });
@@ -622,13 +622,13 @@ namespace DAL.Migrations
             modelBuilder.Entity("Common.Models.StationRelation", b =>
                 {
                     b.HasOne("Common.Models.Station", "StationFrom")
-                        .WithMany("ParentStations")
+                        .WithMany("ChildrenStations")
                         .HasForeignKey("StationFromId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Common.Models.Station", "StationTo")
-                        .WithMany("ChildrenStations")
+                        .WithMany("ParentStations")
                         .HasForeignKey("StationToId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

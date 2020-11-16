@@ -22,11 +22,11 @@ namespace DAL
                 entity.HasKey(sr => new { sr.StationToId, sr.StationFromId, sr.Direction });
                 entity
                     .HasOne(sr => sr.StationFrom)
-                    .WithMany(s => s.ParentStations)
+                    .WithMany(s => s.ChildrenStations)
                     .HasForeignKey(sr => sr.StationFromId);
                 entity
                     .HasOne(sr => sr.StationTo)
-                    .WithMany(s => s.ChildrenStations)
+                    .WithMany(s => s.ParentStations)
                     .HasForeignKey(sr => sr.StationToId);
             });
             modelBuilder.Entity<StationControlTowerRelation>(entity =>
