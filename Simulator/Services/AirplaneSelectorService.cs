@@ -1,6 +1,5 @@
 ﻿using Common.Models;
 using Simulator.API;
-using Simulator.HelperClasses;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -26,7 +25,7 @@ namespace Simulator.Services
             if (airplanes == null || airplanes.Count <= 0) return null;
             if (airplanes.Count == 1) return airplanes.First();
             int indexInCollectionBounds = randomDataService.RandomNumber(0, airplanes.Count);
-            return airplanes.GetItemAtIndex(indexInCollectionBounds);
+            return airplanes.ElementAtOrDefault(indexInCollectionBounds);
         }
 
         private async Task GetAirplanesFromHub()
