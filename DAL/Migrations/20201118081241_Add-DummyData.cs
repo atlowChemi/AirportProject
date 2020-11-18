@@ -55,247 +55,247 @@ namespace DAL.Migrations
             migrationBuilder.InsertData(
                 table: "ControlTowers",
                 columns: new[] { "Id", "Name" },
-                values: new object[] { new Guid("f0ca5a36-02c4-4e74-820e-eeed20605191"), "TLV" });
+                values: new object[] { new Guid("d33db14e-7ff8-4cfe-8b99-55e6f7b364a8"), "TLV" });
 
             migrationBuilder.InsertData(
                 table: "Stations",
                 columns: new[] { "Id", "CurrentFlightId", "Name" },
-                values: new object[] { new Guid("2bed4f6f-1cb3-45ee-9d3b-06b60b32acad"), null, "Pick passengers" });
+                values: new object[] { new Guid("c3485e28-656d-4aad-84d8-aa16a867c80f"), null, "Pick passengers" });
 
             migrationBuilder.InsertData(
                 table: "Stations",
                 columns: new[] { "Id", "CurrentFlightId", "Name" },
-                values: new object[] { new Guid("a0d07c8d-91e8-4382-b004-f14c15b7b9b2"), null, "Drop passengers" });
+                values: new object[] { new Guid("f9290460-fdae-4919-976e-bfaf5b9c8656"), null, "Drop passengers" });
 
             migrationBuilder.InsertData(
                 table: "Stations",
                 columns: new[] { "Id", "CurrentFlightId", "Name" },
-                values: new object[] { new Guid("fce398cc-0d39-4292-99b8-b84bc5144f34"), null, "Drop passengers" });
+                values: new object[] { new Guid("892da281-1edd-4254-980f-b7b7bbe0b53e"), null, "Drop passengers" });
 
             migrationBuilder.InsertData(
                 table: "Stations",
                 columns: new[] { "Id", "CurrentFlightId", "Name" },
-                values: new object[] { new Guid("1a00ce5a-8a1c-44f1-846d-335250f9d3dd"), null, "Drop lugage" });
+                values: new object[] { new Guid("6924b392-9367-4ff5-b86c-914da3e48998"), null, "Drop lugage" });
 
             migrationBuilder.InsertData(
                 table: "Stations",
                 columns: new[] { "Id", "CurrentFlightId", "Name" },
-                values: new object[] { new Guid("619c1cef-6380-4d84-a3a5-a426526c2aee"), null, "Refuel" });
+                values: new object[] { new Guid("ee45404b-c63d-425e-9133-58e730c2010d"), null, "Refuel" });
 
             migrationBuilder.InsertData(
                 table: "Stations",
                 columns: new[] { "Id", "CurrentFlightId", "Name" },
-                values: new object[] { new Guid("b47a8452-55ac-412e-8c6a-f2bbde178239"), null, "Takeoff port 1" });
+                values: new object[] { new Guid("db562c5d-8701-46ce-8817-a90fadfe991f"), null, "Takeoff port 1" });
 
             migrationBuilder.InsertData(
                 table: "Stations",
                 columns: new[] { "Id", "CurrentFlightId", "Name" },
-                values: new object[] { new Guid("3487aa5c-1660-4833-a1a4-7809055fde13"), null, "Pick lugage" });
+                values: new object[] { new Guid("ea208cf0-9042-4e92-b11e-c7174d6db48e"), null, "Pick lugage" });
 
             migrationBuilder.InsertData(
                 table: "Stations",
                 columns: new[] { "Id", "CurrentFlightId", "Name" },
-                values: new object[] { new Guid("94356a19-e4b3-4a88-95d2-8645c8f9b7db"), null, "Pick passengers" });
+                values: new object[] { new Guid("74873abc-bb33-444f-bb3a-a91ff4d49b49"), null, "Pick passengers" });
 
             migrationBuilder.InsertData(
                 table: "Flights",
                 columns: new[] { "Id", "AirplaneId", "ControlTowerId", "Direction", "From", "To" },
-                values: new object[] { new Guid("62b120ef-33e2-4190-b796-c73427933f0e"), 1, null, 0, "JFK", "TLV" });
+                values: new object[] { new Guid("66d449df-d1d5-4f8f-b4dd-b9cdc1a773c6"), 1, null, 0, "JFK", "TLV" });
 
             migrationBuilder.InsertData(
                 table: "Flights",
                 columns: new[] { "Id", "AirplaneId", "ControlTowerId", "Direction", "From", "To" },
-                values: new object[] { new Guid("afedcee1-1c84-4a84-8391-e8652f5a38ed"), 1, null, 1, "TLV", "ATH" });
+                values: new object[] { new Guid("3880d9ae-ae40-4a38-a058-5442b012dd66"), 1, null, 1, "TLV", "ATH" });
 
             migrationBuilder.InsertData(
                 table: "Flights",
                 columns: new[] { "Id", "AirplaneId", "ControlTowerId", "Direction", "From", "To" },
-                values: new object[] { new Guid("5358068e-0385-4753-90dc-12d0461c04d4"), 2, null, 0, "IST", "TLV" });
+                values: new object[] { new Guid("50f7e8bf-7924-4a74-8c2b-5ffe1cec064e"), 2, null, 0, "IST", "TLV" });
 
             migrationBuilder.InsertData(
                 table: "Flights",
                 columns: new[] { "Id", "AirplaneId", "ControlTowerId", "Direction", "From", "To" },
-                values: new object[] { new Guid("7f18b05f-4117-48f1-8263-04f19255fe8c"), 2, null, 1, "TLV", "LTN" });
+                values: new object[] { new Guid("1821509e-f07c-4fa3-b42e-266ff7209de7"), 2, null, 1, "TLV", "LTN" });
 
             migrationBuilder.InsertData(
                 table: "Flights",
                 columns: new[] { "Id", "AirplaneId", "ControlTowerId", "Direction", "From", "To" },
-                values: new object[] { new Guid("b7cf621c-31c7-4c15-8d6f-7fbd60c7cf95"), 3, null, 0, "SAW", "TLV" });
+                values: new object[] { new Guid("f35fe4e2-54b4-486c-9ba2-2261da5a8cd8"), 3, null, 0, "SAW", "TLV" });
 
             migrationBuilder.InsertData(
                 table: "Flights",
                 columns: new[] { "Id", "AirplaneId", "ControlTowerId", "Direction", "From", "To" },
-                values: new object[] { new Guid("dfd8b75c-b624-4a30-8d6e-c77afd746201"), 4, new Guid("f0ca5a36-02c4-4e74-820e-eeed20605191"), 0, "STN", "TLV" });
+                values: new object[] { new Guid("8bedf3e1-0646-44d3-a1e3-64d1f476f9b3"), 4, new Guid("d33db14e-7ff8-4cfe-8b99-55e6f7b364a8"), 0, "STN", "TLV" });
 
             migrationBuilder.InsertData(
                 table: "StationControlTowerRelation",
-                columns: new[] { "ControlTowerId", "Direction", "StationId" },
-                values: new object[] { new Guid("f0ca5a36-02c4-4e74-820e-eeed20605191"), 1, new Guid("b47a8452-55ac-412e-8c6a-f2bbde178239") });
+                columns: new[] { "ControlTowerId", "Direction", "StationToId" },
+                values: new object[] { new Guid("d33db14e-7ff8-4cfe-8b99-55e6f7b364a8"), 1, new Guid("db562c5d-8701-46ce-8817-a90fadfe991f") });
 
             migrationBuilder.InsertData(
                 table: "StationRelation",
                 columns: new[] { "Direction", "StationFromId", "StationToId" },
-                values: new object[] { 0, new Guid("a0d07c8d-91e8-4382-b004-f14c15b7b9b2"), new Guid("1a00ce5a-8a1c-44f1-846d-335250f9d3dd") });
+                values: new object[] { 0, new Guid("f9290460-fdae-4919-976e-bfaf5b9c8656"), new Guid("6924b392-9367-4ff5-b86c-914da3e48998") });
 
             migrationBuilder.InsertData(
                 table: "StationRelation",
                 columns: new[] { "Direction", "StationFromId", "StationToId" },
-                values: new object[] { 0, new Guid("fce398cc-0d39-4292-99b8-b84bc5144f34"), new Guid("1a00ce5a-8a1c-44f1-846d-335250f9d3dd") });
+                values: new object[] { 0, new Guid("892da281-1edd-4254-980f-b7b7bbe0b53e"), new Guid("6924b392-9367-4ff5-b86c-914da3e48998") });
 
             migrationBuilder.InsertData(
                 table: "StationRelation",
                 columns: new[] { "Direction", "StationFromId", "StationToId" },
-                values: new object[] { 0, new Guid("1a00ce5a-8a1c-44f1-846d-335250f9d3dd"), new Guid("619c1cef-6380-4d84-a3a5-a426526c2aee") });
+                values: new object[] { 0, new Guid("6924b392-9367-4ff5-b86c-914da3e48998"), new Guid("ee45404b-c63d-425e-9133-58e730c2010d") });
 
             migrationBuilder.InsertData(
                 table: "StationRelation",
                 columns: new[] { "Direction", "StationFromId", "StationToId" },
-                values: new object[] { 1, new Guid("b47a8452-55ac-412e-8c6a-f2bbde178239"), new Guid("619c1cef-6380-4d84-a3a5-a426526c2aee") });
+                values: new object[] { 1, new Guid("db562c5d-8701-46ce-8817-a90fadfe991f"), new Guid("ee45404b-c63d-425e-9133-58e730c2010d") });
 
             migrationBuilder.InsertData(
                 table: "StationRelation",
                 columns: new[] { "Direction", "StationFromId", "StationToId" },
-                values: new object[] { 1, new Guid("619c1cef-6380-4d84-a3a5-a426526c2aee"), new Guid("3487aa5c-1660-4833-a1a4-7809055fde13") });
+                values: new object[] { 1, new Guid("ee45404b-c63d-425e-9133-58e730c2010d"), new Guid("ea208cf0-9042-4e92-b11e-c7174d6db48e") });
 
             migrationBuilder.InsertData(
                 table: "StationRelation",
                 columns: new[] { "Direction", "StationFromId", "StationToId" },
-                values: new object[] { 1, new Guid("3487aa5c-1660-4833-a1a4-7809055fde13"), new Guid("2bed4f6f-1cb3-45ee-9d3b-06b60b32acad") });
+                values: new object[] { 1, new Guid("ea208cf0-9042-4e92-b11e-c7174d6db48e"), new Guid("c3485e28-656d-4aad-84d8-aa16a867c80f") });
 
             migrationBuilder.InsertData(
                 table: "StationRelation",
                 columns: new[] { "Direction", "StationFromId", "StationToId" },
-                values: new object[] { 1, new Guid("3487aa5c-1660-4833-a1a4-7809055fde13"), new Guid("94356a19-e4b3-4a88-95d2-8645c8f9b7db") });
+                values: new object[] { 1, new Guid("ea208cf0-9042-4e92-b11e-c7174d6db48e"), new Guid("74873abc-bb33-444f-bb3a-a91ff4d49b49") });
 
             migrationBuilder.InsertData(
                 table: "FlightHistories",
                 columns: new[] { "Id", "EnterStationTime", "FlightId", "LeaveStationTime", "StationId" },
-                values: new object[] { new Guid("1b0db67e-aadd-4c9d-813d-04857fcc6207"), new DateTime(2020, 11, 15, 4, 22, 14, 0, DateTimeKind.Unspecified), new Guid("62b120ef-33e2-4190-b796-c73427933f0e"), new DateTime(2020, 11, 15, 4, 23, 7, 0, DateTimeKind.Unspecified), new Guid("fce398cc-0d39-4292-99b8-b84bc5144f34") });
+                values: new object[] { new Guid("d6b4c84b-185b-4f73-9965-47a95e2d5034"), new DateTime(2020, 11, 15, 4, 22, 14, 0, DateTimeKind.Unspecified), new Guid("66d449df-d1d5-4f8f-b4dd-b9cdc1a773c6"), new DateTime(2020, 11, 15, 4, 23, 7, 0, DateTimeKind.Unspecified), new Guid("892da281-1edd-4254-980f-b7b7bbe0b53e") });
 
             migrationBuilder.InsertData(
                 table: "FlightHistories",
                 columns: new[] { "Id", "EnterStationTime", "FlightId", "LeaveStationTime", "StationId" },
-                values: new object[] { new Guid("068f2bae-b304-4b54-8398-f776b278238a"), new DateTime(2020, 11, 15, 4, 23, 7, 0, DateTimeKind.Unspecified), new Guid("62b120ef-33e2-4190-b796-c73427933f0e"), new DateTime(2020, 11, 15, 4, 26, 38, 0, DateTimeKind.Unspecified), new Guid("1a00ce5a-8a1c-44f1-846d-335250f9d3dd") });
+                values: new object[] { new Guid("cbf8a0f6-cb97-4585-9353-46aa01594c3c"), new DateTime(2020, 11, 15, 4, 23, 7, 0, DateTimeKind.Unspecified), new Guid("66d449df-d1d5-4f8f-b4dd-b9cdc1a773c6"), new DateTime(2020, 11, 15, 4, 26, 38, 0, DateTimeKind.Unspecified), new Guid("6924b392-9367-4ff5-b86c-914da3e48998") });
 
             migrationBuilder.InsertData(
                 table: "FlightHistories",
                 columns: new[] { "Id", "EnterStationTime", "FlightId", "LeaveStationTime", "StationId" },
-                values: new object[] { new Guid("163e5855-813a-43c8-8a49-17c2cc045f57"), new DateTime(2020, 11, 15, 4, 26, 38, 0, DateTimeKind.Unspecified), new Guid("62b120ef-33e2-4190-b796-c73427933f0e"), new DateTime(2020, 11, 15, 4, 27, 20, 0, DateTimeKind.Unspecified), new Guid("619c1cef-6380-4d84-a3a5-a426526c2aee") });
+                values: new object[] { new Guid("ac35331f-6af1-4b8d-bd33-21936a1029bc"), new DateTime(2020, 11, 15, 4, 26, 38, 0, DateTimeKind.Unspecified), new Guid("66d449df-d1d5-4f8f-b4dd-b9cdc1a773c6"), new DateTime(2020, 11, 15, 4, 27, 20, 0, DateTimeKind.Unspecified), new Guid("ee45404b-c63d-425e-9133-58e730c2010d") });
 
             migrationBuilder.InsertData(
                 table: "FlightHistories",
                 columns: new[] { "Id", "EnterStationTime", "FlightId", "LeaveStationTime", "StationId" },
-                values: new object[] { new Guid("be5c2155-e808-43f1-ba29-dabcc78062f0"), new DateTime(2020, 11, 15, 4, 18, 46, 0, DateTimeKind.Unspecified), new Guid("afedcee1-1c84-4a84-8391-e8652f5a38ed"), new DateTime(2020, 11, 15, 4, 20, 20, 0, DateTimeKind.Unspecified), new Guid("b47a8452-55ac-412e-8c6a-f2bbde178239") });
+                values: new object[] { new Guid("02704e6b-a435-4f38-ba62-034a7d649984"), new DateTime(2020, 11, 15, 4, 18, 46, 0, DateTimeKind.Unspecified), new Guid("3880d9ae-ae40-4a38-a058-5442b012dd66"), new DateTime(2020, 11, 15, 4, 20, 20, 0, DateTimeKind.Unspecified), new Guid("db562c5d-8701-46ce-8817-a90fadfe991f") });
 
             migrationBuilder.InsertData(
                 table: "FlightHistories",
                 columns: new[] { "Id", "EnterStationTime", "FlightId", "LeaveStationTime", "StationId" },
-                values: new object[] { new Guid("9cff5f24-0845-4fa9-9eee-afba08d6f2db"), new DateTime(2020, 11, 15, 4, 20, 20, 0, DateTimeKind.Unspecified), new Guid("afedcee1-1c84-4a84-8391-e8652f5a38ed"), new DateTime(2020, 11, 15, 4, 23, 21, 0, DateTimeKind.Unspecified), new Guid("619c1cef-6380-4d84-a3a5-a426526c2aee") });
+                values: new object[] { new Guid("30cdf3f4-fbfe-4ed3-afaa-23f90fd681f1"), new DateTime(2020, 11, 15, 4, 20, 20, 0, DateTimeKind.Unspecified), new Guid("3880d9ae-ae40-4a38-a058-5442b012dd66"), new DateTime(2020, 11, 15, 4, 23, 21, 0, DateTimeKind.Unspecified), new Guid("ee45404b-c63d-425e-9133-58e730c2010d") });
 
             migrationBuilder.InsertData(
                 table: "FlightHistories",
                 columns: new[] { "Id", "EnterStationTime", "FlightId", "LeaveStationTime", "StationId" },
-                values: new object[] { new Guid("b2a12006-9d89-4b20-8d85-a365f748978b"), new DateTime(2020, 11, 15, 4, 23, 21, 0, DateTimeKind.Unspecified), new Guid("afedcee1-1c84-4a84-8391-e8652f5a38ed"), new DateTime(2020, 11, 15, 4, 24, 19, 0, DateTimeKind.Unspecified), new Guid("3487aa5c-1660-4833-a1a4-7809055fde13") });
+                values: new object[] { new Guid("b880d4b6-40e1-475b-b827-04d776860b17"), new DateTime(2020, 11, 15, 4, 23, 21, 0, DateTimeKind.Unspecified), new Guid("3880d9ae-ae40-4a38-a058-5442b012dd66"), new DateTime(2020, 11, 15, 4, 24, 19, 0, DateTimeKind.Unspecified), new Guid("ea208cf0-9042-4e92-b11e-c7174d6db48e") });
 
             migrationBuilder.InsertData(
                 table: "FlightHistories",
                 columns: new[] { "Id", "EnterStationTime", "FlightId", "LeaveStationTime", "StationId" },
-                values: new object[] { new Guid("4a825c82-5858-4636-bc02-80fdb4d1df30"), new DateTime(2020, 11, 15, 4, 24, 19, 0, DateTimeKind.Unspecified), new Guid("afedcee1-1c84-4a84-8391-e8652f5a38ed"), new DateTime(2020, 11, 15, 4, 28, 39, 0, DateTimeKind.Unspecified), new Guid("2bed4f6f-1cb3-45ee-9d3b-06b60b32acad") });
+                values: new object[] { new Guid("48121608-384d-4429-8a4a-79af664980d3"), new DateTime(2020, 11, 15, 4, 24, 19, 0, DateTimeKind.Unspecified), new Guid("3880d9ae-ae40-4a38-a058-5442b012dd66"), new DateTime(2020, 11, 15, 4, 28, 39, 0, DateTimeKind.Unspecified), new Guid("c3485e28-656d-4aad-84d8-aa16a867c80f") });
 
             migrationBuilder.InsertData(
                 table: "FlightHistories",
                 columns: new[] { "Id", "EnterStationTime", "FlightId", "LeaveStationTime", "StationId" },
-                values: new object[] { new Guid("0b93fe0c-7b08-43fa-af91-3f8ec703d78f"), new DateTime(2020, 11, 15, 4, 25, 31, 0, DateTimeKind.Unspecified), new Guid("5358068e-0385-4753-90dc-12d0461c04d4"), new DateTime(2020, 11, 15, 4, 30, 1, 0, DateTimeKind.Unspecified), new Guid("a0d07c8d-91e8-4382-b004-f14c15b7b9b2") });
+                values: new object[] { new Guid("3cd38f60-a910-4de7-998e-256a82b0020c"), new DateTime(2020, 11, 15, 4, 25, 31, 0, DateTimeKind.Unspecified), new Guid("50f7e8bf-7924-4a74-8c2b-5ffe1cec064e"), new DateTime(2020, 11, 15, 4, 30, 1, 0, DateTimeKind.Unspecified), new Guid("f9290460-fdae-4919-976e-bfaf5b9c8656") });
 
             migrationBuilder.InsertData(
                 table: "FlightHistories",
                 columns: new[] { "Id", "EnterStationTime", "FlightId", "LeaveStationTime", "StationId" },
-                values: new object[] { new Guid("37cf10bf-e950-4276-9fe1-91ed7db9e2fa"), new DateTime(2020, 11, 15, 4, 30, 1, 0, DateTimeKind.Unspecified), new Guid("5358068e-0385-4753-90dc-12d0461c04d4"), new DateTime(2020, 11, 15, 4, 34, 12, 0, DateTimeKind.Unspecified), new Guid("1a00ce5a-8a1c-44f1-846d-335250f9d3dd") });
+                values: new object[] { new Guid("6561af5e-77b0-427c-8c6c-eacd316544d5"), new DateTime(2020, 11, 15, 4, 30, 1, 0, DateTimeKind.Unspecified), new Guid("50f7e8bf-7924-4a74-8c2b-5ffe1cec064e"), new DateTime(2020, 11, 15, 4, 34, 12, 0, DateTimeKind.Unspecified), new Guid("6924b392-9367-4ff5-b86c-914da3e48998") });
 
             migrationBuilder.InsertData(
                 table: "FlightHistories",
                 columns: new[] { "Id", "EnterStationTime", "FlightId", "LeaveStationTime", "StationId" },
-                values: new object[] { new Guid("9e0f0200-621b-4874-9e03-4bdbb7bed9a8"), new DateTime(2020, 11, 15, 4, 34, 12, 0, DateTimeKind.Unspecified), new Guid("5358068e-0385-4753-90dc-12d0461c04d4"), new DateTime(2020, 11, 15, 4, 38, 10, 0, DateTimeKind.Unspecified), new Guid("619c1cef-6380-4d84-a3a5-a426526c2aee") });
+                values: new object[] { new Guid("e571993e-0473-4cca-b332-a52348e72a5f"), new DateTime(2020, 11, 15, 4, 34, 12, 0, DateTimeKind.Unspecified), new Guid("50f7e8bf-7924-4a74-8c2b-5ffe1cec064e"), new DateTime(2020, 11, 15, 4, 38, 10, 0, DateTimeKind.Unspecified), new Guid("ee45404b-c63d-425e-9133-58e730c2010d") });
 
             migrationBuilder.InsertData(
                 table: "FlightHistories",
                 columns: new[] { "Id", "EnterStationTime", "FlightId", "LeaveStationTime", "StationId" },
-                values: new object[] { new Guid("c8ef531a-0641-4dba-a7fa-7098898e64b5"), new DateTime(2020, 11, 15, 5, 38, 16, 0, DateTimeKind.Unspecified), new Guid("7f18b05f-4117-48f1-8263-04f19255fe8c"), new DateTime(2020, 11, 15, 5, 40, 9, 0, DateTimeKind.Unspecified), new Guid("b47a8452-55ac-412e-8c6a-f2bbde178239") });
+                values: new object[] { new Guid("6c59cbdd-ac80-4e7a-9da5-6a120f959fce"), new DateTime(2020, 11, 15, 5, 38, 16, 0, DateTimeKind.Unspecified), new Guid("1821509e-f07c-4fa3-b42e-266ff7209de7"), new DateTime(2020, 11, 15, 5, 40, 9, 0, DateTimeKind.Unspecified), new Guid("db562c5d-8701-46ce-8817-a90fadfe991f") });
 
             migrationBuilder.InsertData(
                 table: "FlightHistories",
                 columns: new[] { "Id", "EnterStationTime", "FlightId", "LeaveStationTime", "StationId" },
-                values: new object[] { new Guid("8b65acc7-6e06-4699-b3da-71c3d4cc6eb2"), new DateTime(2020, 11, 15, 5, 40, 9, 0, DateTimeKind.Unspecified), new Guid("7f18b05f-4117-48f1-8263-04f19255fe8c"), new DateTime(2020, 11, 15, 5, 42, 47, 0, DateTimeKind.Unspecified), new Guid("619c1cef-6380-4d84-a3a5-a426526c2aee") });
+                values: new object[] { new Guid("57089fa1-d7ba-4b94-8313-f5fa53412764"), new DateTime(2020, 11, 15, 5, 40, 9, 0, DateTimeKind.Unspecified), new Guid("1821509e-f07c-4fa3-b42e-266ff7209de7"), new DateTime(2020, 11, 15, 5, 42, 47, 0, DateTimeKind.Unspecified), new Guid("ee45404b-c63d-425e-9133-58e730c2010d") });
 
             migrationBuilder.InsertData(
                 table: "FlightHistories",
                 columns: new[] { "Id", "EnterStationTime", "FlightId", "LeaveStationTime", "StationId" },
-                values: new object[] { new Guid("02d8b3ab-9a33-4e6b-a41e-69f7a31e3e95"), new DateTime(2020, 11, 15, 5, 42, 47, 0, DateTimeKind.Unspecified), new Guid("7f18b05f-4117-48f1-8263-04f19255fe8c"), new DateTime(2020, 11, 15, 5, 44, 31, 0, DateTimeKind.Unspecified), new Guid("3487aa5c-1660-4833-a1a4-7809055fde13") });
+                values: new object[] { new Guid("715533c2-d90c-4f47-94f9-95c5494afd65"), new DateTime(2020, 11, 15, 5, 42, 47, 0, DateTimeKind.Unspecified), new Guid("1821509e-f07c-4fa3-b42e-266ff7209de7"), new DateTime(2020, 11, 15, 5, 44, 31, 0, DateTimeKind.Unspecified), new Guid("ea208cf0-9042-4e92-b11e-c7174d6db48e") });
 
             migrationBuilder.InsertData(
                 table: "FlightHistories",
                 columns: new[] { "Id", "EnterStationTime", "FlightId", "LeaveStationTime", "StationId" },
-                values: new object[] { new Guid("1b240fc7-82e7-45b3-b3c3-e457e42ad718"), new DateTime(2020, 11, 15, 5, 44, 31, 0, DateTimeKind.Unspecified), new Guid("7f18b05f-4117-48f1-8263-04f19255fe8c"), new DateTime(2020, 11, 15, 5, 48, 57, 0, DateTimeKind.Unspecified), new Guid("94356a19-e4b3-4a88-95d2-8645c8f9b7db") });
+                values: new object[] { new Guid("3158d2f0-42af-467d-a9ed-c0c445c45b8f"), new DateTime(2020, 11, 15, 5, 44, 31, 0, DateTimeKind.Unspecified), new Guid("1821509e-f07c-4fa3-b42e-266ff7209de7"), new DateTime(2020, 11, 15, 5, 48, 57, 0, DateTimeKind.Unspecified), new Guid("74873abc-bb33-444f-bb3a-a91ff4d49b49") });
 
             migrationBuilder.InsertData(
                 table: "Stations",
                 columns: new[] { "Id", "CurrentFlightId", "Name" },
-                values: new object[] { new Guid("a4780f67-afe2-4ba8-b751-da6fa950ee36"), new Guid("7f18b05f-4117-48f1-8263-04f19255fe8c"), "Takeoff" });
+                values: new object[] { new Guid("da3d4fa3-c710-42fc-b613-a78b465b3307"), new Guid("1821509e-f07c-4fa3-b42e-266ff7209de7"), "Takeoff" });
 
             migrationBuilder.InsertData(
                 table: "Stations",
                 columns: new[] { "Id", "CurrentFlightId", "Name" },
-                values: new object[] { new Guid("bf14e8cb-4fee-4709-bba6-f398e0ad44e0"), new Guid("b7cf621c-31c7-4c15-8d6f-7fbd60c7cf95"), "Land port 1" });
+                values: new object[] { new Guid("0f8aa583-c35d-452f-a275-4ed792b7f645"), new Guid("f35fe4e2-54b4-486c-9ba2-2261da5a8cd8"), "Land port 1" });
 
             migrationBuilder.InsertData(
                 table: "FlightHistories",
                 columns: new[] { "Id", "EnterStationTime", "FlightId", "LeaveStationTime", "StationId" },
-                values: new object[] { new Guid("b37f421f-bb6e-478e-a03c-6ec253b5983c"), new DateTime(2020, 11, 15, 4, 28, 39, 0, DateTimeKind.Unspecified), new Guid("afedcee1-1c84-4a84-8391-e8652f5a38ed"), new DateTime(2020, 11, 15, 4, 29, 3, 0, DateTimeKind.Unspecified), new Guid("a4780f67-afe2-4ba8-b751-da6fa950ee36") });
+                values: new object[] { new Guid("1157aa0e-a4db-4c1d-912a-2e569d4aff26"), new DateTime(2020, 11, 15, 4, 28, 39, 0, DateTimeKind.Unspecified), new Guid("3880d9ae-ae40-4a38-a058-5442b012dd66"), new DateTime(2020, 11, 15, 4, 29, 3, 0, DateTimeKind.Unspecified), new Guid("da3d4fa3-c710-42fc-b613-a78b465b3307") });
 
             migrationBuilder.InsertData(
                 table: "FlightHistories",
                 columns: new[] { "Id", "EnterStationTime", "FlightId", "LeaveStationTime", "StationId" },
-                values: new object[] { new Guid("fd5d2fa2-994a-4b45-b7b2-9293baec9ad1"), new DateTime(2020, 11, 15, 5, 48, 57, 0, DateTimeKind.Unspecified), new Guid("7f18b05f-4117-48f1-8263-04f19255fe8c"), null, new Guid("a4780f67-afe2-4ba8-b751-da6fa950ee36") });
+                values: new object[] { new Guid("60e01193-065b-4651-8e00-1fb2bdb97f7e"), new DateTime(2020, 11, 15, 5, 48, 57, 0, DateTimeKind.Unspecified), new Guid("1821509e-f07c-4fa3-b42e-266ff7209de7"), null, new Guid("da3d4fa3-c710-42fc-b613-a78b465b3307") });
 
             migrationBuilder.InsertData(
                 table: "FlightHistories",
                 columns: new[] { "Id", "EnterStationTime", "FlightId", "LeaveStationTime", "StationId" },
-                values: new object[] { new Guid("520155bb-706f-4a20-9e65-196350e11ae4"), new DateTime(2020, 11, 15, 4, 18, 30, 0, DateTimeKind.Unspecified), new Guid("62b120ef-33e2-4190-b796-c73427933f0e"), new DateTime(2020, 11, 15, 4, 22, 14, 0, DateTimeKind.Unspecified), new Guid("bf14e8cb-4fee-4709-bba6-f398e0ad44e0") });
+                values: new object[] { new Guid("52d00766-f3c4-4385-af09-351b0c1c3e4f"), new DateTime(2020, 11, 15, 4, 18, 30, 0, DateTimeKind.Unspecified), new Guid("66d449df-d1d5-4f8f-b4dd-b9cdc1a773c6"), new DateTime(2020, 11, 15, 4, 22, 14, 0, DateTimeKind.Unspecified), new Guid("0f8aa583-c35d-452f-a275-4ed792b7f645") });
 
             migrationBuilder.InsertData(
                 table: "FlightHistories",
                 columns: new[] { "Id", "EnterStationTime", "FlightId", "LeaveStationTime", "StationId" },
-                values: new object[] { new Guid("26aa3702-2d8c-4958-8526-6b12707e59f1"), new DateTime(2020, 11, 15, 4, 24, 48, 0, DateTimeKind.Unspecified), new Guid("5358068e-0385-4753-90dc-12d0461c04d4"), new DateTime(2020, 11, 15, 4, 25, 31, 0, DateTimeKind.Unspecified), new Guid("bf14e8cb-4fee-4709-bba6-f398e0ad44e0") });
+                values: new object[] { new Guid("ec920831-1c94-4f1f-b151-e92918494f96"), new DateTime(2020, 11, 15, 4, 24, 48, 0, DateTimeKind.Unspecified), new Guid("50f7e8bf-7924-4a74-8c2b-5ffe1cec064e"), new DateTime(2020, 11, 15, 4, 25, 31, 0, DateTimeKind.Unspecified), new Guid("0f8aa583-c35d-452f-a275-4ed792b7f645") });
 
             migrationBuilder.InsertData(
                 table: "FlightHistories",
                 columns: new[] { "Id", "EnterStationTime", "FlightId", "LeaveStationTime", "StationId" },
-                values: new object[] { new Guid("27642efe-6f3a-4b38-a096-0338d70838e0"), new DateTime(2020, 11, 15, 4, 26, 38, 0, DateTimeKind.Unspecified), new Guid("b7cf621c-31c7-4c15-8d6f-7fbd60c7cf95"), null, new Guid("bf14e8cb-4fee-4709-bba6-f398e0ad44e0") });
+                values: new object[] { new Guid("8a7d546d-5105-4e83-8262-82c5cc51f145"), new DateTime(2020, 11, 15, 4, 26, 38, 0, DateTimeKind.Unspecified), new Guid("f35fe4e2-54b4-486c-9ba2-2261da5a8cd8"), null, new Guid("0f8aa583-c35d-452f-a275-4ed792b7f645") });
 
             migrationBuilder.InsertData(
                 table: "StationControlTowerRelation",
-                columns: new[] { "ControlTowerId", "Direction", "StationId" },
-                values: new object[] { new Guid("f0ca5a36-02c4-4e74-820e-eeed20605191"), 0, new Guid("bf14e8cb-4fee-4709-bba6-f398e0ad44e0") });
+                columns: new[] { "ControlTowerId", "Direction", "StationToId" },
+                values: new object[] { new Guid("d33db14e-7ff8-4cfe-8b99-55e6f7b364a8"), 0, new Guid("0f8aa583-c35d-452f-a275-4ed792b7f645") });
 
             migrationBuilder.InsertData(
                 table: "StationRelation",
                 columns: new[] { "Direction", "StationFromId", "StationToId" },
-                values: new object[] { 1, new Guid("2bed4f6f-1cb3-45ee-9d3b-06b60b32acad"), new Guid("a4780f67-afe2-4ba8-b751-da6fa950ee36") });
+                values: new object[] { 1, new Guid("c3485e28-656d-4aad-84d8-aa16a867c80f"), new Guid("da3d4fa3-c710-42fc-b613-a78b465b3307") });
 
             migrationBuilder.InsertData(
                 table: "StationRelation",
                 columns: new[] { "Direction", "StationFromId", "StationToId" },
-                values: new object[] { 1, new Guid("94356a19-e4b3-4a88-95d2-8645c8f9b7db"), new Guid("a4780f67-afe2-4ba8-b751-da6fa950ee36") });
+                values: new object[] { 1, new Guid("74873abc-bb33-444f-bb3a-a91ff4d49b49"), new Guid("da3d4fa3-c710-42fc-b613-a78b465b3307") });
 
             migrationBuilder.InsertData(
                 table: "StationRelation",
                 columns: new[] { "Direction", "StationFromId", "StationToId" },
-                values: new object[] { 0, new Guid("bf14e8cb-4fee-4709-bba6-f398e0ad44e0"), new Guid("a0d07c8d-91e8-4382-b004-f14c15b7b9b2") });
+                values: new object[] { 0, new Guid("0f8aa583-c35d-452f-a275-4ed792b7f645"), new Guid("f9290460-fdae-4919-976e-bfaf5b9c8656") });
 
             migrationBuilder.InsertData(
                 table: "StationRelation",
                 columns: new[] { "Direction", "StationFromId", "StationToId" },
-                values: new object[] { 0, new Guid("bf14e8cb-4fee-4709-bba6-f398e0ad44e0"), new Guid("fce398cc-0d39-4292-99b8-b84bc5144f34") });
+                values: new object[] { 0, new Guid("0f8aa583-c35d-452f-a275-4ed792b7f645"), new Guid("892da281-1edd-4254-980f-b7b7bbe0b53e") });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -328,167 +328,167 @@ namespace DAL.Migrations
             migrationBuilder.DeleteData(
                 table: "FlightHistories",
                 keyColumn: "Id",
-                keyValue: new Guid("02d8b3ab-9a33-4e6b-a41e-69f7a31e3e95"));
+                keyValue: new Guid("02704e6b-a435-4f38-ba62-034a7d649984"));
 
             migrationBuilder.DeleteData(
                 table: "FlightHistories",
                 keyColumn: "Id",
-                keyValue: new Guid("068f2bae-b304-4b54-8398-f776b278238a"));
+                keyValue: new Guid("1157aa0e-a4db-4c1d-912a-2e569d4aff26"));
 
             migrationBuilder.DeleteData(
                 table: "FlightHistories",
                 keyColumn: "Id",
-                keyValue: new Guid("0b93fe0c-7b08-43fa-af91-3f8ec703d78f"));
+                keyValue: new Guid("30cdf3f4-fbfe-4ed3-afaa-23f90fd681f1"));
 
             migrationBuilder.DeleteData(
                 table: "FlightHistories",
                 keyColumn: "Id",
-                keyValue: new Guid("163e5855-813a-43c8-8a49-17c2cc045f57"));
+                keyValue: new Guid("3158d2f0-42af-467d-a9ed-c0c445c45b8f"));
 
             migrationBuilder.DeleteData(
                 table: "FlightHistories",
                 keyColumn: "Id",
-                keyValue: new Guid("1b0db67e-aadd-4c9d-813d-04857fcc6207"));
+                keyValue: new Guid("3cd38f60-a910-4de7-998e-256a82b0020c"));
 
             migrationBuilder.DeleteData(
                 table: "FlightHistories",
                 keyColumn: "Id",
-                keyValue: new Guid("1b240fc7-82e7-45b3-b3c3-e457e42ad718"));
+                keyValue: new Guid("48121608-384d-4429-8a4a-79af664980d3"));
 
             migrationBuilder.DeleteData(
                 table: "FlightHistories",
                 keyColumn: "Id",
-                keyValue: new Guid("26aa3702-2d8c-4958-8526-6b12707e59f1"));
+                keyValue: new Guid("52d00766-f3c4-4385-af09-351b0c1c3e4f"));
 
             migrationBuilder.DeleteData(
                 table: "FlightHistories",
                 keyColumn: "Id",
-                keyValue: new Guid("27642efe-6f3a-4b38-a096-0338d70838e0"));
+                keyValue: new Guid("57089fa1-d7ba-4b94-8313-f5fa53412764"));
 
             migrationBuilder.DeleteData(
                 table: "FlightHistories",
                 keyColumn: "Id",
-                keyValue: new Guid("37cf10bf-e950-4276-9fe1-91ed7db9e2fa"));
+                keyValue: new Guid("60e01193-065b-4651-8e00-1fb2bdb97f7e"));
 
             migrationBuilder.DeleteData(
                 table: "FlightHistories",
                 keyColumn: "Id",
-                keyValue: new Guid("4a825c82-5858-4636-bc02-80fdb4d1df30"));
+                keyValue: new Guid("6561af5e-77b0-427c-8c6c-eacd316544d5"));
 
             migrationBuilder.DeleteData(
                 table: "FlightHistories",
                 keyColumn: "Id",
-                keyValue: new Guid("520155bb-706f-4a20-9e65-196350e11ae4"));
+                keyValue: new Guid("6c59cbdd-ac80-4e7a-9da5-6a120f959fce"));
 
             migrationBuilder.DeleteData(
                 table: "FlightHistories",
                 keyColumn: "Id",
-                keyValue: new Guid("8b65acc7-6e06-4699-b3da-71c3d4cc6eb2"));
+                keyValue: new Guid("715533c2-d90c-4f47-94f9-95c5494afd65"));
 
             migrationBuilder.DeleteData(
                 table: "FlightHistories",
                 keyColumn: "Id",
-                keyValue: new Guid("9cff5f24-0845-4fa9-9eee-afba08d6f2db"));
+                keyValue: new Guid("8a7d546d-5105-4e83-8262-82c5cc51f145"));
 
             migrationBuilder.DeleteData(
                 table: "FlightHistories",
                 keyColumn: "Id",
-                keyValue: new Guid("9e0f0200-621b-4874-9e03-4bdbb7bed9a8"));
+                keyValue: new Guid("ac35331f-6af1-4b8d-bd33-21936a1029bc"));
 
             migrationBuilder.DeleteData(
                 table: "FlightHistories",
                 keyColumn: "Id",
-                keyValue: new Guid("b2a12006-9d89-4b20-8d85-a365f748978b"));
+                keyValue: new Guid("b880d4b6-40e1-475b-b827-04d776860b17"));
 
             migrationBuilder.DeleteData(
                 table: "FlightHistories",
                 keyColumn: "Id",
-                keyValue: new Guid("b37f421f-bb6e-478e-a03c-6ec253b5983c"));
+                keyValue: new Guid("cbf8a0f6-cb97-4585-9353-46aa01594c3c"));
 
             migrationBuilder.DeleteData(
                 table: "FlightHistories",
                 keyColumn: "Id",
-                keyValue: new Guid("be5c2155-e808-43f1-ba29-dabcc78062f0"));
+                keyValue: new Guid("d6b4c84b-185b-4f73-9965-47a95e2d5034"));
 
             migrationBuilder.DeleteData(
                 table: "FlightHistories",
                 keyColumn: "Id",
-                keyValue: new Guid("c8ef531a-0641-4dba-a7fa-7098898e64b5"));
+                keyValue: new Guid("e571993e-0473-4cca-b332-a52348e72a5f"));
 
             migrationBuilder.DeleteData(
                 table: "FlightHistories",
                 keyColumn: "Id",
-                keyValue: new Guid("fd5d2fa2-994a-4b45-b7b2-9293baec9ad1"));
+                keyValue: new Guid("ec920831-1c94-4f1f-b151-e92918494f96"));
 
             migrationBuilder.DeleteData(
                 table: "Flights",
                 keyColumn: "Id",
-                keyValue: new Guid("dfd8b75c-b624-4a30-8d6e-c77afd746201"));
+                keyValue: new Guid("8bedf3e1-0646-44d3-a1e3-64d1f476f9b3"));
 
             migrationBuilder.DeleteData(
                 table: "StationControlTowerRelation",
-                keyColumns: new[] { "ControlTowerId", "Direction", "StationId" },
-                keyValues: new object[] { new Guid("f0ca5a36-02c4-4e74-820e-eeed20605191"), 1, new Guid("b47a8452-55ac-412e-8c6a-f2bbde178239") });
+                keyColumns: new[] { "ControlTowerId", "Direction", "StationToId" },
+                keyValues: new object[] { new Guid("d33db14e-7ff8-4cfe-8b99-55e6f7b364a8"), 0, new Guid("0f8aa583-c35d-452f-a275-4ed792b7f645") });
 
             migrationBuilder.DeleteData(
                 table: "StationControlTowerRelation",
-                keyColumns: new[] { "ControlTowerId", "Direction", "StationId" },
-                keyValues: new object[] { new Guid("f0ca5a36-02c4-4e74-820e-eeed20605191"), 0, new Guid("bf14e8cb-4fee-4709-bba6-f398e0ad44e0") });
+                keyColumns: new[] { "ControlTowerId", "Direction", "StationToId" },
+                keyValues: new object[] { new Guid("d33db14e-7ff8-4cfe-8b99-55e6f7b364a8"), 1, new Guid("db562c5d-8701-46ce-8817-a90fadfe991f") });
 
             migrationBuilder.DeleteData(
                 table: "StationRelation",
                 keyColumns: new[] { "Direction", "StationFromId", "StationToId" },
-                keyValues: new object[] { 0, new Guid("a0d07c8d-91e8-4382-b004-f14c15b7b9b2"), new Guid("1a00ce5a-8a1c-44f1-846d-335250f9d3dd") });
+                keyValues: new object[] { 0, new Guid("892da281-1edd-4254-980f-b7b7bbe0b53e"), new Guid("6924b392-9367-4ff5-b86c-914da3e48998") });
 
             migrationBuilder.DeleteData(
                 table: "StationRelation",
                 keyColumns: new[] { "Direction", "StationFromId", "StationToId" },
-                keyValues: new object[] { 0, new Guid("fce398cc-0d39-4292-99b8-b84bc5144f34"), new Guid("1a00ce5a-8a1c-44f1-846d-335250f9d3dd") });
+                keyValues: new object[] { 0, new Guid("f9290460-fdae-4919-976e-bfaf5b9c8656"), new Guid("6924b392-9367-4ff5-b86c-914da3e48998") });
 
             migrationBuilder.DeleteData(
                 table: "StationRelation",
                 keyColumns: new[] { "Direction", "StationFromId", "StationToId" },
-                keyValues: new object[] { 1, new Guid("3487aa5c-1660-4833-a1a4-7809055fde13"), new Guid("2bed4f6f-1cb3-45ee-9d3b-06b60b32acad") });
+                keyValues: new object[] { 1, new Guid("ea208cf0-9042-4e92-b11e-c7174d6db48e"), new Guid("74873abc-bb33-444f-bb3a-a91ff4d49b49") });
 
             migrationBuilder.DeleteData(
                 table: "StationRelation",
                 keyColumns: new[] { "Direction", "StationFromId", "StationToId" },
-                keyValues: new object[] { 1, new Guid("619c1cef-6380-4d84-a3a5-a426526c2aee"), new Guid("3487aa5c-1660-4833-a1a4-7809055fde13") });
+                keyValues: new object[] { 0, new Guid("0f8aa583-c35d-452f-a275-4ed792b7f645"), new Guid("892da281-1edd-4254-980f-b7b7bbe0b53e") });
 
             migrationBuilder.DeleteData(
                 table: "StationRelation",
                 keyColumns: new[] { "Direction", "StationFromId", "StationToId" },
-                keyValues: new object[] { 0, new Guid("1a00ce5a-8a1c-44f1-846d-335250f9d3dd"), new Guid("619c1cef-6380-4d84-a3a5-a426526c2aee") });
+                keyValues: new object[] { 1, new Guid("ea208cf0-9042-4e92-b11e-c7174d6db48e"), new Guid("c3485e28-656d-4aad-84d8-aa16a867c80f") });
 
             migrationBuilder.DeleteData(
                 table: "StationRelation",
                 keyColumns: new[] { "Direction", "StationFromId", "StationToId" },
-                keyValues: new object[] { 1, new Guid("b47a8452-55ac-412e-8c6a-f2bbde178239"), new Guid("619c1cef-6380-4d84-a3a5-a426526c2aee") });
+                keyValues: new object[] { 1, new Guid("74873abc-bb33-444f-bb3a-a91ff4d49b49"), new Guid("da3d4fa3-c710-42fc-b613-a78b465b3307") });
 
             migrationBuilder.DeleteData(
                 table: "StationRelation",
                 keyColumns: new[] { "Direction", "StationFromId", "StationToId" },
-                keyValues: new object[] { 1, new Guid("3487aa5c-1660-4833-a1a4-7809055fde13"), new Guid("94356a19-e4b3-4a88-95d2-8645c8f9b7db") });
+                keyValues: new object[] { 1, new Guid("c3485e28-656d-4aad-84d8-aa16a867c80f"), new Guid("da3d4fa3-c710-42fc-b613-a78b465b3307") });
 
             migrationBuilder.DeleteData(
                 table: "StationRelation",
                 keyColumns: new[] { "Direction", "StationFromId", "StationToId" },
-                keyValues: new object[] { 0, new Guid("bf14e8cb-4fee-4709-bba6-f398e0ad44e0"), new Guid("a0d07c8d-91e8-4382-b004-f14c15b7b9b2") });
+                keyValues: new object[] { 1, new Guid("ee45404b-c63d-425e-9133-58e730c2010d"), new Guid("ea208cf0-9042-4e92-b11e-c7174d6db48e") });
 
             migrationBuilder.DeleteData(
                 table: "StationRelation",
                 keyColumns: new[] { "Direction", "StationFromId", "StationToId" },
-                keyValues: new object[] { 1, new Guid("2bed4f6f-1cb3-45ee-9d3b-06b60b32acad"), new Guid("a4780f67-afe2-4ba8-b751-da6fa950ee36") });
+                keyValues: new object[] { 0, new Guid("6924b392-9367-4ff5-b86c-914da3e48998"), new Guid("ee45404b-c63d-425e-9133-58e730c2010d") });
 
             migrationBuilder.DeleteData(
                 table: "StationRelation",
                 keyColumns: new[] { "Direction", "StationFromId", "StationToId" },
-                keyValues: new object[] { 1, new Guid("94356a19-e4b3-4a88-95d2-8645c8f9b7db"), new Guid("a4780f67-afe2-4ba8-b751-da6fa950ee36") });
+                keyValues: new object[] { 1, new Guid("db562c5d-8701-46ce-8817-a90fadfe991f"), new Guid("ee45404b-c63d-425e-9133-58e730c2010d") });
 
             migrationBuilder.DeleteData(
                 table: "StationRelation",
                 keyColumns: new[] { "Direction", "StationFromId", "StationToId" },
-                keyValues: new object[] { 0, new Guid("bf14e8cb-4fee-4709-bba6-f398e0ad44e0"), new Guid("fce398cc-0d39-4292-99b8-b84bc5144f34") });
+                keyValues: new object[] { 0, new Guid("0f8aa583-c35d-452f-a275-4ed792b7f645"), new Guid("f9290460-fdae-4919-976e-bfaf5b9c8656") });
 
             migrationBuilder.DeleteData(
                 table: "Airplanes",
@@ -498,72 +498,72 @@ namespace DAL.Migrations
             migrationBuilder.DeleteData(
                 table: "ControlTowers",
                 keyColumn: "Id",
-                keyValue: new Guid("f0ca5a36-02c4-4e74-820e-eeed20605191"));
+                keyValue: new Guid("d33db14e-7ff8-4cfe-8b99-55e6f7b364a8"));
 
             migrationBuilder.DeleteData(
                 table: "Flights",
                 keyColumn: "Id",
-                keyValue: new Guid("5358068e-0385-4753-90dc-12d0461c04d4"));
+                keyValue: new Guid("3880d9ae-ae40-4a38-a058-5442b012dd66"));
 
             migrationBuilder.DeleteData(
                 table: "Flights",
                 keyColumn: "Id",
-                keyValue: new Guid("62b120ef-33e2-4190-b796-c73427933f0e"));
+                keyValue: new Guid("50f7e8bf-7924-4a74-8c2b-5ffe1cec064e"));
 
             migrationBuilder.DeleteData(
                 table: "Flights",
                 keyColumn: "Id",
-                keyValue: new Guid("afedcee1-1c84-4a84-8391-e8652f5a38ed"));
+                keyValue: new Guid("66d449df-d1d5-4f8f-b4dd-b9cdc1a773c6"));
 
             migrationBuilder.DeleteData(
                 table: "Stations",
                 keyColumn: "Id",
-                keyValue: new Guid("1a00ce5a-8a1c-44f1-846d-335250f9d3dd"));
+                keyValue: new Guid("0f8aa583-c35d-452f-a275-4ed792b7f645"));
 
             migrationBuilder.DeleteData(
                 table: "Stations",
                 keyColumn: "Id",
-                keyValue: new Guid("2bed4f6f-1cb3-45ee-9d3b-06b60b32acad"));
+                keyValue: new Guid("6924b392-9367-4ff5-b86c-914da3e48998"));
 
             migrationBuilder.DeleteData(
                 table: "Stations",
                 keyColumn: "Id",
-                keyValue: new Guid("3487aa5c-1660-4833-a1a4-7809055fde13"));
+                keyValue: new Guid("74873abc-bb33-444f-bb3a-a91ff4d49b49"));
 
             migrationBuilder.DeleteData(
                 table: "Stations",
                 keyColumn: "Id",
-                keyValue: new Guid("619c1cef-6380-4d84-a3a5-a426526c2aee"));
+                keyValue: new Guid("892da281-1edd-4254-980f-b7b7bbe0b53e"));
 
             migrationBuilder.DeleteData(
                 table: "Stations",
                 keyColumn: "Id",
-                keyValue: new Guid("94356a19-e4b3-4a88-95d2-8645c8f9b7db"));
+                keyValue: new Guid("c3485e28-656d-4aad-84d8-aa16a867c80f"));
 
             migrationBuilder.DeleteData(
                 table: "Stations",
                 keyColumn: "Id",
-                keyValue: new Guid("a0d07c8d-91e8-4382-b004-f14c15b7b9b2"));
+                keyValue: new Guid("da3d4fa3-c710-42fc-b613-a78b465b3307"));
 
             migrationBuilder.DeleteData(
                 table: "Stations",
                 keyColumn: "Id",
-                keyValue: new Guid("a4780f67-afe2-4ba8-b751-da6fa950ee36"));
+                keyValue: new Guid("db562c5d-8701-46ce-8817-a90fadfe991f"));
 
             migrationBuilder.DeleteData(
                 table: "Stations",
                 keyColumn: "Id",
-                keyValue: new Guid("b47a8452-55ac-412e-8c6a-f2bbde178239"));
+                keyValue: new Guid("ea208cf0-9042-4e92-b11e-c7174d6db48e"));
 
             migrationBuilder.DeleteData(
                 table: "Stations",
                 keyColumn: "Id",
-                keyValue: new Guid("bf14e8cb-4fee-4709-bba6-f398e0ad44e0"));
+                keyValue: new Guid("ee45404b-c63d-425e-9133-58e730c2010d"));
 
             migrationBuilder.DeleteData(
                 table: "Stations",
                 keyColumn: "Id",
-                keyValue: new Guid("fce398cc-0d39-4292-99b8-b84bc5144f34"));
+                keyValue: new Guid("f9290460-fdae-4919-976e-bfaf5b9c8656"));
 
             migrationBuilder.DeleteData(
                 table: "Airplanes",
@@ -573,12 +573,12 @@ namespace DAL.Migrations
             migrationBuilder.DeleteData(
                 table: "Flights",
                 keyColumn: "Id",
-                keyValue: new Guid("7f18b05f-4117-48f1-8263-04f19255fe8c"));
+                keyValue: new Guid("1821509e-f07c-4fa3-b42e-266ff7209de7"));
 
             migrationBuilder.DeleteData(
                 table: "Flights",
                 keyColumn: "Id",
-                keyValue: new Guid("b7cf621c-31c7-4c15-8d6f-7fbd60c7cf95"));
+                keyValue: new Guid("f35fe4e2-54b4-486c-9ba2-2261da5a8cd8"));
 
             migrationBuilder.DeleteData(
                 table: "Airplanes",

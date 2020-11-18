@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Common.Interfaces
 {
     public interface IFlightHandler
     {
-        ICollection<IStation> TakeoffStations { get; }
-        ICollection<IStation> LandingStations { get; }
         bool FlightArrived(IFlight flight);
     }
 }

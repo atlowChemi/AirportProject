@@ -111,12 +111,12 @@ namespace DAL.Migrations
                 columns: table => new
                 {
                     Direction = table.Column<int>(type: "INTEGER", nullable: false),
-                    StationId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    StationToId = table.Column<Guid>(type: "TEXT", nullable: false),
                     ControlTowerId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StationControlTowerRelation", x => new { x.StationId, x.Direction, x.ControlTowerId });
+                    table.PrimaryKey("PK_StationControlTowerRelation", x => new { x.StationToId, x.Direction, x.ControlTowerId });
                     table.ForeignKey(
                         name: "FK_StationControlTowerRelation_ControlTowers_ControlTowerId",
                         column: x => x.ControlTowerId,
@@ -124,8 +124,8 @@ namespace DAL.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StationControlTowerRelation_Stations_StationId",
-                        column: x => x.StationId,
+                        name: "FK_StationControlTowerRelation_Stations_StationToId",
+                        column: x => x.StationToId,
                         principalTable: "Stations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -188,9 +188,9 @@ namespace DAL.Migrations
                 column: "ControlTowerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_StationControlTowerRelation_StationId",
+                name: "IX_StationControlTowerRelation_StationToId",
                 table: "StationControlTowerRelation",
-                column: "StationId",
+                column: "StationToId",
                 unique: true);
 
             migrationBuilder.CreateIndex(

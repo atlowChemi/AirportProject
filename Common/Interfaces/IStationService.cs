@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Common.Models;
+using System;
+using System.Collections.Generic;
 
 namespace Common.Interfaces
 {
-    public interface IStation : IFlightHandler
+    public interface IStationService : IFlightHandler, IHasNextStations
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
+        public Station Station { get; }
         public IFlight CurrentFlight { get; }
         public bool IsStationAvailable { get; }
         public int WaitingTimeMS { get; }

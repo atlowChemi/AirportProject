@@ -9,7 +9,7 @@ namespace DAL.Repositories
 {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, new()
     {
-        private readonly AirportContext AirportContext;
+        protected readonly AirportContext AirportContext;
 
         public Repository(AirportContext airportContext)
         {

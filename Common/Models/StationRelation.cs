@@ -1,9 +1,10 @@
 ﻿using Common.Enums;
+using Common.Interfaces;
 using System;
 
 namespace Common.Models
 {
-    public class StationRelation
+    public class StationRelation : IRelatedToStation
     {
         public virtual Guid StationFromId { get; set; }
         public virtual Guid StationToId { get; set; }

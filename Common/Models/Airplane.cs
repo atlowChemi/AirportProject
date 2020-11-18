@@ -12,9 +12,5 @@ namespace Common.Models
         public int Id { get; set; }
         public string AirLine { get; set; }
         public virtual ICollection<Flight> Flights { get; set; }
-        [NotMapped]
-        public IEnumerable<Flight> Takeoffs => Flights?.Where(f => f.Direction == FlightDirection.Takeoff);
-        [NotMapped]
-        public IEnumerable<Flight> Landings => Flights?.Where(f => f.Direction == FlightDirection.Landing);
     }
 }

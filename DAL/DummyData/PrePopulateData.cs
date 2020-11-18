@@ -138,8 +138,8 @@ namespace DAL.DummyData
 
         public static StationControlTowerRelation[] StationControlTowerRelations =
         {
-            new StationControlTowerRelation { Direction = FlightDirection.Landing, ControlTowerId = guids[2][0], StationId = guids[1][0] },
-            new StationControlTowerRelation { Direction = FlightDirection.Takeoff, ControlTowerId = guids[2][0], StationId = guids[1][5], },
+            new StationControlTowerRelation { Direction = FlightDirection.Landing, ControlTowerId = guids[2][0], StationToId = guids[1][0] },
+            new StationControlTowerRelation { Direction = FlightDirection.Takeoff, ControlTowerId = guids[2][0], StationToId = guids[1][5], },
         };
     }
 }

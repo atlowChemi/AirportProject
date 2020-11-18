@@ -31,11 +31,11 @@ namespace DAL
             });
             modelBuilder.Entity<StationControlTowerRelation>(entity =>
             {
-                entity.HasKey(sctr => new { sctr.StationId, sctr.Direction, sctr.ControlTowerId });
+                entity.HasKey(sctr => new { sctr.StationToId, sctr.Direction, sctr.ControlTowerId });
                 entity
                     .HasOne(sctr => sctr.Station)
                     .WithOne(s => s.ControlTowerRelation)
-                    .HasForeignKey<StationControlTowerRelation>(sctr => sctr.StationId);
+                    .HasForeignKey<StationControlTowerRelation>(sctr => sctr.StationToId);
                 entity
                     .HasOne(sctr => sctr.ControlTower)
                     .WithMany(ct => ct.FirstStations)

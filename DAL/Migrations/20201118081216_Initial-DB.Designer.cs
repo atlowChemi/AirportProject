@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(AirportContext))]
-    [Migration("20201116092417_Initial-DB")]
+    [Migration("20201118081216_Initial-DB")]
     partial class InitialDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -127,7 +127,7 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Common.Models.StationControlTowerRelation", b =>
                 {
-                    b.Property<Guid>("StationId")
+                    b.Property<Guid>("StationToId")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Direction")
@@ -136,11 +136,11 @@ namespace DAL.Migrations
                     b.Property<Guid>("ControlTowerId")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("StationId", "Direction", "ControlTowerId");
+                    b.HasKey("StationToId", "Direction", "ControlTowerId");
 
                     b.HasIndex("ControlTowerId");
 
-                    b.HasIndex("StationId")
+                    b.HasIndex("StationToId")
                         .IsUnique();
 
                     b.ToTable("StationControlTowerRelation");
@@ -219,7 +219,7 @@ namespace DAL.Migrations
 
                     b.HasOne("Common.Models.Station", "Station")
                         .WithOne("ControlTowerRelation")
-                        .HasForeignKey("Common.Models.StationControlTowerRelation", "StationId")
+                        .HasForeignKey("Common.Models.StationControlTowerRelation", "StationToId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
