@@ -1,4 +1,5 @@
-﻿using Common.Models;
+﻿using Common.Interfaces;
+using Common.Models;
 using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
@@ -9,19 +10,25 @@ namespace Server.Hubs
 {
     public class FlightHub : Hub
     {
-        public ICollection<Airplane> GetAirplanes()
+        private readonly IAirportService airportService;
+
+        public FlightHub(IAirportService airportService)
         {
-            return new Airplane[]{ new Airplane(), new Airplane(), new Airplane() };
+            this.airportService = airportService;
+        }
+        public IEnumerable<Airplane> GetAirplanes()
+        {
+            var airplanes = airportService.GetAirplanes();
+            return airplanes;
         }
 
-        public Flight CreateFlight(Flight flight)
+        public Flight FlightArrival(Flight flight)
         {
+            airportService.HandleNewFlightArrivedAsync(flight);
             return flight;
         }
 
-        public override Task OnConnectedAsync()
-        {
-            return base.OnConnectedAsync();
-        }
+        public void GetFlightData() { }
+        public void GetStationsData() { }
     }
 }
