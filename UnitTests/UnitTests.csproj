@@ -19,8 +19,4 @@
     <ProjectReference Include="..\Simulator\Simulator.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="BL\Mocks\" />
-  </ItemGroup>
-
 </Project>

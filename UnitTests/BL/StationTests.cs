@@ -1,6 +1,7 @@
-using BL.Models;
+using BL.Services;
 using Common.Enums;
 using Common.Interfaces;
+using Common.Models;
 using System;
 using UnitTests.BL.Mocks;
 using Xunit;
@@ -10,75 +11,94 @@ namespace UnitTests.BL
     public class StationTests
     {
         [Fact]
-        public void StationRejectsFlightWhileBusy()
+        public void StationServiceThrowsIfStationIsNull()
         {
-            IStation station = new Station(0);
+            Assert.Throws<ArgumentNullException>("station", () => new StationService(null, 1));
+        }
 
-            FlightMock flight1 = new FlightMock { Direction = FlightDirection.Landing };
-            FlightMock flight2 = new FlightMock { Direction = FlightDirection.Landing };
+        [Fact]
+        public void StationServiceThrowsIfWaitingToShort()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>("waitingTimeMS", () => new StationService(new Station(), 0));
+        }
+
+        [Fact]
+        public void StationServiceHasExpectedWaitingTime()
+        {
+            IStationService station = new StationService(new Station(), 1000);
+            Assert.Equal(1000, station.WaitingTimeMS);
+        }
+
+        [Fact]
+        public void StationServiceRejectsFlightWhileBusy()
+        {
+            IStationService station = new StationService(new Station(), 1);
+
+            FlightServiceMock flight1 = new FlightServiceMock { Flight = new Flight { Direction = FlightDirection.Landing } };
+            FlightServiceMock flight2 = new FlightServiceMock { Flight = new Flight { Direction = FlightDirection.Landing } };
 
             Assert.True(station.FlightArrived(flight1));
             Assert.Equal(station.CurrentFlight, flight1);
-            Assert.False(station.IsStationAvailable);
+            Assert.False(station.IsHandlerAvailable);
             Assert.False(station.FlightArrived(flight2));
             Assert.Equal(station.CurrentFlight, flight1);
         }
 
         [Fact]
-        public void StationAcceptsFlightWhenAvailable()
+        public void StationServiceAcceptsFlightWhenAvailable()
         {
-            IStation station = new Station(0);
+            IStationService station = new StationService(new Station(), 1);
 
-            FlightMock flight1 = new FlightMock { Direction = FlightDirection.Landing };
-            FlightMock flight2 = new FlightMock { Direction = FlightDirection.Landing };
+            FlightServiceMock flight1 = new FlightServiceMock { Flight = new Flight { Direction = FlightDirection.Landing } };
+            FlightServiceMock flight2 = new FlightServiceMock { Flight = new Flight { Direction = FlightDirection.Landing } };
 
             Assert.True(station.FlightArrived(flight1));
-            Assert.False(station.IsStationAvailable);
+            Assert.False(station.IsHandlerAvailable);
             Assert.Equal(station.CurrentFlight, flight1);
 
             flight1.StopWaiting();
             Assert.Null(station.CurrentFlight);
-            Assert.True(station.IsStationAvailable);
+            Assert.True(station.IsHandlerAvailable);
             Assert.True(station.FlightArrived(flight2));
             Assert.Equal(station.CurrentFlight, flight2);
         }
 
         [Fact]
-        public void PlaneWaitInStationIfNextStationOneIsNotAvailable()
+        public void PlaneWaitInStationIfNextStationIsNotAvailable()
         {
-            IStation station1 = new Station(0);
-            IStation station2 = new Station(0);
-            station1.LandingStations.Add(station2);
+            IStationService station1 = new StationService(new Station(), 1);
+            IStationService station2 = new StationService(new Station(), 1);
+            station1.ConnectToNextStations(new IFlightHandler[] { station2 }, null);
 
-            FlightMock flight1 = new FlightMock { Direction = FlightDirection.Landing };
-            FlightMock flight2 = new FlightMock { Direction = FlightDirection.Landing };
+            FlightServiceMock flight1 = new FlightServiceMock { Flight = new Flight { Direction = FlightDirection.Landing } };
+            FlightServiceMock flight2 = new FlightServiceMock { Flight = new Flight { Direction = FlightDirection.Landing } };
 
             Assert.True(station1.FlightArrived(flight1));
             Assert.Equal(station1.CurrentFlight, flight1);
-            
+
             Assert.True(station2.FlightArrived(flight2));
             Assert.Equal(station2.CurrentFlight, flight2);
 
             flight1.StopWaiting();
 
-            Assert.False(station1.IsStationAvailable);
+            Assert.False(station1.IsHandlerAvailable);
             Assert.Equal(station1.CurrentFlight, flight1);
             Assert.NotEqual(station2.CurrentFlight, flight1);
             Assert.Equal(station2.CurrentFlight, flight2);
         }
 
         [Fact]
-        public void StationMarksAsAvailableWhenPlaneDeparts()
+        public void StationServiceMarksAsAvailableWhenPlaneDeparts()
         {
-            IStation station1 = new Station(0);
-            IStation station2 = new Station(0);
-            station1.LandingStations.Add(station2);
+            IStationService station1 = new StationService(new Station(), 1);
+            IStationService station2 = new StationService(new Station(), 1);
+            station1.ConnectToNextStations(new IFlightHandler[] { station2 }, null);
 
-            FlightMock flight1 = new FlightMock { Direction = FlightDirection.Landing };
+            FlightServiceMock flight1 = new FlightServiceMock { Flight = new Flight { Direction = FlightDirection.Landing } };
 
             Assert.True(station1.FlightArrived(flight1));
             Assert.Equal(station1.CurrentFlight, flight1);
-            
+
             Assert.Null(station2.CurrentFlight);
 
             var evt = Assert.Raises<EventArgs>(xHandler => station1.AvailabiltyChange += xHandler, xHandler => station1.AvailabiltyChange -= xHandler, () => flight1.StopWaiting());
@@ -87,114 +107,125 @@ namespace UnitTests.BL
             Assert.Equal(station1, evt.Sender);
             Assert.Equal(EventArgs.Empty, evt.Arguments);
 
-            Assert.True(station1.IsStationAvailable);
+            Assert.True(station1.IsHandlerAvailable);
             Assert.Null(station1.CurrentFlight);
             Assert.Equal(station2.CurrentFlight, flight1);
         }
 
         [Fact]
-        public void StationTurnsAvailableIfNoContinuationStation()
+        public void StationServiceTurnsAvailableIfNoContinuationStation()
         {
-            IStation station1 = new Station(0);
-            IStation station2 = new Station(0);
-            station1.LandingStations.Add(station2);
+            IStationService station1 = new StationService(new Station(), 1);
+            IStationService station2 = new StationService(new Station(), 1);
+            station1.ConnectToNextStations(new IFlightHandler[] { station2 }, null);
 
-            FlightMock flight1 = new FlightMock { Direction = FlightDirection.Landing };
-            FlightMock flight2 = new FlightMock { Direction = FlightDirection.Landing };
+            FlightServiceMock flight1 = new FlightServiceMock { Flight = new Flight { Direction = FlightDirection.Landing } };
+            FlightServiceMock flight2 = new FlightServiceMock { Flight = new Flight { Direction = FlightDirection.Landing } };
 
             Assert.True(station2.FlightArrived(flight1));
             Assert.True(station1.FlightArrived(flight2));
 
-            Assert.False(station2.IsStationAvailable);
+            Assert.False(station2.IsHandlerAvailable);
             Assert.Equal(station2.CurrentFlight, flight1);
 
-            Assert.False(station1.IsStationAvailable);
+            Assert.False(station1.IsHandlerAvailable);
             Assert.Equal(station1.CurrentFlight, flight2);
 
             flight2.StopWaiting();
-            Assert.False(station1.IsStationAvailable);
+            Assert.False(station1.IsHandlerAvailable);
             Assert.Equal(station1.CurrentFlight, flight2);
 
             flight1.StopWaiting();
-            Assert.True(station1.IsStationAvailable);
-            Assert.False(station2.IsStationAvailable);
+            Assert.True(station1.IsHandlerAvailable);
+            Assert.False(station2.IsHandlerAvailable);
             Assert.Equal(station2.CurrentFlight, flight2);
         }
 
         [Fact]
-        public void StationSendsPlainToCorrectNextStation()
+        public void StationServiceSendsPlainToCorrectNextStation()
         {
-            IStation stationStart = new Station(0);
-            IStation stationLand = new Station(0);
-            IStation stationTakoff = new Station(0);
-            stationStart.LandingStations.Add(stationLand);
-            stationStart.TakeoffStations.Add(stationTakoff);
+            IStationService stationStart = new StationService(new Station(), 1);
+            IStationService stationLand = new StationService(new Station(), 1);
+            IStationService stationTakoff = new StationService(new Station(), 1);
+            stationStart.ConnectToNextStations(new IFlightHandler[] { stationLand }, new IFlightHandler[] { stationTakoff });
 
-            FlightMock flightLanding = new FlightMock { Direction = FlightDirection.Landing };
-            FlightMock flightTakoeff = new FlightMock { Direction = FlightDirection.Takeoff };
+            FlightServiceMock flightLanding = new FlightServiceMock { Flight = new Flight { Direction = FlightDirection.Landing } };
+            FlightServiceMock flightTakoeff = new FlightServiceMock { Flight = new Flight { Direction = FlightDirection.Takeoff } };
 
             Assert.True(stationStart.FlightArrived(flightLanding));
-            Assert.False(stationStart.IsStationAvailable);
+            Assert.False(stationStart.IsHandlerAvailable);
             Assert.Equal(stationStart.CurrentFlight, flightLanding);
 
-            Assert.True(stationLand.IsStationAvailable);
-            Assert.True(stationTakoff.IsStationAvailable);
+            Assert.True(stationLand.IsHandlerAvailable);
+            Assert.True(stationTakoff.IsHandlerAvailable);
 
             flightLanding.StopWaiting();
 
-            Assert.True(stationStart.IsStationAvailable);
-            Assert.False(stationLand.IsStationAvailable);
+            Assert.True(stationStart.IsHandlerAvailable);
+            Assert.False(stationLand.IsHandlerAvailable);
             Assert.Equal(stationLand.CurrentFlight, flightLanding);
 
             Assert.True(stationStart.FlightArrived(flightTakoeff));
 
-            Assert.False(stationStart.IsStationAvailable);
+            Assert.False(stationStart.IsHandlerAvailable);
             Assert.Equal(stationStart.CurrentFlight, flightTakoeff);
 
             flightTakoeff.StopWaiting();
 
-            Assert.True(stationStart.IsStationAvailable);
-            Assert.False(stationTakoff.IsStationAvailable);
+            Assert.True(stationStart.IsHandlerAvailable);
+            Assert.False(stationTakoff.IsHandlerAvailable);
             Assert.Equal(stationTakoff.CurrentFlight, flightTakoeff);
         }
 
         [Fact]
-        public void StationDowsNotSendPlainToIncorrectNextStation()
+        public void StationServiceDowsNotSendPlainToIncorrectNextStation()
         {
-            IStation stationStart = new Station(0);
-            IStation stationLand = new Station(0);
-            IStation stationTakoff = new Station(0);
-            stationStart.LandingStations.Add(stationLand);
-            stationStart.TakeoffStations.Add(stationTakoff);
+            IStationService stationStart = new StationService(new Station(), 1);
+            IStationService stationLand = new StationService(new Station(), 1);
+            IStationService stationTakoff = new StationService(new Station(), 1);
+            stationStart.ConnectToNextStations(new IFlightHandler[] { stationLand }, new IFlightHandler[] { stationTakoff });
 
-            FlightMock flight1 = new FlightMock { Direction = FlightDirection.Takeoff };
-            FlightMock flight2 = new FlightMock { Direction = FlightDirection.Takeoff };
+            FlightServiceMock flight1 = new FlightServiceMock { Flight = new Flight { Direction = FlightDirection.Takeoff } };
+            FlightServiceMock flight2 = new FlightServiceMock { Flight = new Flight { Direction = FlightDirection.Takeoff } };
 
             Assert.True(stationStart.FlightArrived(flight1));
-            Assert.False(stationStart.IsStationAvailable);
+            Assert.False(stationStart.IsHandlerAvailable);
             Assert.Equal(stationStart.CurrentFlight, flight1);
 
-            Assert.True(stationLand.IsStationAvailable);
-            Assert.True(stationTakoff.IsStationAvailable);
+            Assert.True(stationLand.IsHandlerAvailable);
+            Assert.True(stationTakoff.IsHandlerAvailable);
 
             flight1.StopWaiting();
 
-            Assert.True(stationStart.IsStationAvailable);
-            Assert.False(stationTakoff.IsStationAvailable);
+            Assert.True(stationStart.IsHandlerAvailable);
+            Assert.False(stationTakoff.IsHandlerAvailable);
             Assert.Equal(stationTakoff.CurrentFlight, flight1);
 
             Assert.True(stationStart.FlightArrived(flight2));
-            Assert.False(stationStart.IsStationAvailable);
+            Assert.False(stationStart.IsHandlerAvailable);
             Assert.Equal(stationStart.CurrentFlight, flight2);
 
             flight2.StopWaiting();
 
-            Assert.False(stationStart.IsStationAvailable);
+            Assert.False(stationStart.IsHandlerAvailable);
             Assert.Equal(stationStart.CurrentFlight, flight2);
-            Assert.False(stationTakoff.IsStationAvailable);
+            Assert.False(stationTakoff.IsHandlerAvailable);
             Assert.Equal(stationTakoff.CurrentFlight, flight1);
-            Assert.True(stationLand.IsStationAvailable);
+            Assert.True(stationLand.IsHandlerAvailable);
             Assert.Null(stationLand.CurrentFlight);
+        }
+
+        [Fact]
+        public void StationServiceShouldSaveNextStations()
+        {
+            IHasNextStations station = new StationService(new Station(), 1);
+            IFlightHandler[] landingStations = Array.Empty<IFlightHandler>();
+            IFlightHandler[] takeoffStations = Array.Empty<IFlightHandler>();
+
+            station.ConnectToNextStations(landingStations, takeoffStations);
+
+            Assert.Equal(landingStations, station.LandingStations);
+            Assert.Equal(takeoffStations, station.TakeoffStations);
         }
     }
 }
