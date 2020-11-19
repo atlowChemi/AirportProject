@@ -1,15 +1,10 @@
-﻿using Common.Enums;
-using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Common.Models
 {
     public class Airplane
     {
-        public int Id { get; set; }
+        public int Id { get; init; }
         public string AirLine { get; set; }
         public virtual ICollection<Flight> Flights { get; set; }
     }

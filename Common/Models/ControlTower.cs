@@ -1,8 +1,6 @@
-﻿using Common.Interfaces;
-using Microsoft.EntityFrameworkCore.Infrastructure;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Common.Models
 {
@@ -17,7 +15,7 @@ namespace Common.Models
         }
 
 
-        public Guid Id { get; set; }
+        public Guid Id { get; init; }
         public string Name { get; set; }
 
         private ICollection<StationControlTowerRelation> firstStations;

@@ -16,7 +16,7 @@ namespace Common.Models
             this.lazyLoader = lazyLoader;
         }
 
-        public Guid Id { get; set; }
+        public Guid Id { get; init; }
         public string Name { get; set; }
         public virtual Guid? CurrentFlightId { get; set; }
         public virtual Flight CurrentFlight { get; set; }

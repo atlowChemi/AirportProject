@@ -6,7 +6,7 @@ namespace Common.Models
 {
     public class Flight
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; init; }
         public string To { get; set; }
         public string From { get; set; }
         public DateTime PlannedTime { get; set; }
