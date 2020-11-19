@@ -36,8 +36,9 @@ namespace Simulator.Services
             FlightDirection direction = randomDataService.RandomFlightDirection();
             (string from, string to) = PickRandomTarget(direction);
             Airplane airplane = airplaneSelectorService.GetAirplane();
+            DateTime plannedTime = DateTime.Now.AddSeconds(randomDataService.RandomNumber(10, 80));
             if (airplane == null) return null;
-            return new Flight { Direction = direction, AirplaneId = airplane.Id, From = from, To = to };
+            return new Flight { Direction = direction, AirplaneId = airplane.Id, From = from, To = to, PlannedTime = plannedTime };
         }
 
         private async Task<Flight> SendFlightToHub()
@@ -56,11 +57,11 @@ namespace Simulator.Services
             return ("TLV", airports[randomIndex]);
         }
 
-        private string FlightToMessage(Flight flight)
+        private static string FlightToMessage(Flight flight)
         {
             string flightDirection = Enum.GetName(typeof(FlightDirection), flight.Direction);
             string flightData = $"{flight.From} > {flight.To}";
-            return $"Created {flightDirection} flight: {flightData}";
+            return $"Created {flightDirection} flight: {flightData} for { flight.PlannedTime.ToLongTimeString() }";
         }
     }
 }
