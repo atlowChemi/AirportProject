@@ -1,19 +1,21 @@
-﻿using Common.Enums;
-using Common.Interfaces;
+﻿using Common.Interfaces;
+using Common.Models;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace BL.Models
+namespace BL.Services
 {
-    public class Flight : IFlight
+    public class FlightService : IFlightService
     {
-        public Guid Id { get; set; }
-        public FlightDirection Direction { get; set; }
-        public IAirplane Airplane { get; set; }
+        public Flight Flight { get; }
 
         public event EventHandler<EventArgs> ReadyToContinue;
+
+        public FlightService(Flight flight)
+        {
+            if (flight is null) throw new ArgumentNullException(nameof(flight), "A flight cannot be null! This is not Malaysia Airlines!");
+            Flight = flight;
+        }
 
         public async Task StartWaitingInStationAsync(int delayInMS)
         {

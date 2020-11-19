@@ -1,5 +1,6 @@
-﻿using BL.Models;
+﻿using BL.Services;
 using Common.Interfaces;
+using Common.Models;
 using System;
 using Xunit;
 
@@ -8,20 +9,28 @@ namespace UnitTests.BL
     public class FlightTests
     {
         [Fact]
-        public void FlightThrowsIfNegativeTime()
+        public void FlightServiceThrowsIfFlightIsNull()
         {
-            IFlight flight = new Flight();
+            var ex = Assert.Throws<ArgumentNullException>("flight", () => new FlightService(null));
+            Assert.NotNull(ex);
+
+        }
+
+        [Fact]
+        public void FlightServiceThrowsIfNegativeTime()
+        {
+            IFlightService flight = new FlightService(new Flight());
             var ex = Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => flight.StartWaitingInStationAsync(-1));
             Assert.NotNull(ex);
 
         }
 
         [Fact]
-        public void FlightNotifiesAfterAmountOfTime()
+        public void FlightServiceNotifiesAfterAmountOfTime()
         {
-            IFlight flight = new Flight();
+            IFlightService flight = new FlightService(new Flight());
 
-            var evt = Assert.Raises<EventArgs>(
+            var evt = Assert.RaisesAsync<EventArgs>(
                 xHandler => flight.ReadyToContinue += xHandler,
                 xHandler => flight.ReadyToContinue -= xHandler,
                 () => flight.StartWaitingInStationAsync(0));
