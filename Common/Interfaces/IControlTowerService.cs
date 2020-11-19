@@ -6,7 +6,7 @@ namespace Common.Interfaces
 {
     public interface IControlTowerService : IHasNextStations
     {
-        //public ControlTower ControlTower { get; set; }
-        Task<Flight> FlightArrived(Flight flight);
+        public ControlTower ControlTower { get; }
+        void FlightArrived(Flight flight);
     }
 }
