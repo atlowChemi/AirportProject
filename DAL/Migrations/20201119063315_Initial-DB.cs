@@ -39,6 +39,7 @@ namespace DAL.Migrations
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     To = table.Column<string>(type: "TEXT", nullable: true),
                     From = table.Column<string>(type: "TEXT", nullable: true),
+                    PlannedTime = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Direction = table.Column<int>(type: "INTEGER", nullable: false),
                     AirplaneId = table.Column<int>(type: "INTEGER", nullable: false),
                     ControlTowerId = table.Column<Guid>(type: "TEXT", nullable: true)

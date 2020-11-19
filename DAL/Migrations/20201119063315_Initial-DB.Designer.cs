@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(AirportContext))]
-    [Migration("20201118081216_Initial-DB")]
+    [Migration("20201119063315_Initial-DB")]
     partial class InitialDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -65,6 +65,9 @@ namespace DAL.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("From")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("PlannedTime")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("To")
