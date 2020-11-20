@@ -59,6 +59,7 @@ namespace BL.Services
             }
             return response;
         }
+
         /// <summary>
         /// Create new Service for each of the stations.
         /// </summary>
@@ -69,7 +70,9 @@ namespace BL.Services
             {
                 response = true;
                 int waitingTimeMS = randomDataGeneratorService.CreateRandomNumber(1 * 1000, 6 * 1000);
-                stationServices.Add(new StationService(station, waitingTimeMS));
+                StationService stationService = new StationService(station, waitingTimeMS);
+                stationService.AvailabiltyChange += StationService_AvailabiltyChange;
+                stationServices.Add(stationService);
             }
             return response;
         }
@@ -105,6 +108,12 @@ namespace BL.Services
                 .Where(sctr => sctr.Direction == FlightDirection.Takeoff)
                 .Join(stationServices, sr => sr.StationToId, ss => ss.Station.Id, (sctr, ss) => ss);
             hasNextStations.ConnectToNextStations(landingStations, takeoffStations);
+        }
+
+        private void StationService_AvailabiltyChange(object sender, EventArgs e)
+        {
+            //TODO: Call Action that will update DB.
+            throw new NotImplementedException();
         }
     }
 }
