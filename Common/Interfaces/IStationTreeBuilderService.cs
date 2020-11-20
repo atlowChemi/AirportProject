@@ -6,7 +6,7 @@ namespace Common.Interfaces
     public interface IStationTreeBuilderService
     {
         /// <summary>
-        /// Indexer to return the controlTowerService by it's name.
+        /// Indexer to return the controlTowerService by its name.
         /// </summary>
         /// <param name="name">Name of control tower to get.</param>
         /// <returns>The controlTowerService with a control tower with this name, or null - if no tower found.</returns>
