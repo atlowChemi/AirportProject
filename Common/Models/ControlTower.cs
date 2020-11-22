@@ -68,5 +68,19 @@ namespace Common.Models
             get => lazyLoader.Load(this, ref flightsWaiting);
             set => flightsWaiting = value;
         }
+
+
+        /// <summary>
+        /// The <see cref="Station">Stations</see> of the Control tower.
+        /// </summary>
+        private ICollection<Station> stations;
+        /// <summary>
+        /// The <see cref="Station">Stations</see> of the Control tower.
+        /// </summary>
+        public virtual ICollection<Station> Stations
+        {
+            get => lazyLoader.Load(this, ref stations);
+            set => stations = value;
+        }
     }
 }

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(AirportContext))]
-    [Migration("20201119063315_Initial-DB")]
+    [Migration("20201122123346_Initial-DB")]
     partial class InitialDB
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -115,6 +115,9 @@ namespace DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid>("ControlTowerId")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid?>("CurrentFlightId")
                         .HasColumnType("TEXT");
 
@@ -122,6 +125,8 @@ namespace DAL.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ControlTowerId");
 
                     b.HasIndex("CurrentFlightId");
 
@@ -205,9 +210,17 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("Common.Models.Station", b =>
                 {
+                    b.HasOne("Common.Models.ControlTower", "ControlTower")
+                        .WithMany("Stations")
+                        .HasForeignKey("ControlTowerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Common.Models.Flight", "CurrentFlight")
                         .WithMany()
                         .HasForeignKey("CurrentFlightId");
+
+                    b.Navigation("ControlTower");
 
                     b.Navigation("CurrentFlight");
                 });
@@ -260,6 +273,8 @@ namespace DAL.Migrations
                     b.Navigation("FirstStations");
 
                     b.Navigation("FlightsWaiting");
+
+                    b.Navigation("Stations");
                 });
 
             modelBuilder.Entity("Common.Models.Flight", b =>

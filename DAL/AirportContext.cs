@@ -17,18 +17,13 @@ namespace DAL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ControlTower>().HasIndex(ct => ct.Name).IsUnique();
-            modelBuilder.Entity<StationRelation>(entity =>
-            {
-                entity.HasKey(sr => new { sr.StationToId, sr.StationFromId, sr.Direction });
-                entity
-                    .HasOne(sr => sr.StationFrom)
-                    .WithMany(s => s.ChildrenStations)
-                    .HasForeignKey(sr => sr.StationFromId);
-                entity
-                    .HasOne(sr => sr.StationTo)
-                    .WithMany(s => s.ParentStations)
-                    .HasForeignKey(sr => sr.StationToId);
-            });
+            DefineStationToStationRelation(modelBuilder);
+            DefineStationToControlTowerRelation(modelBuilder);
+            InjectPrePopulatedData(modelBuilder);
+        }
+
+        private void DefineStationToControlTowerRelation(ModelBuilder modelBuilder)
+        {
             modelBuilder.Entity<StationControlTowerRelation>(entity =>
             {
                 entity.HasKey(sctr => new { sctr.StationToId, sctr.Direction, sctr.ControlTowerId });
@@ -41,6 +36,26 @@ namespace DAL
                     .WithMany(ct => ct.FirstStations)
                     .HasForeignKey(sctr => sctr.ControlTowerId);
             });
+        }
+
+        private void DefineStationToStationRelation(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<StationRelation>(entity =>
+            {
+                entity.HasKey(sr => new { sr.StationToId, sr.StationFromId, sr.Direction });
+                entity
+                    .HasOne(sr => sr.StationFrom)
+                    .WithMany(s => s.ChildrenStations)
+                    .HasForeignKey(sr => sr.StationFromId);
+                entity
+                    .HasOne(sr => sr.StationTo)
+                    .WithMany(s => s.ParentStations)
+                    .HasForeignKey(sr => sr.StationToId);
+            });
+        }
+
+        private void InjectPrePopulatedData(ModelBuilder modelBuilder)
+        {
             modelBuilder.Entity<Airplane>().HasData(PrePopulateData.Airplanes);
             modelBuilder.Entity<Flight>().HasData(PrePopulateData.Flights);
             modelBuilder.Entity<Station>().HasData(PrePopulateData.Stations);

@@ -67,11 +67,18 @@ namespace DAL.Migrations
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", nullable: true),
-                    CurrentFlightId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    CurrentFlightId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    ControlTowerId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Stations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Stations_ControlTowers_ControlTowerId",
+                        column: x => x.ControlTowerId,
+                        principalTable: "ControlTowers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Stations_Flights_CurrentFlightId",
                         column: x => x.CurrentFlightId,
@@ -198,6 +205,11 @@ namespace DAL.Migrations
                 name: "IX_StationRelation_StationFromId",
                 table: "StationRelation",
                 column: "StationFromId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Stations_ControlTowerId",
+                table: "Stations",
+                column: "ControlTowerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Stations_CurrentFlightId",

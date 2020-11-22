@@ -43,6 +43,14 @@ namespace Common.Models
         /// The currnet <see cref="Flight">Flight</see> in the DB.
         /// </summary>
         public virtual Flight CurrentFlight { get; set; }
+        /// <summary>
+        /// The Id of the <see cref="Models.ControlTower">Control Tower</see> this station belongs to.
+        /// </summary>
+        public virtual Guid ControlTowerId { get; set; }
+        /// <summary>
+        /// The <see cref="Models.ControlTower">Control Tower</see> this station belongs to.
+        /// </summary>
+        public virtual ControlTower ControlTower { get; set; }
 
         /// <summary>
         /// The relation with a control tower.

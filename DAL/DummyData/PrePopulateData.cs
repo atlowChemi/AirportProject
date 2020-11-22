@@ -6,7 +6,7 @@ namespace DAL.DummyData
 {
     public static class PrePopulateData
     {
-        public static Airplane[] Airplanes =
+        public static readonly Airplane[] Airplanes =
         {
             new Airplane{ Id = 1, AirLine = "El Al" },
             new Airplane{ Id = 2, AirLine = "Lufthansa" },
@@ -48,7 +48,7 @@ namespace DAL.DummyData
             },
         };
 
-        public static Flight[] Flights =
+        public static readonly Flight[] Flights =
         {
             new Flight { Id = guids[0][0], AirplaneId = 1, Direction = FlightDirection.Landing, From = "JFK", To = "TLV", PlannedTime = new DateTime(2020, 11, 15, 4, 18, 0) },
             new Flight { Id = guids[0][1], AirplaneId = 2, Direction = FlightDirection.Landing, From = "IST", To = "TLV", PlannedTime = new DateTime(2020, 11, 15, 4, 24, 57) },
@@ -58,21 +58,21 @@ namespace DAL.DummyData
             new Flight { Id = guids[0][5], AirplaneId = 2, Direction = FlightDirection.Takeoff, From = "TLV", To = "LTN", PlannedTime = new DateTime(2020, 11, 15, 4, 36, 29) },
         };
 
-        public static Station[] Stations =
+        public static readonly Station[] Stations =
         {
-            new Station { Id = guids[1][0], Name = "Land port 1", CurrentFlightId = guids[0][2] }, // LandingStations = new List<Guid> { guids[1][1], guids[1][2], }
-            new Station { Id = guids[1][1], Name = "Drop passengers", }, // LandingStations = new List<Guid> { guids[1][3], }
-            new Station { Id = guids[1][2], Name = "Drop passengers", }, // LandingStations = new List<Guid> { guids[1][3], } 
-            new Station { Id = guids[1][3], Name = "Drop lugage",  }, // LandingStations = new List<Guid> { guids[1][4] }
-            new Station { Id = guids[1][4], Name = "Refuel",  }, // TakeoffStations = new List<Guid> { guids[1][6] }
-            new Station { Id = guids[1][5], Name = "Takeoff port 1", }, // TakeoffStations = new List<Guid> { guids[1][4] } 
-            new Station { Id = guids[1][6], Name = "Pick lugage",  }, // TakeoffStations = new List<Guid> { guids[1][7], guids[1][8], }, 
-            new Station { Id = guids[1][7], Name = "Pick passengers",  }, // TakeoffStations = new List<Guid> { guids[1][9] },
-            new Station { Id = guids[1][8], Name = "Pick passengers",  }, // TakeoffStations = new List<Guid> { guids[1][9] },
-            new Station { Id = guids[1][9], Name = "Takeoff", CurrentFlightId = guids[0][5] },
+            new Station { Id = guids[1][0], ControlTowerId = guids[2][0], Name = "Land port 1", CurrentFlightId = guids[0][2] }, // LandingStations = new List<Guid> { guids[1][1], guids[1][2], }
+            new Station { Id = guids[1][1], ControlTowerId = guids[2][0], Name = "Drop passengers", }, // LandingStations = new List<Guid> { guids[1][3], }
+            new Station { Id = guids[1][2], ControlTowerId = guids[2][0], Name = "Drop passengers", }, // LandingStations = new List<Guid> { guids[1][3], } 
+            new Station { Id = guids[1][3], ControlTowerId = guids[2][0], Name = "Drop lugage",  }, // LandingStations = new List<Guid> { guids[1][4] }
+            new Station { Id = guids[1][4], ControlTowerId = guids[2][0], Name = "Refuel",  }, // TakeoffStations = new List<Guid> { guids[1][6] }
+            new Station { Id = guids[1][5], ControlTowerId = guids[2][0], Name = "Takeoff port 1", }, // TakeoffStations = new List<Guid> { guids[1][4] } 
+            new Station { Id = guids[1][6], ControlTowerId = guids[2][0], Name = "Pick lugage",  }, // TakeoffStations = new List<Guid> { guids[1][7], guids[1][8], }, 
+            new Station { Id = guids[1][7], ControlTowerId = guids[2][0], Name = "Pick passengers",  }, // TakeoffStations = new List<Guid> { guids[1][9] },
+            new Station { Id = guids[1][8], ControlTowerId = guids[2][0], Name = "Pick passengers",  }, // TakeoffStations = new List<Guid> { guids[1][9] },
+            new Station { Id = guids[1][9], ControlTowerId = guids[2][0], Name = "Takeoff", CurrentFlightId = guids[0][5] },
         };
 
-        public static StationRelation[] StationRelations =
+        public static readonly StationRelation[] StationRelations =
         {
             new StationRelation { Direction = FlightDirection.Landing, StationFromId = guids[1][0], StationToId = guids[1][1] },
             new StationRelation { Direction = FlightDirection.Landing, StationFromId = guids[1][0], StationToId = guids[1][2] },
@@ -87,7 +87,7 @@ namespace DAL.DummyData
             new StationRelation { Direction = FlightDirection.Takeoff, StationFromId = guids[1][8], StationToId = guids[1][9] },
         };
 
-        public static FlightHistory[] FlightHistories =
+        public static readonly FlightHistory[] FlightHistories =
         {
 
             #region Flight 0
@@ -127,12 +127,12 @@ namespace DAL.DummyData
             
         };
 
-        public static ControlTower[] ControlTowers =
+        public static readonly ControlTower[] ControlTowers =
         {
             new ControlTower{ Id= guids[2][0], Name = "TLV" },
         };
 
-        public static StationControlTowerRelation[] StationControlTowerRelations =
+        public static readonly StationControlTowerRelation[] StationControlTowerRelations =
         {
             new StationControlTowerRelation { Direction = FlightDirection.Landing, ControlTowerId = guids[2][0], StationToId = guids[1][0] },
             new StationControlTowerRelation { Direction = FlightDirection.Takeoff, ControlTowerId = guids[2][0], StationToId = guids[1][5], },
