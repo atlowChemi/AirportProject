@@ -58,9 +58,10 @@ namespace UnitTests.BL
             Assert.Equal(flightHandlerLanding, controlTowerService.LandingStations);
 
             Flight flight = new Flight { Direction = FlightDirection.Landing };
+            FlightServiceMock flightServiceMock = new FlightServiceMock { Flight = flight };
 
             Assert.True(flightHandlerLanding[0].IsHandlerAvailable);
-            controlTowerService.FlightArrived(flight);
+            controlTowerService.FlightArrived(flightServiceMock);
             Assert.False(flightHandlerLanding[0].IsHandlerAvailable);
         }
 
@@ -83,7 +84,8 @@ namespace UnitTests.BL
             Assert.False(station.IsHandlerAvailable);
 
             Flight flight = new Flight { Direction = FlightDirection.Landing };
-            controlTowerService.FlightArrived(flight);
+            FlightServiceMock flightServiceMock = new FlightServiceMock { Flight = flight };
+            controlTowerService.FlightArrived(flightServiceMock);
 
             Assert.False(station.IsHandlerAvailable);
             Assert.Equal(preFlight, station.CurrentFlight);
