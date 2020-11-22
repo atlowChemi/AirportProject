@@ -8,6 +8,8 @@ namespace Common.Events
         public Flight Flight{ get; init; }
         public Station StationFrom {get; init;}
         public Station StationTo {get; init;}
+        public bool IsFromControlTowerToFirstStation => StationFrom is null && StationTo is not null;
+        public bool IsFromLastStationToEnd => StationFrom is not null && StationTo is null;
 
         public FlightEventArgs(Flight flight, Station stationFrom, Station stationTo)
         {
