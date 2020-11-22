@@ -44,7 +44,7 @@ namespace UnitTests.BL
         {
             ControlTower controlTower = new ControlTower();
             IControlTowerService controlTowerService = new ControlTowerService(controlTower);
-            Assert.Throws<ArgumentNullException>("flight", () => controlTowerService.FlightArrived(null));
+            Assert.Throws<ArgumentNullException>("flightService", () => controlTowerService.FlightArrived(null));
         }
 
         [Fact]
