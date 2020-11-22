@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Common.Events;
 using System.Threading.Tasks;
 
 namespace Common.Interfaces
@@ -11,5 +8,11 @@ namespace Common.Interfaces
     /// </summary>
     public interface IAirportDBService
     {
+        /// <summary>
+        /// Update the database when a <see cref="Models.Flight">flight</see> has moved.
+        /// </summary>
+        /// <param name="flightEvent">The flight event arguments.</param>
+        /// <returns>An awaitable task.</returns>
+        Task FlightMoved(FlightEventArgs flightEvent);
     }
 }
