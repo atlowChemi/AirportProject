@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Common.Enums;
+using Common.Events;
 using Common.Interfaces;
 using Common.Models;
 
@@ -16,6 +17,7 @@ namespace BL.Services
         public IEnumerable<IStationFlightHandler> TakeoffStations { get; private set; }
         private Queue<Flight> LandingFlights { get; set; }
         private Queue<Flight> TakeoffFlights { get; set; }
+        public event EventHandler<FlightEventArgs> FlightChanged;
 
 
         public ControlTowerService(ControlTower controlTower)
@@ -25,6 +27,7 @@ namespace BL.Services
             InitFlightQueues();
             SignupToAllStationsEvents();
         }
+
 
         public bool FlightArrived(IFlightService flightService)
         {
@@ -89,9 +92,10 @@ namespace BL.Services
             IEnumerable<IStationFlightHandler> relevantFirstStations = GetRelevantFlightHandler(FlightDirection.Landing);
 
             IStationFlightHandler avaialabeStation = relevantFirstStations?.FirstOrDefault(ss => ss.IsHandlerAvailable);
-            if (avaialabeStation is not null && avaialabeStation.FlightArrived(flightService) && isFromWaitingList)
+            if (avaialabeStation is not null && avaialabeStation.FlightArrived(flightService))
             {
-                RemoveFlightFromWaitingList(flightService.Flight);
+                FlightChanged?.Invoke(this, new FlightEventArgs(flightService.Flight, null, avaialabeStation.Station));
+                if (isFromWaitingList) RemoveFlightFromWaitingList(flightService.Flight);
             }
             else if (!isFromWaitingList)
             {
@@ -105,7 +109,7 @@ namespace BL.Services
             IEnumerable<IStationFlightHandler> allStations = (LandingStations ?? emptyFallback).Concat(TakeoffStations ?? emptyFallback);
             foreach (IStationFlightHandler item in allStations)
             {
-                item.AvailabiltyChange -= FlightHandler_AvailabilityChanged;
+                item.FlightChanged -= FlightHandler_FlightChanged;
             }
         }
 
@@ -115,11 +119,11 @@ namespace BL.Services
             IEnumerable<IStationFlightHandler> allStations = (LandingStations ?? emptyFallback).Concat(TakeoffStations ?? emptyFallback);
             foreach (IStationFlightHandler item in allStations)
             {
-                item.AvailabiltyChange += FlightHandler_AvailabilityChanged;
+                item.FlightChanged += FlightHandler_FlightChanged;
             }
         }
 
-        private void FlightHandler_AvailabilityChanged(object sender, EventArgs e)
+        private void FlightHandler_FlightChanged(object sender, EventArgs e)
         {
             if (sender is not IStationFlightHandler flightHandler)
                 throw new ArgumentException("Sender must be a station service!", nameof(sender));

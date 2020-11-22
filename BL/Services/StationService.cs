@@ -22,7 +22,7 @@ namespace BL.Services
 
         public IEnumerable<IStationFlightHandler> TakeoffStations { get; private set; }
 
-        public event EventHandler<FlightEventArgs> AvailabiltyChange;
+        public event EventHandler<FlightEventArgs> FlightChanged;
 
 
         public StationService(Station station, int waitingTimeMS)
@@ -30,6 +30,7 @@ namespace BL.Services
             if (waitingTimeMS <= 0) throw new ArgumentOutOfRangeException(nameof(waitingTimeMS), "Station can't wait less than 1 MS!");
             Station = station ?? throw new ArgumentNullException(nameof(station), "Cannot create service for null station!");
             WaitingTimeMS = waitingTimeMS;
+            AddCurrentFlightFromDB();
         }
 
         public void ConnectToNextStations(IEnumerable<IStationFlightHandler> landingStations, IEnumerable<IStationFlightHandler> takeoffStations)
@@ -69,12 +70,12 @@ namespace BL.Services
             {
                 foreach (IStationFlightHandler station in nextStationListByDirection)
                 {
-                    station.AvailabiltyChange += Next_Station_AvailabiltyChange; ;
+                    station.FlightChanged += Next_Station_FlightChanged; ;
                 }
             }
         }
 
-        private void Next_Station_AvailabiltyChange(object sender, EventArgs e)
+        private void Next_Station_FlightChanged(object sender, EventArgs e)
         {
             if (CurrentFlight is null) return;
 
@@ -89,7 +90,7 @@ namespace BL.Services
                 IEnumerable<IStationFlightHandler> nextStationListByDirection = CurrentFlight.Flight.Direction == FlightDirection.Landing ? LandingStations : TakeoffStations;
                 foreach (IStationFlightHandler station in nextStationListByDirection)
                 {
-                    station.AvailabiltyChange -= Next_Station_AvailabiltyChange;
+                    station.FlightChanged -= Next_Station_FlightChanged;
                 }
                 ChangeAvailability(availableStation.Station);
             }
@@ -98,8 +99,17 @@ namespace BL.Services
 
         private void ChangeAvailability(Station stationTo)
         {
-            AvailabiltyChange?.Invoke(this, new FlightEventArgs(CurrentFlight.Flight, Station, stationTo));
+            Flight flight = CurrentFlight.Flight;
             CurrentFlight = null;
+            FlightChanged?.Invoke(this, new FlightEventArgs(flight, Station, stationTo));
+        }
+
+        private void AddCurrentFlightFromDB()
+        {
+            if (Station.CurrentFlight is not null)
+            {
+                FlightArrived(new FlightService(Station.CurrentFlight));
+            }
         }
     }
 }

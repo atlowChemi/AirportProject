@@ -12,7 +12,9 @@ namespace Common.Events
         public FlightEventArgs(Flight flight, Station stationFrom, Station stationTo)
         {
             Flight = flight ?? throw new ArgumentNullException(nameof(flight));
-            StationFrom = stationFrom ?? throw new ArgumentNullException(nameof(stationFrom));
+            if (stationFrom is null && stationTo is null) 
+                throw new ArgumentNullException("stations", "Only one of the stations can be declared as null!");
+            StationFrom = stationFrom;
             StationTo = stationTo;
         }
     }

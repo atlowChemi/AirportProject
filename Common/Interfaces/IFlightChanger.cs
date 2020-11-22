@@ -10,8 +10,8 @@ namespace Common.Interfaces
     {
 
         /// <summary>
-        /// Flight handler availability has changed.
+        /// Flight was changed.
         /// </summary>
-        public event EventHandler<FlightEventArgs> AvailabiltyChange;
+        public event EventHandler<FlightEventArgs> FlightChanged;
     }
 }

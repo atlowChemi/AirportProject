@@ -13,9 +13,9 @@ namespace BL.Services
         private readonly IRandomDataGeneratorService randomDataGeneratorService;
         private readonly IAirportEventsService airportEventsService;
         private ICollection<IStationService> stationServices;
-        private ICollection<IControlTowerService> ControlTowerServices;
+        private ICollection<IControlTowerService> controlTowerServices;
 
-        public IControlTowerService this[string name] => ControlTowerServices?.FirstOrDefault(cst => cst.ControlTower.Name == name);
+        public IControlTowerService this[string name] => controlTowerServices?.FirstOrDefault(cst => cst.ControlTower.Name == name);
 
         public StationTreeBuilderService(IRandomDataGeneratorService randomDataGeneratorService, IAirportEventsService airportEventsService)
         {
@@ -30,10 +30,10 @@ namespace BL.Services
 
             lock (builderLock)
             {
-                if (ControlTowerServices is null) ControlTowerServices = new List<IControlTowerService>();
+                if (controlTowerServices is null) controlTowerServices = new List<IControlTowerService>();
                 if (stationServices is null) stationServices = new List<IStationService>();
 
-                IEnumerable<ControlTower> newControlTowers = controlTowers.Where(ct => ControlTowerServices.All(cts => cts.ControlTower.Id != ct.Id));
+                IEnumerable<ControlTower> newControlTowers = controlTowers.Where(ct => controlTowerServices.All(cts => cts.ControlTower.Id != ct.Id));
                 IEnumerable<Station> newStations = stations.Where(s => stationServices.All(ss => ss.Station.Id != s.Id));
 
                 bool isNewControlTower = BuildControlTowerServicesForAllControlTowers(newControlTowers);
@@ -43,7 +43,9 @@ namespace BL.Services
                 {
                     ConnectControlTowersWithStationRelations();
                     ConnectStationsWithStationRelations();
-                    airportEventsService.AddStationsToListenTo(stationServices);
+
+                    IEnumerable<IFlightChanger> flightChangers = stationServices.AsEnumerable<IFlightChanger>().Concat(controlTowerServices);
+                    airportEventsService.AddStationsToListenTo(flightChangers);
                 }
             }
         }
@@ -58,7 +60,7 @@ namespace BL.Services
             foreach (ControlTower controlTower in controlTowers)
             {
                 response = true;
-                ControlTowerServices.Add(new ControlTowerService(controlTower));
+                controlTowerServices.Add(new ControlTowerService(controlTower));
             }
             return response;
         }
@@ -84,7 +86,7 @@ namespace BL.Services
         /// </summary>
         private void ConnectControlTowersWithStationRelations()
         {
-            foreach (IControlTowerService controlTowerService in ControlTowerServices)
+            foreach (IControlTowerService controlTowerService in controlTowerServices)
                 BuildConnections(controlTowerService);
         }
         /// <summary>

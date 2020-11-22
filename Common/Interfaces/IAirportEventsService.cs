@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Common.Interfaces
 {
@@ -15,6 +11,6 @@ namespace Common.Interfaces
         /// Add stations which need to be registered to.
         /// </summary>
         /// <param name="stationServices">The station to register to.</param>
-        void AddStationsToListenTo(IEnumerable<IStationService> stationServices);
+        void AddStationsToListenTo(IEnumerable<IFlightChanger> stationServices);
     }
 }

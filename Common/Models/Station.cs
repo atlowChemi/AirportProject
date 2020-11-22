@@ -42,7 +42,15 @@ namespace Common.Models
         /// <summary>
         /// The currnet <see cref="Flight">Flight</see> in the DB.
         /// </summary>
-        public virtual Flight CurrentFlight { get; set; }
+        private Flight currentFlight;
+        /// <summary>
+        /// The currnet <see cref="Flight">Flight</see> in the DB.
+        /// </summary>
+        public virtual Flight CurrentFlight
+        {
+            get => lazyLoader.Load(this, ref currentFlight);
+            set => currentFlight = value;
+        }
         /// <summary>
         /// The Id of the <see cref="Models.ControlTower">Control Tower</see> this station belongs to.
         /// </summary>
@@ -81,6 +89,7 @@ namespace Common.Models
         /// The stations which are children for this station.
         /// </summary>
         private ICollection<StationRelation> childrenStations;
+
         /// <summary>
         /// The stations which are children for this station.
         /// </summary>
