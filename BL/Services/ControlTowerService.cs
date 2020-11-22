@@ -52,7 +52,7 @@ namespace BL.Services
         {
             IEnumerable<Flight> emptyFallback = Enumerable.Empty<Flight>();
             IEnumerable<Flight> landingFlights = ControlTower?.FlightsWaiting?.Where(f => f.Direction == FlightDirection.Landing) ?? emptyFallback;
-            IEnumerable<Flight> takeoffFlights = ControlTower?.FlightsWaiting?.Where(f => f.Direction == FlightDirection.Landing) ?? emptyFallback;
+            IEnumerable<Flight> takeoffFlights = ControlTower?.FlightsWaiting?.Where(f => f.Direction == FlightDirection.Takeoff) ?? emptyFallback;
 
             LandingFlights = new Queue<Flight>(landingFlights);
             TakeoffFlights = new Queue<Flight>(takeoffFlights);
@@ -84,13 +84,13 @@ namespace BL.Services
 
             IFlightHandler avaialabeStation = relevantFirstStations.FirstOrDefault(ss => ss.IsHandlerAvailable);
             IFlightService flightService = new FlightService(flight);
-            if ((avaialabeStation is null || !avaialabeStation.FlightArrived(flightService)) && !isFromWaitingList)
-            {
-                AddFlightToWaitingList(flight);
-            }
-            else if (isFromWaitingList)
+            if (avaialabeStation is not null && avaialabeStation.FlightArrived(flightService) && isFromWaitingList)
             {
                 RemoveFlightFromWaitingList(flight);
+            }
+            else if (!isFromWaitingList)
+            {
+                AddFlightToWaitingList(flight);
             }
         }
 
