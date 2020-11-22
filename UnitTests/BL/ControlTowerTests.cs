@@ -1,5 +1,6 @@
 ﻿using BL.Services;
 using Common.Enums;
+using Common.Events;
 using Common.Interfaces;
 using Common.Models;
 using System;
@@ -29,8 +30,8 @@ namespace UnitTests.BL
         [Fact]
         public void ControlTowerServiceShouldHaveExpectedNextStations()
         {
-            IFlightHandler[] flightHandlerLanding = new IFlightHandler[] { new StationService(new Station(), 1) };
-            IFlightHandler[] flightHandlerTakeoff = new IFlightHandler[] { new StationService(new Station(), 1) };
+            IStationFlightHandler[] flightHandlerLanding = new IStationFlightHandler[] { new StationService(new Station(), 1) };
+            IStationFlightHandler[] flightHandlerTakeoff = new IStationFlightHandler[] { new StationService(new Station(), 1) };
             ControlTower controlTower = new ControlTower();
             IControlTowerService controlTowerService = new ControlTowerService(controlTower);
             controlTowerService.ConnectToNextStations(flightHandlerLanding, flightHandlerTakeoff);
@@ -50,7 +51,7 @@ namespace UnitTests.BL
         [Fact]
         public void ControlTowerServiceSendsFlightToStation()
         {
-            IFlightHandler[] flightHandlerLanding = new IFlightHandler[] { new StationService(new Station(), 1) };
+            IStationFlightHandler[] flightHandlerLanding = new IStationFlightHandler[] { new StationService(new Station(), 1) };
             ControlTower controlTower = new ControlTower();
             IControlTowerService controlTowerService = new ControlTowerService(controlTower);
             controlTowerService.ConnectToNextStations(flightHandlerLanding, null);
@@ -73,7 +74,7 @@ namespace UnitTests.BL
             
             station.FlightArrived(preFlight);
 
-            IFlightHandler[] flightHandlerLanding = new IFlightHandler[] { station };
+            IStationFlightHandler[] flightHandlerLanding = new IStationFlightHandler[] { station };
             ControlTower controlTower = new ControlTower();
             IControlTowerService controlTowerService = new ControlTowerService(controlTower);
             controlTowerService.ConnectToNextStations(flightHandlerLanding, null);
@@ -90,7 +91,7 @@ namespace UnitTests.BL
             Assert.False(station.IsHandlerAvailable);
             Assert.Equal(preFlight, station.CurrentFlight);
 
-            Assert.Raises<EventArgs>(eh => station.AvailabiltyChange += eh, eh => station.AvailabiltyChange -= eh, () => preFlight.StopWaiting());
+            Assert.Raises<FlightEventArgs>(eh => station.FlightChanged += eh, eh => station.FlightChanged -= eh, () => preFlight.StopWaiting());
 
             Assert.False(station.IsHandlerAvailable);
             Assert.Equal(flight, station.CurrentFlight.Flight);

@@ -1,5 +1,6 @@
 using BL.Services;
 using Common.Enums;
+using Common.Events;
 using Common.Interfaces;
 using Common.Models;
 using System;
@@ -68,7 +69,7 @@ namespace UnitTests.BL
         {
             IStationService station1 = new StationService(new Station(), 1);
             IStationService station2 = new StationService(new Station(), 1);
-            station1.ConnectToNextStations(new IFlightHandler[] { station2 }, null);
+            station1.ConnectToNextStations(new IStationFlightHandler[] { station2 }, null);
 
             FlightServiceMock flight1 = new FlightServiceMock { Flight = new Flight { Direction = FlightDirection.Landing } };
             FlightServiceMock flight2 = new FlightServiceMock { Flight = new Flight { Direction = FlightDirection.Landing } };
@@ -92,7 +93,7 @@ namespace UnitTests.BL
         {
             IStationService station1 = new StationService(new Station(), 1);
             IStationService station2 = new StationService(new Station(), 1);
-            station1.ConnectToNextStations(new IFlightHandler[] { station2 }, null);
+            station1.ConnectToNextStations(new IStationFlightHandler[] { station2 }, null);
 
             FlightServiceMock flight1 = new FlightServiceMock { Flight = new Flight { Direction = FlightDirection.Landing } };
 
@@ -101,11 +102,13 @@ namespace UnitTests.BL
 
             Assert.Null(station2.CurrentFlight);
 
-            var evt = Assert.Raises<EventArgs>(xHandler => station1.AvailabiltyChange += xHandler, xHandler => station1.AvailabiltyChange -= xHandler, () => flight1.StopWaiting());
+            var evt = Assert.Raises<FlightEventArgs>(xHandler => station1.FlightChanged += xHandler, xHandler => station1.FlightChanged -= xHandler, () => flight1.StopWaiting());
 
             Assert.NotNull(evt);
             Assert.Equal(station1, evt.Sender);
-            Assert.Equal(EventArgs.Empty, evt.Arguments);
+            Assert.Equal(flight1.Flight, evt.Arguments.Flight);
+            Assert.Equal(station1.Station, evt.Arguments.StationFrom);
+            Assert.Equal(station2.Station, evt.Arguments.StationTo);
 
             Assert.True(station1.IsHandlerAvailable);
             Assert.Null(station1.CurrentFlight);
@@ -117,7 +120,7 @@ namespace UnitTests.BL
         {
             IStationService station1 = new StationService(new Station(), 1);
             IStationService station2 = new StationService(new Station(), 1);
-            station1.ConnectToNextStations(new IFlightHandler[] { station2 }, null);
+            station1.ConnectToNextStations(new IStationFlightHandler[] { station2 }, null);
 
             FlightServiceMock flight1 = new FlightServiceMock { Flight = new Flight { Direction = FlightDirection.Landing } };
             FlightServiceMock flight2 = new FlightServiceMock { Flight = new Flight { Direction = FlightDirection.Landing } };
@@ -147,7 +150,7 @@ namespace UnitTests.BL
             IStationService stationStart = new StationService(new Station(), 1);
             IStationService stationLand = new StationService(new Station(), 1);
             IStationService stationTakoff = new StationService(new Station(), 1);
-            stationStart.ConnectToNextStations(new IFlightHandler[] { stationLand }, new IFlightHandler[] { stationTakoff });
+            stationStart.ConnectToNextStations(new IStationFlightHandler[] { stationLand }, new IStationFlightHandler[] { stationTakoff });
 
             FlightServiceMock flightLanding = new FlightServiceMock { Flight = new Flight { Direction = FlightDirection.Landing } };
             FlightServiceMock flightTakoeff = new FlightServiceMock { Flight = new Flight { Direction = FlightDirection.Takeoff } };
@@ -183,7 +186,7 @@ namespace UnitTests.BL
             IStationService stationStart = new StationService(new Station(), 1);
             IStationService stationLand = new StationService(new Station(), 1);
             IStationService stationTakoff = new StationService(new Station(), 1);
-            stationStart.ConnectToNextStations(new IFlightHandler[] { stationLand }, new IFlightHandler[] { stationTakoff });
+            stationStart.ConnectToNextStations(new IStationFlightHandler[] { stationLand }, new IStationFlightHandler[] { stationTakoff });
 
             FlightServiceMock flight1 = new FlightServiceMock { Flight = new Flight { Direction = FlightDirection.Takeoff } };
             FlightServiceMock flight2 = new FlightServiceMock { Flight = new Flight { Direction = FlightDirection.Takeoff } };
@@ -219,8 +222,8 @@ namespace UnitTests.BL
         public void StationServiceShouldSaveNextStations()
         {
             IHasNextStations station = new StationService(new Station(), 1);
-            IFlightHandler[] landingStations = Array.Empty<IFlightHandler>();
-            IFlightHandler[] takeoffStations = Array.Empty<IFlightHandler>();
+            IStationFlightHandler[] landingStations = Array.Empty<IStationFlightHandler>();
+            IStationFlightHandler[] takeoffStations = Array.Empty<IStationFlightHandler>();
 
             station.ConnectToNextStations(landingStations, takeoffStations);
 
