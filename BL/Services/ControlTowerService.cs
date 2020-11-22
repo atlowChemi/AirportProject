@@ -41,6 +41,17 @@ namespace BL.Services
             LandingStations = landingStations;
             TakeoffStations = takeoffStations;
             SignupToAllStationsEvents();
+
+            if (LandingFlights.TryPeek(out Flight landingFlight))
+            {
+                IFlightService flightService = new FlightService(landingFlight);
+                SendFlightToRelvantStation(flightService, true);
+            }
+            if (TakeoffFlights.TryPeek(out Flight takeoffFlight))
+            {
+                IFlightService flightService = new FlightService(takeoffFlight);
+                SendFlightToRelvantStation(flightService, true);
+            }
         }
 
         private void InitFlightQueues()
@@ -77,7 +88,7 @@ namespace BL.Services
             if (flightService is null) throw new ArgumentNullException(nameof(flightService), "A flight cannot arrive to the control tower as null! This is not Malaysia Airlines!");
             IEnumerable<IFlightHandler> relevantFirstStations = GetRelevantFlightHandler(FlightDirection.Landing);
 
-            IFlightHandler avaialabeStation = relevantFirstStations.FirstOrDefault(ss => ss.IsHandlerAvailable);
+            IFlightHandler avaialabeStation = relevantFirstStations?.FirstOrDefault(ss => ss.IsHandlerAvailable);
             if (avaialabeStation is not null && avaialabeStation.FlightArrived(flightService) && isFromWaitingList)
             {
                 RemoveFlightFromWaitingList(flightService.Flight);
