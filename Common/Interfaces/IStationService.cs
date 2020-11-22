@@ -1,18 +1,10 @@
-﻿using Common.Models;
-using System;
-using System.Collections.Generic;
-
-namespace Common.Interfaces
+﻿namespace Common.Interfaces
 {
     /// <summary>
     /// Logical wrapper for Stations.
     /// </summary>
-    public interface IStationService : IFlightHandler, IHasNextStations
+    public interface IStationService : IStationFlightHandler, IHasNextStations
     {
-        /// <summary>
-        /// The station the service is handeling.
-        /// </summary>
-        public Station Station { get; }
         /// <summary>
         /// The logical flight currently in station.
         /// </summary>

@@ -12,8 +12,8 @@ namespace BL.Services
         public ControlTower ControlTower { get; init; }
 
         public IEnumerable<IRelatedToStation> NextStations => ControlTower?.FirstStations;
-        public IEnumerable<IFlightHandler> LandingStations { get; private set; }
-        public IEnumerable<IFlightHandler> TakeoffStations { get; private set; }
+        public IEnumerable<IStationFlightHandler> LandingStations { get; private set; }
+        public IEnumerable<IStationFlightHandler> TakeoffStations { get; private set; }
         private Queue<Flight> LandingFlights { get; set; }
         private Queue<Flight> TakeoffFlights { get; set; }
 
@@ -35,7 +35,7 @@ namespace BL.Services
             return true;
         }
 
-        public void ConnectToNextStations(IEnumerable<IFlightHandler> landingStations, IEnumerable<IFlightHandler> takeoffStations)
+        public void ConnectToNextStations(IEnumerable<IStationFlightHandler> landingStations, IEnumerable<IStationFlightHandler> takeoffStations)
         {
             SignupOutOfAllStationsEvents();
             LandingStations = landingStations;
@@ -86,9 +86,9 @@ namespace BL.Services
         private void SendFlightToRelvantStation(IFlightService flightService, bool isFromWaitingList = false)
         {
             if (flightService is null) throw new ArgumentNullException(nameof(flightService), "A flight cannot arrive to the control tower as null! This is not Malaysia Airlines!");
-            IEnumerable<IFlightHandler> relevantFirstStations = GetRelevantFlightHandler(FlightDirection.Landing);
+            IEnumerable<IStationFlightHandler> relevantFirstStations = GetRelevantFlightHandler(FlightDirection.Landing);
 
-            IFlightHandler avaialabeStation = relevantFirstStations?.FirstOrDefault(ss => ss.IsHandlerAvailable);
+            IStationFlightHandler avaialabeStation = relevantFirstStations?.FirstOrDefault(ss => ss.IsHandlerAvailable);
             if (avaialabeStation is not null && avaialabeStation.FlightArrived(flightService) && isFromWaitingList)
             {
                 RemoveFlightFromWaitingList(flightService.Flight);
@@ -101,9 +101,9 @@ namespace BL.Services
 
         private void SignupOutOfAllStationsEvents()
         {
-            IEnumerable<IFlightHandler> emptyFallback = Enumerable.Empty<IFlightHandler>();
-            IEnumerable<IFlightHandler> allStations = (LandingStations ?? emptyFallback).Concat(TakeoffStations ?? emptyFallback);
-            foreach (IFlightHandler item in allStations)
+            IEnumerable<IStationFlightHandler> emptyFallback = Enumerable.Empty<IStationFlightHandler>();
+            IEnumerable<IStationFlightHandler> allStations = (LandingStations ?? emptyFallback).Concat(TakeoffStations ?? emptyFallback);
+            foreach (IStationFlightHandler item in allStations)
             {
                 item.AvailabiltyChange -= FlightHandler_AvailabilityChanged;
             }
@@ -111,9 +111,9 @@ namespace BL.Services
 
         private void SignupToAllStationsEvents()
         {
-            IEnumerable<IFlightHandler> emptyFallback = Enumerable.Empty<IFlightHandler>();
-            IEnumerable<IFlightHandler> allStations = (LandingStations ?? emptyFallback).Concat(TakeoffStations ?? emptyFallback);
-            foreach (IFlightHandler item in allStations)
+            IEnumerable<IStationFlightHandler> emptyFallback = Enumerable.Empty<IStationFlightHandler>();
+            IEnumerable<IStationFlightHandler> allStations = (LandingStations ?? emptyFallback).Concat(TakeoffStations ?? emptyFallback);
+            foreach (IStationFlightHandler item in allStations)
             {
                 item.AvailabiltyChange += FlightHandler_AvailabilityChanged;
             }
@@ -121,7 +121,7 @@ namespace BL.Services
 
         private void FlightHandler_AvailabilityChanged(object sender, EventArgs e)
         {
-            if (sender is not IFlightHandler flightHandler)
+            if (sender is not IStationFlightHandler flightHandler)
                 throw new ArgumentException("Sender must be a station service!", nameof(sender));
             bool isLandingStation = LandingStations?.Contains(flightHandler) ?? false;
             bool isTakeoffStation = TakeoffStations?.Contains(flightHandler) ?? false;
@@ -141,7 +141,7 @@ namespace BL.Services
             }
         }
 
-        private IEnumerable<IFlightHandler> GetRelevantFlightHandler(FlightDirection direction) =>
+        private IEnumerable<IStationFlightHandler> GetRelevantFlightHandler(FlightDirection direction) =>
             direction == FlightDirection.Landing ? LandingStations : TakeoffStations;
 
         private Queue<Flight> GetRelevantFlights(FlightDirection direction) =>

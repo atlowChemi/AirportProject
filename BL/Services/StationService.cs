@@ -1,4 +1,5 @@
 ﻿using Common.Enums;
+using Common.Events;
 using Common.Interfaces;
 using Common.Models;
 using System;
@@ -17,11 +18,11 @@ namespace BL.Services
         public bool IsHandlerAvailable => CurrentFlight == null;
         public IEnumerable<IRelatedToStation> NextStations => Station?.ChildrenStations;
 
-        public IEnumerable<IFlightHandler> LandingStations { get; private set; }
+        public IEnumerable<IStationFlightHandler> LandingStations { get; private set; }
 
-        public IEnumerable<IFlightHandler> TakeoffStations { get; private set; }
+        public IEnumerable<IStationFlightHandler> TakeoffStations { get; private set; }
 
-        public event EventHandler<EventArgs> AvailabiltyChange;
+        public event EventHandler<FlightEventArgs> AvailabiltyChange;
 
 
         public StationService(Station station, int waitingTimeMS)
@@ -31,7 +32,7 @@ namespace BL.Services
             WaitingTimeMS = waitingTimeMS;
         }
 
-        public void ConnectToNextStations(IEnumerable<IFlightHandler> landingStations, IEnumerable<IFlightHandler> takeoffStations)
+        public void ConnectToNextStations(IEnumerable<IStationFlightHandler> landingStations, IEnumerable<IStationFlightHandler> takeoffStations)
         {
             LandingStations = landingStations;
             TakeoffStations = takeoffStations;
@@ -51,22 +52,22 @@ namespace BL.Services
 
         private void CurrentFlight_ReadyToContinue(object sender, EventArgs e)
         {
-            IEnumerable<IFlightHandler> nextStationListByDirection = CurrentFlight?.Flight.Direction == FlightDirection.Landing ? LandingStations : TakeoffStations;
+            IEnumerable<IStationFlightHandler> nextStationListByDirection = CurrentFlight?.Flight.Direction == FlightDirection.Landing ? LandingStations : TakeoffStations;
             // There are no more stations to pass, plane can go bye bye.
-            if (nextStationListByDirection == null || !nextStationListByDirection.Any())
+            if (nextStationListByDirection is null || !nextStationListByDirection.Any())
             {
-                ChangeAvailability();
+                ChangeAvailability(null);
                 return;
             }
             // Attempt finding an available station, and if needed sign up to all.
-            IFlightHandler nextFreeStation = nextStationListByDirection.FirstOrDefault(station => station.IsHandlerAvailable);
+            IStationFlightHandler nextFreeStation = nextStationListByDirection.FirstOrDefault(station => station.IsHandlerAvailable);
             if (nextFreeStation != null && nextFreeStation.FlightArrived(CurrentFlight))
             {
-                ChangeAvailability();
+                ChangeAvailability(nextFreeStation.Station);
             }
             else
             {
-                foreach (IFlightHandler station in nextStationListByDirection)
+                foreach (IStationFlightHandler station in nextStationListByDirection)
                 {
                     station.AvailabiltyChange += Next_Station_AvailabiltyChange; ;
                 }
@@ -85,20 +86,20 @@ namespace BL.Services
             if (availableStation.FlightArrived(CurrentFlight))
             {
                 // Unregister from all from all stations.
-                IEnumerable<IFlightHandler> nextStationListByDirection = CurrentFlight.Flight.Direction == FlightDirection.Landing ? LandingStations : TakeoffStations;
-                foreach (IFlightHandler station in nextStationListByDirection)
+                IEnumerable<IStationFlightHandler> nextStationListByDirection = CurrentFlight.Flight.Direction == FlightDirection.Landing ? LandingStations : TakeoffStations;
+                foreach (IStationFlightHandler station in nextStationListByDirection)
                 {
                     station.AvailabiltyChange -= Next_Station_AvailabiltyChange;
                 }
-                ChangeAvailability();
+                ChangeAvailability(availableStation.Station);
             }
 
         }
 
-        private void ChangeAvailability()
+        private void ChangeAvailability(Station stationTo)
         {
+            AvailabiltyChange?.Invoke(this, new FlightEventArgs(CurrentFlight.Flight, Station, stationTo));
             CurrentFlight = null;
-            AvailabiltyChange?.Invoke(this, EventArgs.Empty);
         }
     }
 }

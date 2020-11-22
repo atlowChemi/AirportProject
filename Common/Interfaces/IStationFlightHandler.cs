@@ -1,16 +1,22 @@
-﻿using System;
+﻿using Common.Events;
+using Common.Models;
+using System;
 
 namespace Common.Interfaces
 {
     /// <summary>
     /// Element that can handle Incoming flights.
     /// </summary>
-    public interface IFlightHandler : IGetFlights
+    public interface IStationFlightHandler : IGetFlights
     {
+        /// <summary>
+        /// The station the service is handeling.
+        /// </summary>
+        public Station Station { get; }
         /// <summary>
         /// Flight handler availability has changed.
         /// </summary>
-        public event EventHandler<EventArgs> AvailabiltyChange;
+        public event EventHandler<FlightEventArgs> AvailabiltyChange;
         /// <summary>
         /// Is handler is available currently.
         /// </summary>
