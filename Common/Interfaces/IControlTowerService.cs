@@ -5,7 +5,7 @@ namespace Common.Interfaces
     /// <summary>
     /// Logical wrapper for control towers.
     /// </summary>
-    public interface IControlTowerService : IHasNextStations, IGetFlights
+    public interface IControlTowerService : IHasNextStations, IGetFlights, IFlightChanger
     {
         /// <summary>
         /// The control tower the service is handeling.
