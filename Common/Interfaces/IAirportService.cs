@@ -18,7 +18,6 @@ namespace Common.Interfaces
         /// Handle the situation of a new flight arriving the airport.
         /// </summary>
         /// <param name="flight">The flight that has arrived.</param>
-        /// <returns>The flight after inserted to DB.</returns>
-        Task<Flight> HandleNewFlightArrivedAsync(Flight flight);
+        Task HandleNewFlightArrivedAsync(Flight flight);
     }
 }

@@ -11,14 +11,16 @@ namespace BL.Services
     {
         private readonly object builderLock = new object();
         private readonly IRandomDataGeneratorService randomDataGeneratorService;
+        private readonly IAirportEventsService airportEventsService;
         private ICollection<IStationService> stationServices;
         private ICollection<IControlTowerService> ControlTowerServices;
 
         public IControlTowerService this[string name] => ControlTowerServices?.FirstOrDefault(cst => cst.ControlTower.Name == name);
 
-        public StationTreeBuilderService(IRandomDataGeneratorService randomDataGeneratorService)
+        public StationTreeBuilderService(IRandomDataGeneratorService randomDataGeneratorService, IAirportEventsService airportEventsService)
         {
             this.randomDataGeneratorService = randomDataGeneratorService;
+            this.airportEventsService = airportEventsService;
         }
 
         public void BuildStationsTree(IEnumerable<ControlTower> controlTowers, IEnumerable<Station> stations)
@@ -41,6 +43,7 @@ namespace BL.Services
                 {
                     ConnectControlTowersWithStationRelations();
                     ConnectStationsWithStationRelations();
+                    airportEventsService.AddStationsToListenTo(stationServices);
                 }
             }
         }
@@ -71,7 +74,6 @@ namespace BL.Services
                 response = true;
                 int waitingTimeMS = randomDataGeneratorService.CreateRandomNumber(1 * 1000, 6 * 1000);
                 StationService stationService = new StationService(station, waitingTimeMS);
-                stationService.AvailabiltyChange += StationService_AvailabiltyChange;
                 stationServices.Add(stationService);
             }
             return response;
@@ -108,12 +110,6 @@ namespace BL.Services
                 .Where(sctr => sctr.Direction == FlightDirection.Takeoff)
                 .Join(stationServices, sr => sr.StationToId, ss => ss.Station.Id, (sctr, ss) => ss);
             hasNextStations.ConnectToNextStations(landingStations, takeoffStations);
-        }
-
-        private void StationService_AvailabiltyChange(object sender, EventArgs e)
-        {
-            //TODO: Call Action that will update DB.
-            throw new NotImplementedException();
         }
     }
 }

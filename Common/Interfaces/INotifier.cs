@@ -3,7 +3,7 @@
     /// <summary>
     /// service that notifies When changes happen.
     /// </summary>
-    public interface INotifier
+    public interface INotifier : IFutureFlightNotifier
     {
         void Notify();
     }

@@ -51,7 +51,7 @@ namespace BL.Services
 
         private void CurrentFlight_ReadyToContinue(object sender, EventArgs e)
         {
-            IEnumerable<IFlightHandler> nextStationListByDirection = CurrentFlight.Flight.Direction == FlightDirection.Landing ? LandingStations : TakeoffStations;
+            IEnumerable<IFlightHandler> nextStationListByDirection = CurrentFlight?.Flight.Direction == FlightDirection.Landing ? LandingStations : TakeoffStations;
             // There are no more stations to pass, plane can go bye bye.
             if (nextStationListByDirection == null || !nextStationListByDirection.Any())
             {
