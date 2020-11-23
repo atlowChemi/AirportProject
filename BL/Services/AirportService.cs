@@ -65,14 +65,16 @@ namespace BL.Services
         private async void SendFlightToControlTowerAtTime(Flight flight)
         {
             string controlTowerName = flight.Direction == FlightDirection.Landing ? flight.To : flight.From;
-            IGetFlights controlTowerService = stationTreeBuilder[controlTowerName] ??
+            IControlTowerService controlTowerService = stationTreeBuilder[controlTowerName] ??
                 throw new ArgumentOutOfRangeException(nameof(flight), "Control tower does not exist");
             TimeSpan delayUntillFlight = flight.PlannedTime - DateTime.Now;
+            flight.ControlTowerId = controlTowerService.ControlTower.Id;
+            Task<Flight> dbFlightTask = flightRepository.UpdateAsync(flight);
             if (delayUntillFlight > TimeSpan.Zero)
             {
                 await Task.Delay(delayUntillFlight);
             }
-            controlTowerService.FlightArrived(new FlightService(flight));
+            controlTowerService.FlightArrived(new FlightService(await dbFlightTask));
         }
 
         private void CreateStationTrees()
