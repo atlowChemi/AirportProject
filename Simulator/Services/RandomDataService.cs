@@ -8,6 +8,7 @@ namespace Simulator.Services
     public class RandomDataService : IRandomDataService
     {
         private readonly Random random = new Random(DateTime.UtcNow.Millisecond);
+        private readonly string[] airports = { "JFK", "IST", "SAW", "STN", "LTN", "ATH" };
 
         public int RandomNumber(int min, int max)
         {
@@ -24,5 +25,11 @@ namespace Simulator.Services
 
         public FlightDirection RandomFlightDirection() =>
             random.Next() % 2 == 0 ? FlightDirection.Landing : FlightDirection.Takeoff;
+
+        public string RandomFlightTarget()
+        {
+            int randomIndex = RandomNumber(0, airports.Length);
+            return airports[randomIndex];
+        }
     }
 }

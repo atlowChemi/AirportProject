@@ -11,7 +11,6 @@ namespace Simulator.Services
         private readonly IRandomDataService randomDataService;
         private readonly IHubConnectionService hubConnectionService;
         private readonly IAirplaneSelectorService airplaneSelectorService;
-        private readonly string[] airports = { "JFK", "IST", "SAW", "STN", "LTN", "ATH" };
 
         public FlightGeneratorService(IRandomDataService randomDataService,
             IHubConnectionService hubConnectionService,
@@ -36,7 +35,7 @@ namespace Simulator.Services
             FlightDirection direction = randomDataService.RandomFlightDirection();
             (string from, string to) = PickRandomTarget(direction);
             Airplane airplane = airplaneSelectorService.GetAirplane();
-            DateTime plannedTime = DateTime.Now.AddSeconds(randomDataService.RandomNumber(10, 80));
+            DateTime plannedTime = DateTime.Now.AddSeconds(randomDataService.RandomNumber(100, 200));
             if (airplane == null) return null;
             return new Flight { Direction = direction, AirplaneId = airplane.Id, From = from, To = to, PlannedTime = plannedTime };
         }
@@ -44,17 +43,18 @@ namespace Simulator.Services
         private async Task<Flight> SendFlightToHub()
         {
             Flight flight = CreateFlight();
-            return await hubConnectionService.CreateFlight(flight);
+            await hubConnectionService.CreateFlight(flight);
+            return flight;
         }
 
         private (string from, string to) PickRandomTarget(FlightDirection direction)
         {
-            int randomIndex = randomDataService.RandomNumber(max: airports.Length);
+            string randomTarget = randomDataService.RandomFlightTarget();
             if (direction == FlightDirection.Landing)
             {
-                return (airports[randomIndex], "TLV");
+                return (randomTarget, "TLV");
             }
-            return ("TLV", airports[randomIndex]);
+            return ("TLV", randomTarget);
         }
 
         private static string FlightToMessage(Flight flight)
