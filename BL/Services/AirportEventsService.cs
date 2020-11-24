@@ -21,7 +21,7 @@ namespace BL.Services
 
         public void AddStationsToListenTo(IEnumerable<IFlightChanger> stationServices)
         {
-            IEnumerable<IFlightChanger> newStations = stationServices.Where(fc => !this.flightChangers.Any(flc => fc == flc));
+            IEnumerable<IFlightChanger> newStations = stationServices.Where(fc => !flightChangers.Any(flc => fc == flc));
             foreach (IFlightChanger stationService in newStations)
             {
                 stationService.FlightChanged += StationService_FlightChanged;

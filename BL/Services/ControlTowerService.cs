@@ -59,9 +59,9 @@ namespace BL.Services
 
         private void InitFlightQueues()
         {
-            IEnumerable<Flight> emptyFallback = Enumerable.Empty<Flight>();
-            IEnumerable<Flight> landingFlights = ControlTower?.FlightsWaiting?.Where(f => f.Direction == FlightDirection.Landing) ?? emptyFallback;
-            IEnumerable<Flight> takeoffFlights = ControlTower?.FlightsWaiting?.Where(f => f.Direction == FlightDirection.Takeoff) ?? emptyFallback;
+            IEnumerable<Flight> waitingFlights = ControlTower?.FlightsWaiting?.Where(f => f.History?.Count <= 0) ?? Enumerable.Empty<Flight>();
+            IEnumerable<Flight> landingFlights = waitingFlights.Where(f => f.Direction == FlightDirection.Landing);
+            IEnumerable<Flight> takeoffFlights = waitingFlights.Where(f => f.Direction == FlightDirection.Takeoff);
 
             LandingFlights = new Queue<Flight>(landingFlights);
             TakeoffFlights = new Queue<Flight>(takeoffFlights);

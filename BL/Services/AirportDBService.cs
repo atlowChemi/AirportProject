@@ -4,6 +4,7 @@ using Common.Models;
 using Common.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -48,18 +49,21 @@ namespace BL.Services
         private void OpenFlightHistoryRow(Flight flight, Station to)
         {
             FlightHistory flightHistory = new FlightHistory { StationId = to.Id, EnterStationTime = DateTime.Now };
+            if (flight.History is null)
+            {
+                flight.History = new List<FlightHistory>();
+            }
             flight.History.Add(flightHistory);
         }
 
         private void CloseFlighHistoryRow(Flight flight, Station from)
         {
             FlightHistory flightHistory = flight.History.FirstOrDefault(fh => fh.StationId == from.Id && !fh.LeaveStationTime.HasValue);
-            flightHistory.LeaveStationTime = DateTime.Now;
+            if (flightHistory is not null) flightHistory.LeaveStationTime = DateTime.Now;
         }
 
         private void RemoveControlTowerFromFlightAndAddFlighHistory(Flight flight, Station firstStation)
         {
-            flight.ControlTowerId = null;
             OpenFlightHistoryRow(flight, firstStation);
         }
 
