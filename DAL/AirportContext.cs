@@ -16,10 +16,26 @@ namespace DAL
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ControlTower>().HasIndex(ct => ct.Name).IsUnique();
+            SetControlTowerNameToBeUnique(modelBuilder);
+            SetStationFlightRelation(modelBuilder);
             DefineStationToStationRelation(modelBuilder);
             DefineStationToControlTowerRelation(modelBuilder);
             InjectPrePopulatedData(modelBuilder);
+        }
+
+        private void SetControlTowerNameToBeUnique(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ControlTower>()
+                .HasIndex(ct => ct.Name)
+                .IsUnique();
+        }
+
+        private void SetStationFlightRelation(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Station>()
+                .HasOne(s => s.CurrentFlight)
+                .WithOne(f => f.Station)
+                .HasForeignKey<Station>(s => s.CurrentFlightId);
         }
 
         private void DefineStationToControlTowerRelation(ModelBuilder modelBuilder)

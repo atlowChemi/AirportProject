@@ -48,13 +48,21 @@ namespace Common.Models
         /// </summary>
         public virtual Airplane Airplane { get; set; }
         /// <summary>
-        /// Id of the <see cref="Models.ControlTower">Control Tower</see> this flight is waiting at.
+        /// Id of the <see cref="Models.ControlTower">Control Tower</see> this flight is related to.
         /// </summary>
         public virtual Guid? ControlTowerId { get; set; }
         /// <summary>
-        /// The <see cref="Models.ControlTower">Control Tower</see> this flight is waiting at.
+        /// The <see cref="Models.ControlTower">Control Tower</see> this flight is related to.
         /// </summary>
         public virtual ControlTower ControlTower { get; set; }
+        /// <summary>
+        /// Id of the <see cref="Models.Station">Station</see> this flight is currently at.
+        /// </summary>
+        public virtual Guid? StationId { get; set; }
+        /// <summary>
+        /// The <see cref="Models.Station">Station</see> this flight is currently at.
+        /// </summary>
+        public virtual Station Station { get; set; }
 
         /// <summary>
         /// The history of this flight regarding the stations.

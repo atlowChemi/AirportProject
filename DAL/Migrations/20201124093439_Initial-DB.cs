@@ -42,7 +42,8 @@ namespace DAL.Migrations
                     PlannedTime = table.Column<DateTime>(type: "TEXT", nullable: false),
                     Direction = table.Column<int>(type: "INTEGER", nullable: false),
                     AirplaneId = table.Column<int>(type: "INTEGER", nullable: false),
-                    ControlTowerId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    ControlTowerId = table.Column<Guid>(type: "TEXT", nullable: true),
+                    StationId = table.Column<Guid>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -214,7 +215,8 @@ namespace DAL.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Stations_CurrentFlightId",
                 table: "Stations",
-                column: "CurrentFlightId");
+                column: "CurrentFlightId",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

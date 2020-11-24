@@ -50,12 +50,12 @@ namespace DAL.DummyData
 
         public static readonly Flight[] Flights =
         {
-            new Flight { Id = guids[0][0], AirplaneId = 1, Direction = FlightDirection.Landing, From = "JFK", To = "TLV", PlannedTime = new DateTime(2020, 11, 15, 4, 18, 0) },
-            new Flight { Id = guids[0][1], AirplaneId = 2, Direction = FlightDirection.Landing, From = "IST", To = "TLV", PlannedTime = new DateTime(2020, 11, 15, 4, 24, 57) },
-            new Flight { Id = guids[0][2], AirplaneId = 3, Direction = FlightDirection.Landing, From = "SAW", To = "TLV", PlannedTime = new DateTime(2020, 11, 15, 4, 26, 18) },
+            new Flight { Id = guids[0][0], AirplaneId = 1, Direction = FlightDirection.Landing, From = "JFK", To = "TLV", PlannedTime = new DateTime(2020, 11, 15, 4, 18, 0), ControlTowerId = guids[2][0] },
+            new Flight { Id = guids[0][1], AirplaneId = 2, Direction = FlightDirection.Landing, From = "IST", To = "TLV", PlannedTime = new DateTime(2020, 11, 15, 4, 24, 57), ControlTowerId = guids[2][0] },
+            new Flight { Id = guids[0][2], AirplaneId = 3, Direction = FlightDirection.Landing, From = "SAW", To = "TLV", PlannedTime = new DateTime(2020, 11, 15, 4, 26, 18), ControlTowerId = guids[2][0] },
             new Flight { Id = guids[0][3], AirplaneId = 4, Direction = FlightDirection.Landing, From = "STN", To = "TLV", PlannedTime = new DateTime(2020, 11, 15, 4, 31, 6), ControlTowerId = guids[2][0] },
-            new Flight { Id = guids[0][4], AirplaneId = 1, Direction = FlightDirection.Takeoff, From = "TLV", To = "ATH", PlannedTime = new DateTime(2020, 11, 15, 4, 17, 34) },
-            new Flight { Id = guids[0][5], AirplaneId = 2, Direction = FlightDirection.Takeoff, From = "TLV", To = "LTN", PlannedTime = new DateTime(2020, 11, 15, 4, 36, 29) },
+            new Flight { Id = guids[0][4], AirplaneId = 1, Direction = FlightDirection.Takeoff, From = "TLV", To = "ATH", PlannedTime = new DateTime(2020, 11, 15, 4, 17, 34), ControlTowerId = guids[2][0] },
+            new Flight { Id = guids[0][5], AirplaneId = 2, Direction = FlightDirection.Takeoff, From = "TLV", To = "LTN", PlannedTime = new DateTime(2020, 11, 15, 4, 36, 29), ControlTowerId = guids[2][0] },
         };
 
         public static readonly Station[] Stations =
