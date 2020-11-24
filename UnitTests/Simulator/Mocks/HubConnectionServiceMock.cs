@@ -16,7 +16,7 @@ namespace UnitTests.Simulator.Mocks
             this.airplanes = airplanes;
         }
 
-        public Task<Flight> CreateFlight(Flight flight) => Task.Run(() => flight);
+        public Task CreateFlight(Flight flight) => Task.Run(() => flight);
 
         public Task<ICollection<Airplane>> GetAirplanes() => Task.Run(() => airplanes);
 

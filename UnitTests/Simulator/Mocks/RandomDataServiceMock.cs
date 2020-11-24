@@ -24,6 +24,8 @@ namespace UnitTests.Simulator.Mocks
 
         public FlightDirection RandomFlightDirection() => direction;
 
+        public string RandomFlightTarget() => "TLV";
+
         public int RandomNumber(int min = 0, int max = int.MaxValue) => presetRandomResult;
     }
 }

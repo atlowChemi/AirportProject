@@ -33,7 +33,6 @@ namespace Server.Hubs
             airportService.HandleNewFlightArrivedAsync(flight);
         }
 
-        public void GetFlightData() { }
         public void GetStationsData() { }
     }
 }
