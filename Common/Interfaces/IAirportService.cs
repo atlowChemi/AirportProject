@@ -25,5 +25,11 @@ namespace Common.Interfaces
         /// </summary>
         /// <returns>A <see cref="IEnumerable{Flight}"/> with waiting flights.</returns>
         IEnumerable<Flight> GetWaitingFlights();
+        /// <summary>
+        /// Get the <see cref="ControlTower"/> with the a given name.
+        /// </summary>
+        /// <param name="name">The name of the control tower</param>
+        /// <returns>The control tower requested.</returns>
+        ControlTower GetControlTower(string name);
     }
 }

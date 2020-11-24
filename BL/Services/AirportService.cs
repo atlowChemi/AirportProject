@@ -40,6 +40,8 @@ namespace BL.Services
 
         public IEnumerable<Airplane> GetAirplanes() => airplaneRepository.GetAll();
 
+        public ControlTower GetControlTower(string name) => stationTreeBuilder[name].ControlTower;
+
         public async Task HandleNewFlightArrivedAsync(Flight flight)
         {
             Flight dbFlight = await flightRepository.AddAsync(flight);
