@@ -25,14 +25,12 @@ namespace Server.Hubs
 
         public IEnumerable<Airplane> GetAirplanes()
         {
-            var airplanes = airportService.GetAirplanes();
-            return airplanes;
+            return airportService.GetAirplanes();
         }
 
-        public Flight FlightArrival(Flight flight)
+        public void FlightArrival(Flight flight)
         {
             airportService.HandleNewFlightArrivedAsync(flight);
-            return flight;
         }
 
         public void GetFlightData() { }
