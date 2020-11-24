@@ -141,7 +141,7 @@ namespace DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "StationRelation",
+                name: "StationRelations",
                 columns: table => new
                 {
                     StationFromId = table.Column<Guid>(type: "TEXT", nullable: false),
@@ -150,15 +150,15 @@ namespace DAL.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_StationRelation", x => new { x.StationToId, x.StationFromId, x.Direction });
+                    table.PrimaryKey("PK_StationRelations", x => new { x.StationToId, x.StationFromId, x.Direction });
                     table.ForeignKey(
-                        name: "FK_StationRelation_Stations_StationFromId",
+                        name: "FK_StationRelations_Stations_StationFromId",
                         column: x => x.StationFromId,
                         principalTable: "Stations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_StationRelation_Stations_StationToId",
+                        name: "FK_StationRelations_Stations_StationToId",
                         column: x => x.StationToId,
                         principalTable: "Stations",
                         principalColumn: "Id",
@@ -203,8 +203,8 @@ namespace DAL.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_StationRelation_StationFromId",
-                table: "StationRelation",
+                name: "IX_StationRelations_StationFromId",
+                table: "StationRelations",
                 column: "StationFromId");
 
             migrationBuilder.CreateIndex(
@@ -228,7 +228,7 @@ namespace DAL.Migrations
                 name: "StationControlTowerRelation");
 
             migrationBuilder.DropTable(
-                name: "StationRelation");
+                name: "StationRelations");
 
             migrationBuilder.DropTable(
                 name: "Stations");

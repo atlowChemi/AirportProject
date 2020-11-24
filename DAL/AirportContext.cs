@@ -13,6 +13,7 @@ namespace DAL
         public virtual DbSet<Flight> Flights { get; set; }
         public virtual DbSet<FlightHistory> FlightHistories { get; set; }
         public virtual DbSet<ControlTower> ControlTowers { get; set; }
+        public virtual DbSet<StationRelation> StationRelations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
