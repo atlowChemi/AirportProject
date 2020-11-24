@@ -1,2 +1,1 @@
-export { name } from './AirportService';
-export { registerAndGetFlights } from './FlightService';
+export { name, data } from './AirportService';
