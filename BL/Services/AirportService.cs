@@ -1,4 +1,5 @@
-﻿using Common.Enums;
+﻿using Common.DTO;
+using Common.Enums;
 using Common.Interfaces;
 using Common.Models;
 using Common.Repositories;
@@ -13,6 +14,7 @@ namespace BL.Services
     {
         private readonly IRepository<Airplane> airplaneRepository;
         private readonly IRepository<Station> stationRepository;
+        private readonly IRepository<StationRelation> stationRelationRepository;
         private readonly IRepository<ControlTower> controlTowerRepository;
         private readonly IRepository<Flight> flightRepository;
         private readonly IStationTreeBuilderService stationTreeBuilder;
@@ -22,6 +24,7 @@ namespace BL.Services
 
         public AirportService(IRepository<Airplane> airplaneRepository,
             IRepository<Station> stationRepository,
+            IRepository<StationRelation> stationRelationRepository,
             IRepository<ControlTower> controlTowerRepository,
             IRepository<Flight> flightRepository,
             IStationTreeBuilderService stationTreeBuilder,
@@ -29,6 +32,7 @@ namespace BL.Services
         {
             this.airplaneRepository = airplaneRepository;
             this.stationRepository = stationRepository;
+            this.stationRelationRepository = stationRelationRepository;
             this.controlTowerRepository = controlTowerRepository;
             this.flightRepository = flightRepository;
             this.stationTreeBuilder = stationTreeBuilder;
@@ -40,7 +44,41 @@ namespace BL.Services
 
         public IEnumerable<Airplane> GetAirplanes() => airplaneRepository.GetAll();
 
-        public ControlTower GetControlTower(string name) => stationTreeBuilder[name].ControlTower;
+        public AirportDataDTO GetAirportData(string name)
+        {
+            ControlTower controlTower = stationTreeBuilder[name]?.ControlTower ?? throw new ArgumentOutOfRangeException(nameof(name), "No control tower with given name found!");
+            IEnumerable<FlightDTO> flights = flightRepository.GetAll().Where(f => f.History.Count <= 0 && (f.ControlTowerId == controlTower.Id || (f.ControlTower.Name == f.To && f.Direction == FlightDirection.Landing) || (f.ControlTower.Name == f.From && f.Direction == FlightDirection.Takeoff))).Select(f => new FlightDTO
+            {
+                AirplaneId = f.AirplaneId,
+                ControlTowerId = f.ControlTowerId,
+                Direction = f.Direction,
+                From = f.From,
+                Id = f.Id,
+                PlannedTime = f.PlannedTime,
+                StationId = f.StationId,
+                To = f.To
+            });
+            IEnumerable<StationDTO> stations = controlTower.Stations.Select(s => new StationDTO
+            {
+                ControlTowerId = s.ControlTowerId,
+                Id = s.Id,
+                Name = s.Name
+            });
+            IEnumerable<StationRelationDTO> stationRelations = stationRelationRepository.GetAll().AsEnumerable().Where(sr => controlTower.Stations.Any(s => sr.StationFromId == s.Id)).Select(sr => new StationRelationDTO
+            {
+                Direction = sr.Direction,
+                StationFromId = sr.StationFromId,
+                StationToId = sr.StationToId
+            });
+            IEnumerable<StationControlTowerRelationDTO> firstStations = controlTower.FirstStations.Select(sctr => new StationControlTowerRelationDTO
+            {
+                ControlTowerId = sctr.ControlTowerId,
+                Direction = sctr.Direction,
+                StationToId = sctr.StationToId
+            });
+            ControlTowerDTO controlTowerDTO = new ControlTowerDTO { Name = name, Id = controlTower.Id };
+            return new AirportDataDTO { ControlTower = controlTowerDTO, FirstStations = firstStations, Flights = flights, StationRelations = stationRelations, Stations = stations };
+        }
 
         public async Task HandleNewFlightArrivedAsync(Flight flight)
         {

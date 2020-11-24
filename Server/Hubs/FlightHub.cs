@@ -21,9 +21,7 @@ namespace Server.Hubs
         public async Task<AirportDataDTO> RegisterToControlTowerAndGetData(string name)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, $"CT-{name}");
-            IEnumerable<Flight> flights = airportService.GetWaitingFlights();
-            ControlTower controlTower = airportService.GetControlTower(name);
-            return new AirportDataDTO { Flights = flights, ControlTower = controlTower };
+            return airportService.GetAirportData(name);
         }
 
         public IEnumerable<Airplane> GetAirplanes()
@@ -35,7 +33,5 @@ namespace Server.Hubs
         {
             airportService.HandleNewFlightArrivedAsync(flight);
         }
-
-        public void GetStationsData() { }
     }
 }

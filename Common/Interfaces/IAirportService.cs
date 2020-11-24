@@ -1,4 +1,5 @@
-﻿using Common.Models;
+﻿using Common.DTO;
+using Common.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -26,10 +27,10 @@ namespace Common.Interfaces
         /// <returns>A <see cref="IEnumerable{Flight}"/> with waiting flights.</returns>
         IEnumerable<Flight> GetWaitingFlights();
         /// <summary>
-        /// Get the <see cref="ControlTower"/> with the a given name.
+        /// Get the relavent data of a <see cref="ControlTower"/> with the a given name.
         /// </summary>
         /// <param name="name">The name of the control tower</param>
-        /// <returns>The control tower requested.</returns>
-        ControlTower GetControlTower(string name);
+        /// <returns>The data of the control tower.</returns>
+        AirportDataDTO GetAirportData(string name);
     }
 }
