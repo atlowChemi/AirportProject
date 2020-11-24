@@ -1,4 +1,5 @@
-﻿using Common.Interfaces;
+﻿using Common.DTO;
+using Common.Interfaces;
 using Common.Models;
 using Microsoft.AspNetCore.SignalR;
 using System;
@@ -17,10 +18,12 @@ namespace Server.Hubs
             this.airportService = airportService;
         }
 
-        public async Task<IEnumerable<Flight>> RegisterToControlTowerAndGetData(string name)
+        public async Task<AirportDataDTO> RegisterToControlTowerAndGetData(string name)
         {
             await Groups.AddToGroupAsync(Context.ConnectionId, $"CT-{name}");
-            return airportService.GetWaitingFlights();
+            IEnumerable<Flight> flights = airportService.GetWaitingFlights();
+            ControlTower controlTower = airportService.GetControlTower(name);
+            return new AirportDataDTO { Flights = flights, ControlTower = controlTower };
         }
 
         public IEnumerable<Airplane> GetAirplanes()
