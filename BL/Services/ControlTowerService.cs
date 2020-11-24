@@ -5,6 +5,7 @@ using Common.Enums;
 using Common.Events;
 using Common.Interfaces;
 using Common.Models;
+using Common.Data;
 
 namespace BL.Services
 {
@@ -15,8 +16,8 @@ namespace BL.Services
         public IEnumerable<IRelatedToStation> NextStations => ControlTower?.FirstStations;
         public IEnumerable<IStationFlightHandler> LandingStations { get; private set; }
         public IEnumerable<IStationFlightHandler> TakeoffStations { get; private set; }
-        private Queue<Flight> LandingFlights { get; set; }
-        private Queue<Flight> TakeoffFlights { get; set; }
+        private MyQueue<Flight> LandingFlights { get; set; }
+        private MyQueue<Flight> TakeoffFlights { get; set; }
         public event EventHandler<FlightEventArgs> FlightChanged;
 
 
@@ -32,7 +33,7 @@ namespace BL.Services
         public bool FlightArrived(IFlightService flightService)
         {
             if (flightService is null) throw new ArgumentNullException(nameof(flightService), "A flight cannot arrive to the control tower as null! This is not Malaysia Airlines!");
-            Queue<Flight> relevantFlights = GetRelevantFlights(flightService.Flight.Direction);
+            MyQueue<Flight> relevantFlights = GetRelevantFlights(flightService.Flight.Direction);
             if (relevantFlights.Count == 0) SendFlightToRelvantStation(flightService);
             else AddFlightToWaitingList(flightService.Flight);
             return true;
@@ -45,12 +46,12 @@ namespace BL.Services
             TakeoffStations = takeoffStations;
             SignupToAllStationsEvents();
 
-            if (LandingFlights.TryPeek(out Flight landingFlight))
+            if (LandingFlights.TryDequeue(out Flight landingFlight))
             {
                 IFlightService flightService = new FlightService(landingFlight);
                 SendFlightToRelvantStation(flightService, true);
             }
-            if (TakeoffFlights.TryPeek(out Flight takeoffFlight))
+            if (TakeoffFlights.TryDequeue(out Flight takeoffFlight))
             {
                 IFlightService flightService = new FlightService(takeoffFlight);
                 SendFlightToRelvantStation(flightService, true);
@@ -63,31 +64,22 @@ namespace BL.Services
             IEnumerable<Flight> landingFlights = waitingFlights.Where(f => f.Direction == FlightDirection.Landing);
             IEnumerable<Flight> takeoffFlights = waitingFlights.Where(f => f.Direction == FlightDirection.Takeoff);
 
-            LandingFlights = new Queue<Flight>(landingFlights);
-            TakeoffFlights = new Queue<Flight>(takeoffFlights);
+            LandingFlights = new MyQueue<Flight>(landingFlights);
+            TakeoffFlights = new MyQueue<Flight>(takeoffFlights);
         }
 
-        private void AddFlightToWaitingList(Flight flight)
+        private void AddFlightToWaitingList(Flight flight, bool fromWaitingList = false)
         {
             if (flight is null) throw new ArgumentNullException(nameof(flight), "A flight cannot arrive to the control tower as null! This is not Malaysia Airlines!");
-            Queue<Flight> relevantFlights = GetRelevantFlights(flight.Direction);
-            ControlTower?.FlightsWaiting?.Add(flight);
-            relevantFlights.Enqueue(flight);
-        }
+            MyQueue<Flight> relevantFlights = GetRelevantFlights(flight.Direction);
+            if (fromWaitingList) relevantFlights.AddToBegining(flight);
+            else relevantFlights.Enqueue(flight);
 
-        private void RemoveFlightFromWaitingList(Flight flight)
-        {
-            if (flight is null) return;
-            ControlTower?.FlightsWaiting?.Remove(flight);
-            Queue<Flight> relevantFlights = GetRelevantFlights(flight.Direction);
-            if (relevantFlights.TryPeek(out Flight fl) && flight.Id == fl.Id)
-            {
-                relevantFlights.Dequeue();
-            }
         }
 
         private void SendFlightToRelvantStation(IFlightService flightService, bool isFromWaitingList = false)
         {
+            // TODO : If the flight has started out from the queue, we might call it again?
             if (flightService is null) throw new ArgumentNullException(nameof(flightService), "A flight cannot arrive to the control tower as null! This is not Malaysia Airlines!");
             IEnumerable<IStationFlightHandler> relevantFirstStations = GetRelevantFlightHandler(FlightDirection.Landing);
 
@@ -95,12 +87,8 @@ namespace BL.Services
             if (avaialabeStation is not null && avaialabeStation.FlightArrived(flightService))
             {
                 FlightChanged?.Invoke(this, new FlightEventArgs(flightService.Flight, null, avaialabeStation.Station));
-                if (isFromWaitingList) RemoveFlightFromWaitingList(flightService.Flight);
             }
-            else if (!isFromWaitingList)
-            {
-                AddFlightToWaitingList(flightService.Flight);
-            }
+            else AddFlightToWaitingList(flightService.Flight, isFromWaitingList);
         }
 
         private void SignupOutOfAllStationsEvents()
@@ -131,11 +119,11 @@ namespace BL.Services
             bool isTakeoffStation = TakeoffStations?.Contains(flightHandler) ?? false;
 
             IFlightService flightService = null;
-            if (isLandingStation && LandingFlights.TryPeek(out Flight landingFlight))
+            if (isLandingStation && LandingFlights.TryDequeue(out Flight landingFlight))
             {
                 flightService = new FlightService(landingFlight);
             }
-            else if (isTakeoffStation && TakeoffFlights.TryPeek(out Flight takeoffFlight))
+            else if (isTakeoffStation && TakeoffFlights.TryDequeue(out Flight takeoffFlight))
             {
                 flightService = new FlightService(takeoffFlight);
             }
@@ -148,7 +136,7 @@ namespace BL.Services
         private IEnumerable<IStationFlightHandler> GetRelevantFlightHandler(FlightDirection direction) =>
             direction == FlightDirection.Landing ? LandingStations : TakeoffStations;
 
-        private Queue<Flight> GetRelevantFlights(FlightDirection direction) =>
+        private MyQueue<Flight> GetRelevantFlights(FlightDirection direction) =>
             direction == FlightDirection.Landing ? LandingFlights : TakeoffFlights;
     }
 }

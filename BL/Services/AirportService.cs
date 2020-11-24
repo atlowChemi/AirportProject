@@ -50,7 +50,7 @@ namespace BL.Services
 
         public IEnumerable<Flight> GetWaitingFlights()
         {
-            return flightRepository.GetAll().Where(f => f.History.Count <= 0).OrderBy(f => f.PlannedTime);
+            return flightRepository.GetAll().Where(f => f.History.Count <= 0 && f.ControlTowerId == null).OrderBy(f => f.PlannedTime);
         }
 
         private void InitializeWaitingFlights()
