@@ -1,5 +1,4 @@
-import { FlightDirection } from './FlightDirection';
-import { guid } from './Guid';
+import { FlightDirection, guid } from './';
 
 export type Flight = {
     airplaneId: number;

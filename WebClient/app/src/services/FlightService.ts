@@ -1,13 +1,15 @@
-import { Flight } from '@/models/Flight';
+import { AirportData, Flight } from '@/models';
 import { name, data } from './';
 import { install, invokeChatHub, registerChatHubListener } from './HubService';
 
 export const registerAndGetFlights = async () => {
     await install(`${process.env.VUE_APP_SERVER}/FlightHub`);
-    data.flights = await invokeChatHub<Flight[]>(
+
+    const airportData = await invokeChatHub<AirportData>(
         'RegisterToControlTowerAndGetData',
         name,
     );
+    data.flights = airportData.flights;
     registerChatHubListener('FutureFlightAdded', (flight: Flight) => {
         data.flights.push(flight);
     });
