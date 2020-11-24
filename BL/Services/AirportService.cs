@@ -34,7 +34,7 @@ namespace BL.Services
             this.stationTreeBuilder = stationTreeBuilder;
             this.notifier = notifier;
             CreateStationTrees();
-            if (InitialCreate) InitializeUndeltFlights();
+            if (InitialCreate) InitializeWaitingFlights();
         }
 
 
@@ -48,14 +48,15 @@ namespace BL.Services
             SendFlightToControlTowerAtTime(flight);
         }
 
-        private void InitializeUndeltFlights()
+        public IEnumerable<Flight> GetWaitingFlights()
+        {
+            return flightRepository.GetAll().Where(f => f.History.Count <= 0).OrderBy(f => f.PlannedTime);
+        }
+
+        private void InitializeWaitingFlights()
         {
             InitialCreate = false;
-            IEnumerable<Flight> flights = flightRepository.GetAll();
-
-            IEnumerable<Flight> undeltFlights = flights
-                .Where(f => f.History?.Count <= 0)
-                .OrderBy(f => f.PlannedTime);
+            IEnumerable<Flight> undeltFlights = GetWaitingFlights();
             foreach (Flight flight in undeltFlights)
             {
                 SendFlightToControlTowerAtTime(flight);

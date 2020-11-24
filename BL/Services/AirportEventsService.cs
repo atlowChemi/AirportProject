@@ -26,7 +26,7 @@ namespace BL.Services
             {
                 stationService.FlightChanged += StationService_FlightChanged;
             }
-            this.flightChangers = this.flightChangers.Concat(newStations);
+            flightChangers = flightChangers.Concat(newStations);
         }
 
         private void StationService_FlightChanged(object sender, FlightEventArgs e)

@@ -16,6 +16,13 @@ namespace Server.Hubs
         {
             this.airportService = airportService;
         }
+
+        public async Task<IEnumerable<Flight>> RegisterToControlTowerAndGetData(string name)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, $"CT-{name}");
+            return airportService.GetWaitingFlights();
+        }
+
         public IEnumerable<Airplane> GetAirplanes()
         {
             var airplanes = airportService.GetAirplanes();

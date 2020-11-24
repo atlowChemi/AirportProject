@@ -8,11 +8,13 @@ using DAL.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Server.Hubs;
+using Server.HubServices;
 
 namespace Server
 {
@@ -28,7 +30,7 @@ namespace Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options => options.AddPolicy("CorsPolicy", builder =>
+            services.AddCors(options => options.AddPolicy("SignalRCorsPolicy", builder =>
             {
                 builder.WithOrigins("http://localhost:8080")
                     .WithMethods("GET", "POST").AllowAnyHeader().AllowCredentials();
@@ -37,11 +39,15 @@ namespace Server
             {
                 string relativeDataSource = Path.Combine(Environment.CurrentDirectory, @"..\", "DAL", "airport.db");
                 string dataSource = Path.GetFullPath(relativeDataSource);
-                opt.UseSqlite($"Data Source={dataSource}");
+                opt.UseSqlite($"Data Source={dataSource}").ConfigureWarnings(warn => warn.Ignore(CoreEventId.LazyLoadOnDisposedContextWarning));
             });
 
+            services.AddSingleton<INotifier, FlightHubNotifier>();
+            services.AddSingleton<IAirportDBService, AirportDBService>();
+            services.AddSingleton<IAirportEventsService, AirportEventsService>();
             services.AddSingleton<IRandomDataGeneratorService, RandomDataGeneratorService>();
             services.AddSingleton<IStationTreeBuilderService, StationTreeBuilderService>();
+
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IAirportService, AirportService>();
             services.AddSignalR()
@@ -59,6 +65,7 @@ namespace Server
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors("SignalRCorsPolicy");
 
             app.UseRouting();
 

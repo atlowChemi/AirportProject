@@ -10,14 +10,20 @@ namespace Common.Interfaces
     public interface IAirportService
     {
         /// <summary>
-        /// Get all airplanes available.
+        /// Get all <see cref="Airplane">airplanes</see> available.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>All airplanes in the system.</returns>
         IEnumerable<Airplane> GetAirplanes();
         /// <summary>
-        /// Handle the situation of a new flight arriving the airport.
+        /// Handle the situation of a new <see cref="Flight"/> arriving the airport.
         /// </summary>
         /// <param name="flight">The flight that has arrived.</param>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous <see cref="Flight"/> handeling</returns>
         Task HandleNewFlightArrivedAsync(Flight flight);
+        /// <summary>
+        /// Get all <see cref="Flight">Flights</see> which did not yet start the land/takeoff procedure.
+        /// </summary>
+        /// <returns>A <see cref="IEnumerable{Flight}"/> with waiting flights.</returns>
+        IEnumerable<Flight> GetWaitingFlights();
     }
 }
