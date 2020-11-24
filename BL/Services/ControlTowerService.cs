@@ -80,7 +80,7 @@ namespace BL.Services
             if (flight is null) return;
             ControlTower?.FlightsWaiting?.Remove(flight);
             Queue<Flight> relevantFlights = GetRelevantFlights(flight.Direction);
-            if (relevantFlights.TryPeek(out Flight fl) && flight == fl)
+            if (relevantFlights.TryPeek(out Flight fl) && flight.Id == fl.Id)
             {
                 relevantFlights.Dequeue();
             }

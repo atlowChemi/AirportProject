@@ -31,7 +31,7 @@ namespace BL.Services
             Flight flight = flightEvent.Flight;
             if (flightEvent.IsFromControlTowerToFirstStation)
             {
-                RemoveControlTowerFromFlightAndAddFlighHistory(flight, flightEvent.StationTo);
+                OpenFlightHistoryRow(flight, flightEvent.StationTo);
             }
             else if (flightEvent.IsFromLastStationToEnd)
             {
@@ -41,6 +41,7 @@ namespace BL.Services
             {
                 CloseFlighHistoryRowAndOpenNewOne(flight, flightEvent.StationFrom, flightEvent.StationTo);
             }
+            flight.StationId = flightEvent.StationTo?.Id;
             using IServiceScope scope = serviceScopeFactory.CreateScope();
             IRepository<Flight> repo = scope.ServiceProvider.GetRequiredService<IRepository<Flight>>();
             var zebra = await repo.UpdateAsync(flight);
@@ -60,11 +61,6 @@ namespace BL.Services
         {
             FlightHistory flightHistory = flight.History.FirstOrDefault(fh => fh.StationId == from.Id && !fh.LeaveStationTime.HasValue);
             if (flightHistory is not null) flightHistory.LeaveStationTime = DateTime.Now;
-        }
-
-        private void RemoveControlTowerFromFlightAndAddFlighHistory(Flight flight, Station firstStation)
-        {
-            OpenFlightHistoryRow(flight, firstStation);
         }
 
         private void CloseFlighHistoryRowAndOpenNewOne(Flight flight, Station from, Station to)

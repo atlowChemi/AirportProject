@@ -53,6 +53,7 @@ namespace BL.Services
 
         private void CurrentFlight_ReadyToContinue(object sender, EventArgs e)
         {
+            if (sender is not IFlightService) throw new ArgumentException("Sender must be a logical flight", nameof(sender));
             IEnumerable<IStationFlightHandler> nextStationListByDirection = CurrentFlight?.Flight.Direction == FlightDirection.Landing ? LandingStations : TakeoffStations;
             // There are no more stations to pass, plane can go bye bye.
             if (nextStationListByDirection is null || !nextStationListByDirection.Any())
@@ -62,7 +63,7 @@ namespace BL.Services
             }
             // Attempt finding an available station, and if needed sign up to all.
             IStationFlightHandler nextFreeStation = nextStationListByDirection.FirstOrDefault(station => station.IsHandlerAvailable);
-            if (nextFreeStation != null && nextFreeStation.FlightArrived(CurrentFlight))
+            if (nextFreeStation is not null && nextFreeStation.FlightArrived(CurrentFlight))
             {
                 ChangeAvailability(nextFreeStation.Station);
             }
@@ -100,6 +101,7 @@ namespace BL.Services
         private void ChangeAvailability(Station stationTo)
         {
             Flight flight = CurrentFlight.Flight;
+            CurrentFlight.ReadyToContinue -= CurrentFlight_ReadyToContinue;
             CurrentFlight = null;
             FlightChanged?.Invoke(this, new FlightEventArgs(flight, Station, stationTo));
         }
