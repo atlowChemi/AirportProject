@@ -1,1 +1,1 @@
-export { name, data } from './AirportService';
+export { name, data, setData, addFlight, removeFlight } from './AirportService';

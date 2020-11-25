@@ -1,16 +1,33 @@
-import { AirportData, Flight } from '@/models';
-import { name, data } from './';
+import { AirportData, Flight, Station } from '@/models';
+import { name, addFlight, setData } from './';
+import { removeFlight } from './AirportService';
 import { install, invokeChatHub, registerChatHubListener } from './HubService';
 
+const HUB_URL = `${process.env.VUE_APP_SERVER}/FlightHub`;
+
 export const registerAndGetFlights = async () => {
-    await install(`${process.env.VUE_APP_SERVER}/FlightHub`);
+    await install(HUB_URL);
 
     const airportData = await invokeChatHub<AirportData>(
         'RegisterToControlTowerAndGetData',
         name,
     );
-    data.flights = airportData.flights;
+    setData(airportData);
     registerChatHubListener('FutureFlightAdded', (flight: Flight) => {
-        data.flights.push(flight);
+        addFlight(flight);
     });
+};
+
+export const listenToFlightChanges = async () => {
+    await install(HUB_URL);
+
+    registerChatHubListener(
+        'FlightMoved',
+        (flight: Flight, from: Station, to: Station) => {
+            console.log('FlightMoved', flight, from, to);
+            if (from == null) {
+                removeFlight(flight);
+            }
+        },
+    );
 };
