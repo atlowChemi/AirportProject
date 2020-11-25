@@ -1,5 +1,5 @@
-import { AirportData, Flight, Guid } from '@/models';
-import { reactive, readonly } from 'vue';
+import { AirportData, Flight, FlightDirection, Guid } from '@/models';
+import { computed, reactive, readonly } from 'vue';
 import { registerAndGetFlights, listenToFlightChanges } from './FlightService';
 
 export const name = process.env.VUE_APP_AIRPORT;
@@ -9,6 +9,18 @@ const _data = reactive<AirportData>({
     stations: [],
     firstStations: [],
     stationRelations: [],
+});
+
+export const flights = computed<[Flight[], Flight[]]>(() => {
+    return _data.flights
+        .sort((a, b) => Date.parse(a.plannedTime) - Date.parse(b.plannedTime))
+        .reduce<[Flight[], Flight[]]>(
+            ([lnd, tkf], f) =>
+                f.direction === FlightDirection.Landing
+                    ? [[...lnd, f], tkf]
+                    : [lnd, [...tkf, f]],
+            [[], []],
+        );
 });
 
 export const data = readonly(_data);
