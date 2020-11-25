@@ -73,7 +73,6 @@ export default component;
     }
     &.delayed {
         color: $error;
-        font-weight: bold;
     }
 }
 </style>
