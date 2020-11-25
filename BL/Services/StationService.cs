@@ -108,7 +108,7 @@ namespace BL.Services
 
         private void AddCurrentFlightFromDB()
         {
-            if (Station.CurrentFlight is not null)
+            if (Station.CurrentFlight?.History?.Any(h => h.Station.Id == Station.Id && !h.LeaveStationTime.HasValue) ?? false)
             {
                 FlightArrived(new FlightService(Station.CurrentFlight));
             }

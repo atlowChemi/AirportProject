@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Server.Hubs;
 using Server.HubServices;
@@ -50,11 +51,13 @@ namespace Server
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IAirportService, AirportService>();
-            services.AddSignalR()
-                #if DEBUG
-                .AddHubOptions<FlightHub>(o => o.ClientTimeoutInterval = new TimeSpan(5, 5, 5))
-                #endif
-                .AddNewtonsoftJsonProtocol(o => o.PayloadSerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+            services.AddSignalR().AddNewtonsoftJsonProtocol(o => o.PayloadSerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+            services.AddControllers();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "AirportAPI", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,6 +67,9 @@ namespace Server
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "AirportAPI v1"));
 
             app.UseCors("SignalRCorsPolicy");
 
