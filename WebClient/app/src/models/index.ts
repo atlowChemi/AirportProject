@@ -1,4 +1,5 @@
-export { guid, Guid } from './Guid';
+export { guid } from './guid_type';
+export { Guid } from './Guid';
 export { ControlTower } from './ControlTower';
 export { Flight } from './Flight';
 export { FlightDirection } from './FlightDirection';
