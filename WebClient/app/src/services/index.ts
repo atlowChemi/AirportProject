@@ -6,3 +6,4 @@ export {
     removeFlight,
     moveFlight,
 } from './AirportService';
+export { timeService } from './TimeService';

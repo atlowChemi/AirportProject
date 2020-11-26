@@ -1,6 +1,7 @@
 <template>
     <div class="flight__record" :class="{ delayed: isLate }">
         <p class="flight__record-from">{{ flight.from }}</p>
+        <p class="flight__record-planned">{{ planned }}</p>
         <p class="flight__record-time">
             {{ hours }}:{{ minutes }}:{{ seconds }}
         </p>
@@ -11,6 +12,7 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted, computed } from 'vue';
 import { Flight } from '@/models/Flight';
+import { timeService } from '@/services';
 
 const component = defineComponent({
     props: {
@@ -20,6 +22,9 @@ const component = defineComponent({
         },
     },
     setup(props) {
+        const planned = computed(() =>
+            timeService.showDateStringAsTime(props.flight.plannedTime),
+        );
         const timeLeft = ref(
             Date.parse(props.flight.plannedTime) - new Date().getTime(),
         );
@@ -51,7 +56,7 @@ const component = defineComponent({
 
         onMounted(() => setTimeout(countdown, 1000));
 
-        return { seconds, minutes, hours, isLate };
+        return { seconds, minutes, hours, isLate, planned };
     },
 });
 
@@ -61,7 +66,7 @@ export default component;
 <style lang="scss" scoped>
 .flight__record {
     display: grid;
-    grid-template-columns: 4rem 1fr 4rem;
+    grid-template-columns: 4rem repeat(2, 1fr) 4rem;
     align-items: center;
     height: $recordHeight;
     transition: color 200ms linear;

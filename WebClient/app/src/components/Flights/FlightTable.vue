@@ -7,8 +7,8 @@
             </span>
             <template v-else>
                 <table-headers
-                    :data="['from', 'time', 'to']"
-                    :columns="'4rem 1fr 4rem'"
+                    :data="['from', 'ETA', 'time left', 'to']"
+                    :columns="'4rem repeat(2, 1fr) 4rem'"
                 />
                 <flight-record
                     v-for="flight in flights"
