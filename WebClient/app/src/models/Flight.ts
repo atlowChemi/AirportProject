@@ -9,4 +9,6 @@ export type Flight = {
     history: never[];
     id: guid;
     plannedTime: string;
+    stationId?: guid;
+    isWaiting: boolean;
 };
