@@ -1,4 +1,5 @@
 ﻿using Common.Enums;
+using Common.Models;
 using System;
 
 namespace Common.DTO
@@ -13,5 +14,20 @@ namespace Common.DTO
         public int AirplaneId { get; init; }
         public Guid? ControlTowerId { get; init; }
         public Guid? StationId { get; init; }
+
+        public static FlightDTO FromDBModel(Flight flight)
+        {
+            return new()
+            {
+                Id = flight.Id,
+                To = flight.To,
+                From = flight.From,
+                PlannedTime = flight.PlannedTime,
+                Direction = flight.Direction,
+                AirplaneId = flight.AirplaneId,
+                ControlTowerId = flight.ControlTowerId,
+                StationId = flight.StationId
+            };
+        }
     }
 }
