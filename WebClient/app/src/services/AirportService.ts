@@ -36,9 +36,7 @@ watch(
 
 export const data = readonly(_data);
 
-export const setData = (data: AirportData) => {
-    _data.value = data;
-};
+export const setData = (data: AirportData) => (_data.value = data);
 
 export const addFlight = (flight: Flight) => _data.value.flights.push(flight);
 
@@ -48,11 +46,11 @@ export const removeFlight = (flight: Flight) =>
 const moveFlightToStation = (flight: Flight, station: Station) => {
     const flightInd = _data.value.flights.findIndex(f => f.id == flight.id);
     const stationInd = _data.value.stations.findIndex(s => s.id == station.id);
-    if (flightInd > 0) {
+    if (flightInd >= 0) {
         _data.value.flights[flightInd].isWaiting = false;
         _data.value.flights[flightInd].stationId = station.id;
     }
-    if (stationInd > 0) {
+    if (stationInd >= 0) {
         _data.value.stations[stationInd].currentFlight = flight;
     }
 };
