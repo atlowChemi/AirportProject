@@ -1,6 +1,5 @@
-import { guid } from './';
+import { HasId } from './';
 
-export type ControlTower = {
-    id: guid;
+export interface ControlTower extends HasId {
     name: string;
-};
+}

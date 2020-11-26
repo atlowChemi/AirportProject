@@ -1,5 +1,6 @@
 export { guid } from './guid_type';
 export { Guid } from './Guid';
+export { HasId } from './HasId';
 export { ControlTower } from './ControlTower';
 export { Flight } from './Flight';
 export { FlightDirection } from './FlightDirection';

@@ -1,14 +1,13 @@
-import { FlightDirection, guid } from './';
+import { FlightDirection, guid, HasId } from './';
 
-export type Flight = {
+export interface Flight extends HasId {
     airplaneId: number;
     controlTowerId: number;
     direction: FlightDirection;
     from: string;
     to: string;
     history: never[];
-    id: guid;
     plannedTime: string;
     stationId?: guid;
     isWaiting: boolean;
-};
+}

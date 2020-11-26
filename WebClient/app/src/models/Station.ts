@@ -1,8 +1,6 @@
-import { guid } from './';
-import { Flight } from './Flight';
+import { HasId, guid, Flight } from './';
 
-export interface Station {
-    id: guid;
+export interface Station extends HasId {
     controlTowerId: guid;
     name: string;
     currentFlight?: Flight;
