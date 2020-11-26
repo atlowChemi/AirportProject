@@ -27,18 +27,16 @@ let connection: HubConnection;
 type CallbackFn = (...args: any[]) => void;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const invokeChatHub = async <T = any>(
+const invokeFlightHub = async <T = any>(
     methodName: string,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     ...args: any[]
 ) => connection.invoke<T>(methodName, ...args);
 
-export const registerChatHubListener = (
-    methodName: string,
-    callback: CallbackFn,
-) => connection.on(methodName, callback);
+const registerFlightHubListener = (methodName: string, callback: CallbackFn) =>
+    connection.on(methodName, callback);
 
-export const unregisterChatHubListener = (
+const unregisterFlightHubListener = (
     methodName: string,
     callback?: CallbackFn,
 ) =>
@@ -46,7 +44,7 @@ export const unregisterChatHubListener = (
         ? connection.off(methodName, callback)
         : connection.off(methodName);
 
-export const install = async (url: string) => {
+const install = async (url: string) => {
     if (!connection) {
         connection = new HubConnectionBuilder()
             .withUrl(url)
@@ -57,4 +55,11 @@ export const install = async (url: string) => {
         return connection.start();
     }
     return;
+};
+
+export const hubService = {
+    invokeFlightHub,
+    registerFlightHubListener,
+    unregisterFlightHubListener,
+    install,
 };

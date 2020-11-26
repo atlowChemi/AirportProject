@@ -1,6 +1,6 @@
 import { AirportData, Flight, FlightDirection, Guid, Station } from '@/models';
 import { readonly, ref, watch } from 'vue';
-import { registerAndGetFlights, listenToFlightChanges } from './FlightService';
+import { flightService } from './FlightService';
 
 export const name = process.env.VUE_APP_AIRPORT;
 const _data = ref<AirportData>({
@@ -84,5 +84,5 @@ export const moveFlight = (
     }
 };
 
-registerAndGetFlights();
-listenToFlightChanges();
+flightService.registerAndGetFlights();
+flightService.listenToFlightChanges();
