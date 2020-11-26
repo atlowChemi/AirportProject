@@ -35,7 +35,7 @@ namespace Simulator.Services
             FlightDirection direction = randomDataService.RandomFlightDirection();
             (string from, string to) = PickRandomTarget(direction);
             Airplane airplane = airplaneSelectorService.GetAirplane();
-            DateTime plannedTime = DateTime.Now.AddSeconds(randomDataService.RandomNumber(100, 200));
+            DateTime plannedTime = DateTime.Now.AddSeconds(randomDataService.RandomNumber(15, 45));
             if (airplane == null) return null;
             return new Flight { Direction = direction, AirplaneId = airplane.Id, From = from, To = to, PlannedTime = plannedTime };
         }
