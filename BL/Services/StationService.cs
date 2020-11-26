@@ -54,22 +54,22 @@ namespace BL.Services
         private void CurrentFlight_ReadyToContinue(object sender, EventArgs e)
         {
             if (sender is not IFlightService) throw new ArgumentException("Sender must be a logical flight", nameof(sender));
-            IEnumerable<IStationFlightHandler> nextStationListByDirection = CurrentFlight?.Flight.Direction == FlightDirection.Landing ? LandingStations : TakeoffStations;
+            IEnumerable<IStationFlightHandler> nextStationList = GetNextStationListByDirection(CurrentFlight.Flight.Direction);
             // There are no more stations to pass, plane can go bye bye.
-            if (nextStationListByDirection is null || !nextStationListByDirection.Any())
+            if (nextStationList is null || !nextStationList.Any())
             {
                 ChangeAvailability(null);
                 return;
             }
             // Attempt finding an available station, and if needed sign up to all.
-            IStationFlightHandler nextFreeStation = nextStationListByDirection.FirstOrDefault(station => station.IsHandlerAvailable);
+            IStationFlightHandler nextFreeStation = nextStationList.FirstOrDefault(station => station.IsHandlerAvailable);
             if (nextFreeStation is not null && nextFreeStation.FlightArrived(CurrentFlight))
             {
                 ChangeAvailability(nextFreeStation.Station);
             }
             else
             {
-                foreach (IStationFlightHandler station in nextStationListByDirection)
+                foreach (IStationFlightHandler station in nextStationList)
                 {
                     station.FlightChanged += Next_Station_FlightChanged; ;
                 }
@@ -88,8 +88,8 @@ namespace BL.Services
             if (availableStation.FlightArrived(CurrentFlight))
             {
                 // Unregister from all from all stations.
-                IEnumerable<IStationFlightHandler> nextStationListByDirection = CurrentFlight.Flight.Direction == FlightDirection.Landing ? LandingStations : TakeoffStations;
-                foreach (IStationFlightHandler station in nextStationListByDirection)
+                IEnumerable<IStationFlightHandler> nextStations = GetNextStationListByDirection(CurrentFlight.Flight.Direction);
+                foreach (IStationFlightHandler station in nextStations)
                 {
                     station.FlightChanged -= Next_Station_FlightChanged;
                 }
@@ -113,5 +113,8 @@ namespace BL.Services
                 FlightArrived(new FlightService(Station.CurrentFlight));
             }
         }
+
+        private IEnumerable<IStationFlightHandler> GetNextStationListByDirection(FlightDirection direction) =>
+            direction == FlightDirection.Landing ? LandingStations : TakeoffStations;
     }
 }
