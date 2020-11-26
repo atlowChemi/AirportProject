@@ -5,6 +5,7 @@ using Common.Interfaces;
 using Common.Models;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using UnitTests.BL.Mocks;
 using Xunit;
 
@@ -21,7 +22,7 @@ namespace UnitTests.BL
         [Fact]
         public void ControlTowerServiceShouldHaveExpectedControlTower()
         {
-            ControlTower controlTower = new ControlTower();
+            ControlTower controlTower = new();
             IControlTowerService controlTowerService = new ControlTowerService(controlTower);
 
             Assert.Equal(controlTower, controlTowerService.ControlTower);
@@ -30,10 +31,9 @@ namespace UnitTests.BL
         [Fact]
         public void ControlTowerServiceShouldHaveExpectedNextStations()
         {
-            IStationFlightHandler[] flightHandlerLanding = new IStationFlightHandler[] { new StationService(new Station(), 1) };
-            IStationFlightHandler[] flightHandlerTakeoff = new IStationFlightHandler[] { new StationService(new Station(), 1) };
-            ControlTower controlTower = new ControlTower();
-            IControlTowerService controlTowerService = new ControlTowerService(controlTower);
+            IStationFlightHandler[] flightHandlerLanding = new IStationFlightHandler[] { new StationService(new(), 1) };
+            IStationFlightHandler[] flightHandlerTakeoff = new IStationFlightHandler[] { new StationService(new(), 1) };
+            IControlTowerService controlTowerService = new ControlTowerService(new());
             controlTowerService.ConnectToNextStations(flightHandlerLanding, flightHandlerTakeoff);
 
             Assert.Equal(flightHandlerLanding, controlTowerService.LandingStations);
@@ -43,22 +43,20 @@ namespace UnitTests.BL
         [Fact]
         public void ControlTowerServiceThrowsIfNullFlight()
         {
-            ControlTower controlTower = new ControlTower();
-            IControlTowerService controlTowerService = new ControlTowerService(controlTower);
+            IControlTowerService controlTowerService = new ControlTowerService(new());
             Assert.Throws<ArgumentNullException>("flightService", () => controlTowerService.FlightArrived(null));
         }
 
         [Fact]
         public void ControlTowerServiceSendsFlightToStation()
         {
-            IStationFlightHandler[] flightHandlerLanding = new IStationFlightHandler[] { new StationService(new Station(), 1) };
-            ControlTower controlTower = new ControlTower();
-            IControlTowerService controlTowerService = new ControlTowerService(controlTower);
+            IStationFlightHandler[] flightHandlerLanding = new IStationFlightHandler[] { new StationService(new(), 1) };
+            IControlTowerService controlTowerService = new ControlTowerService(new());
             controlTowerService.ConnectToNextStations(flightHandlerLanding, null);
 
             Assert.Equal(flightHandlerLanding, controlTowerService.LandingStations);
 
-            Flight flight = new Flight { Direction = FlightDirection.Landing };
+            Flight flight = new() { Direction = FlightDirection.Landing };
             FlightServiceMock flightServiceMock = new FlightServiceMock { Flight = flight };
 
             Assert.True(flightHandlerLanding[0].IsHandlerAvailable);
@@ -69,14 +67,13 @@ namespace UnitTests.BL
         [Fact]
         public void ControlTowerServiceSendsFlightToStationd()
         {
-            StationService station = new StationService(new Station(), 1);
-            FlightServiceMock preFlight = new FlightServiceMock { Flight = new Flight { Direction = FlightDirection.Landing } };
-            
+            StationService station = new(new(), 1);
+            FlightServiceMock preFlight = new() { Flight = new() { Direction = FlightDirection.Landing } };
+
             station.FlightArrived(preFlight);
 
             IStationFlightHandler[] flightHandlerLanding = new IStationFlightHandler[] { station };
-            ControlTower controlTower = new ControlTower();
-            IControlTowerService controlTowerService = new ControlTowerService(controlTower);
+            IControlTowerService controlTowerService = new ControlTowerService(new());
             controlTowerService.ConnectToNextStations(flightHandlerLanding, null);
 
             Assert.Equal(flightHandlerLanding, controlTowerService.LandingStations);
@@ -84,8 +81,8 @@ namespace UnitTests.BL
             Assert.Equal(preFlight, station.CurrentFlight);
             Assert.False(station.IsHandlerAvailable);
 
-            Flight flight = new Flight { Direction = FlightDirection.Landing };
-            FlightServiceMock flightServiceMock = new FlightServiceMock { Flight = flight };
+            Flight flight = new() { Direction = FlightDirection.Landing };
+            FlightServiceMock flightServiceMock = new() { Flight = flight };
             controlTowerService.FlightArrived(flightServiceMock);
 
             Assert.False(station.IsHandlerAvailable);
@@ -95,6 +92,36 @@ namespace UnitTests.BL
 
             Assert.False(station.IsHandlerAvailable);
             Assert.Equal(flight, station.CurrentFlight.Flight);
+        }
+
+        [Fact]
+        public void ControlTowerWillNotSendSameFlightIfTwoStationsClearAtTheSameTime()
+        {
+            IControlTowerService controlTowerService = new ControlTowerService(new());
+
+            IStationService station1 = new StationService(new(), 1);
+            IStationService station2 = new StationService(new(), 1);
+
+            controlTowerService.ConnectToNextStations(Array.Empty<IStationFlightHandler>(), new IStationFlightHandler[] { station1, station2 });
+
+            FlightServiceMock flight1 = new() { Flight = new() { Direction = FlightDirection.Takeoff } };
+            FlightServiceMock flight2 = new() { Flight = new() { Direction = FlightDirection.Takeoff } };
+            FlightServiceMock flight3 = new() { Flight = new() { Direction = FlightDirection.Takeoff } };
+
+            Assert.True(station1.FlightArrived(flight1));
+            Assert.Equal(flight1, station1.CurrentFlight);
+            Assert.True(station2.FlightArrived(flight2));
+            Assert.Equal(flight2, station2.CurrentFlight);
+
+            Assert.True(controlTowerService.FlightArrived(flight3));
+
+            Parallel.Invoke(
+                () => flight1.StopWaiting(),
+                () => flight2.StopWaiting()
+            );
+
+            Assert.NotEqual(station1.CurrentFlight, station2.CurrentFlight);
+            Assert.True(station1.IsHandlerAvailable ^ station2.IsHandlerAvailable);
         }
     }
 }
