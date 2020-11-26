@@ -38,8 +38,8 @@ export default component;
 
 <style lang="scss">
 .toggle {
-    height: 2.5rem;
-    width: 6rem;
+    height: $toggleHeight;
+    width: $toggleWidth;
     display: flex;
     justify-content: space-around;
     position: absolute;
@@ -50,27 +50,29 @@ export default component;
         $secondary,
         rgba($color: $secondary, $alpha: 1)
     );
-    border-radius: 1.25rem;
+    border-radius: $toggleRadius;
+    background-clip: padding-box;
     overflow: hidden;
     cursor: pointer;
     svg {
-        width: 1.4rem;
+        width: $toggleIcons;
         z-index: 2;
-        transition: fill 250ms;
+        transition: fill $toggleDuration;
         &.selected {
             fill: $light;
         }
     }
     &__bubble {
         position: absolute;
-        width: 3rem;
-        height: 2.5rem;
-        border-radius: 1.25rem;
+        width: calc(#{$toggleWidth} / 2);
+        height: $toggleHeight;
+        border-radius: $toggleRadius;
+        background-clip: padding-box;
         background: $primaryLight;
         background: linear-gradient(224.46deg, $primaryLight, $primaryLight2);
         box-shadow: 0 0.25rem 0.4rem 0 $primary;
         z-index: 1;
-        transition: transform 250ms;
+        transition: transform $toggleDuration;
         .mode1 & {
             transform: translateX(-50%);
         }

@@ -12,6 +12,12 @@ $tableMargin: 0.4rem;
 $titleHeight: 3rem;
 $recordHeight: 3rem;
 
+$toggleHeight: 2.5rem;
+$toggleWidth: 6rem;
+$toggleRadius: 1.25rem;
+$toggleIcons: 1.4rem;
+$toggleDuration: 550ms;
+
 @mixin tabelify($name, $full-page: false) {
     .#{ $name }__table {
         margin: $tableMargin 0;
