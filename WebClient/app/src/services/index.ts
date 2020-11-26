@@ -1,8 +1,8 @@
 export {
     name,
     data,
-    flights,
     setData,
     addFlight,
     removeFlight,
+    moveFlight,
 } from './AirportService';

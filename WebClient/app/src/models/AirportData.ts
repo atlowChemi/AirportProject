@@ -1,15 +1,18 @@
 import {
+    ControlTower,
     Flight,
     Station,
-    StationRelation,
     StationControlTowerRelation,
-    ControlTower,
+    StationRelation,
 } from './';
 
 export type AirportData = {
-    flights: Flight[];
     stations: Station[];
     stationRelations: StationRelation[];
     firstStations: StationControlTowerRelation[];
     controlTower: ControlTower;
+    flights: Flight[];
+
+    takeoffFlights: Flight[];
+    landingFlights: Flight[];
 };

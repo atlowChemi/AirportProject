@@ -1,6 +1,6 @@
 import { AirportData, Flight, Station } from '@/models';
 import { name, addFlight, setData } from './';
-import { removeFlight } from './AirportService';
+import { moveFlight } from './AirportService';
 import { install, invokeChatHub, registerChatHubListener } from './HubService';
 
 const HUB_URL = `${process.env.VUE_APP_SERVER}/FlightHub`;
@@ -23,11 +23,8 @@ export const listenToFlightChanges = async () => {
 
     registerChatHubListener(
         'FlightMoved',
-        (flight: Flight, from: Station, to: Station) => {
-            console.log('FlightMoved', flight, from, to);
-            if (from == null) {
-                removeFlight(flight);
-            }
+        (flight: Flight, from: Station | null, to: Station | null) => {
+            moveFlight(flight, from, to);
         },
     );
 };

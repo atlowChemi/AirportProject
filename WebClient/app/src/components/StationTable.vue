@@ -1,5 +1,5 @@
 <template>
-    <span class="station__table-stations__empty" v-if="!stations.length">
+    <span class="station__table-stations__empty" v-if="!data.stations.length">
         No stations found!
     </span>
     <template v-else>
@@ -8,7 +8,7 @@
             :data="['name', 'state', 'more']"
         />
         <station-record
-            v-for="station in stations"
+            v-for="station in data.stations"
             :key="station.id"
             :station="station"
         />
@@ -24,8 +24,7 @@ import { data } from '@/services';
 const component = defineComponent({
     components: { StationRecord, TableHeaders },
     setup() {
-        const stations = data.stations;
-        return { stations };
+        return { data };
     },
 });
 

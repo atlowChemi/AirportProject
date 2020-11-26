@@ -1,19 +1,19 @@
 <template>
     <div>
-        <flight-table title="Landing" :flights="flights[0]" />
-        <flight-table title="Takeoff" :flights="flights[1]" />
+        <flight-table title="Landing" :flights="data.landingFlights" />
+        <flight-table title="Takeoff" :flights="data.takeoffFlights" />
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import FlightTable from '@/components/FlightTable.vue';
-import { flights } from '@/services';
+import { data } from '@/services';
 
 const component = defineComponent({
     components: { FlightTable },
     setup() {
-        return { flights };
+        return { data };
     },
 });
 
