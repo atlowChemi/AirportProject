@@ -4,4 +4,56 @@ $primaryLight: #344188a4;
 $error: #bb0000;
 $light: #fff;
 
+$tablePadding: 0.1rem;
+$pagePadding: 0.2rem;
+$tableMargin: 0.4rem;
+$titleHeight: 2.5rem;
 $recordHeight: 3rem;
+
+@mixin tabelify($name, $full-page: false) {
+    .#{ $name }__table {
+        margin: $tableMargin 0;
+        padding: $tablePadding;
+        color: $light;
+        background-color: $primary;
+        border: $tablePadding solid $primary;
+        @if ($full-page) {
+            max-height: calc(100% - #{$tableMargin});
+            overflow: hidden;
+        }
+        &-title {
+            display: flex;
+            height: $titleHeight;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            font-weight: 800;
+        }
+        &-#{$name}s {
+            color: $primary;
+            background: $light;
+            overflow-y: auto;
+            @if ($full-page) {
+                max-height: calc(
+                    100vh -
+                        #{$pagePadding} -
+                        #{$recordHeight} -
+                        #{$tableMargin} -
+                        #{$tablePadding} -
+                        #{$tablePadding} -
+                        #{$titleHeight} -
+                        #{$pagePadding} -
+                        #{$tableMargin}
+                );
+            } @else {
+                max-height: calc(#{$recordHeight} * 4.5);
+            }
+            &__empty {
+                height: $recordHeight;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+        }
+    }
+}

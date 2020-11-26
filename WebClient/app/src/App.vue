@@ -1,7 +1,11 @@
 <template>
-    <h1>Welcome To {{ name }} Airport</h1>
-    <div class="airport-grid">
-        <div>Show stations here</div>
+    <h1 class="airport__title">Welcome To {{ name }} Airport</h1>
+    <div class="airport__grid">
+        <div class="airport__grid-station__container">
+            <station-section>
+                <router-view />
+            </station-section>
+        </div>
         <flight-tables />
     </div>
 </template>
@@ -9,10 +13,11 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { name } from '@/services';
-import FlightTables from './views/FlightTables.vue';
+import FlightTables from '@/views/FlightTables.vue';
+import StationSection from '@/views/StationSection.vue';
 
 const component = defineComponent({
-    components: { FlightTables },
+    components: { FlightTables, StationSection },
     setup() {
         return { name };
     },
@@ -50,14 +55,26 @@ body {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: $primary;
-    padding: 0.2rem;
+    padding: $pagePadding;
+    height: calc(100% - #{$pagePadding});
 }
 </style>
 
 <style lang="scss" scoped>
-.airport-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 0.5rem;
+.airport {
+    &__title {
+        display: flex;
+        margin: 0;
+        height: $recordHeight;
+        justify-content: center;
+        align-items: center;
+    }
+    &__grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 0.5rem;
+        height: calc(100% - #{$recordHeight});
+        overflow: hidden;
+    }
 }
 </style>

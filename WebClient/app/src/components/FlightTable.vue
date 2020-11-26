@@ -6,6 +6,10 @@
                 No flights
             </span>
             <template v-else>
+                <table-headers
+                    :data="['from', 'time', 'to']"
+                    :columns="'4rem 1fr 4rem'"
+                />
                 <flight-record
                     v-for="flight in flights"
                     :key="flight.id"
@@ -20,8 +24,10 @@
 import { defineComponent } from 'vue';
 import { Flight } from '@/models/Flight';
 import FlightRecord from '@/components/FlightRecord.vue';
+import TableHeaders from '@/components/TableHeaders.vue';
 
 const component = defineComponent({
+    components: { FlightRecord, TableHeaders },
     props: {
         title: {
             type: String,
@@ -32,35 +38,11 @@ const component = defineComponent({
             required: true,
         },
     },
-    components: { FlightRecord },
 });
 
 export default component;
 </script>
 
 <style lang="scss" scoped>
-.flight__table {
-    margin: 0.4rem 0;
-    padding: 0.1rem;
-    color: $light;
-    background-color: $primary;
-    border: 0.1rem solid $primary;
-    &-title {
-        margin: 0;
-        padding: 0.5rem 0;
-        font-weight: 800;
-    }
-    &-flights {
-        color: $primary;
-        background: $light;
-        overflow-y: auto;
-        max-height: calc(#{$recordHeight} * 4.5);
-        &__empty {
-            height: $recordHeight;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-    }
-}
+@include tabelify(flight);
 </style>
