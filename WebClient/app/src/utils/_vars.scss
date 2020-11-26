@@ -1,6 +1,7 @@
 $primary: #121838;
 $secondary: #99a1cfc5;
 $primaryLight: #344188a4;
+$primaryLight2: #1c2558;
 $error: #bb0000;
 $good: #008b00;
 $light: #fff;
@@ -8,7 +9,7 @@ $light: #fff;
 $tablePadding: 0.1rem;
 $pagePadding: 0.2rem;
 $tableMargin: 0.4rem;
-$titleHeight: 2.5rem;
+$titleHeight: 3rem;
 $recordHeight: 3rem;
 
 @mixin tabelify($name, $full-page: false) {
@@ -29,6 +30,8 @@ $recordHeight: 3rem;
             align-items: center;
             margin: 0;
             font-weight: 800;
+            position: relative;
+            padding-bottom: $tablePadding;
         }
         &-#{$name}s {
             color: $primary;
@@ -43,6 +46,7 @@ $recordHeight: 3rem;
                         #{$tablePadding} -
                         #{$tablePadding} -
                         #{$titleHeight} -
+                        #{$tablePadding} -
                         #{$pagePadding} -
                         #{$tableMargin}
                 );
