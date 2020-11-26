@@ -44,7 +44,7 @@ namespace BL.Services
             flight.StationId = flightEvent.StationTo?.Id;
             using IServiceScope scope = serviceScopeFactory.CreateScope();
             IRepository<Flight> repo = scope.ServiceProvider.GetRequiredService<IRepository<Flight>>();
-            var zebra = await repo.UpdateAsync(flight);
+            await repo.UpdateAsync(flight);
         }
 
         private void OpenFlightHistoryRow(Flight flight, Station to)
