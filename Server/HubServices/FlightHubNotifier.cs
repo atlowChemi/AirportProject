@@ -20,31 +20,23 @@ namespace Server.HubServices
         public void NotifyFlightChanges(FlightEventArgs e)
         {
             Flight flight = e.Flight;
-            FlightDTO flightDto = new FlightDTO
-            {
-                AirplaneId = flight.AirplaneId,
-                ControlTowerId = flight.ControlTowerId,
-                Direction = flight.Direction,
-                From = flight.From,
-                Id = flight.Id,
-                PlannedTime = flight.PlannedTime,
-                StationId = flight.StationId,
-                To = flight.To
-            };
+
+            FlightDTO flightDto = FlightDTO.FromDBModel(flight);
             StationDTO fromDto = null, toDto = null;
             Station from = e.StationFrom;
             if (from is not null)
-                fromDto = new StationDTO { ControlTowerId = from.ControlTowerId, Id = from.Id, Name = from.Name };
+                fromDto = StationDTO.FromDBModel(from);
             Station to = e.StationTo;
             if (to is not null)
-                toDto = new StationDTO { ControlTowerId = to.ControlTowerId, Id = to.Id, Name = to.Name };
+                toDto = StationDTO.FromDBModel(to);
             hubContext.Clients.Group($"CT-{e.Flight.ControlTower.Name}").SendAsync("FlightMoved", flightDto, fromDto, toDto);
         }
 
         public void NotifyFutureFlightAdded(Flight flight)
         {
             string controlTowerName = flight.Direction == FlightDirection.Landing ? flight.To : flight.From;
-            hubContext.Clients.Group($"CT-{controlTowerName}").SendAsync("FutureFlightAdded", flight);
+            FlightDTO flightDto = FlightDTO.FromDBModel(flight);
+            hubContext.Clients.Group($"CT-{controlTowerName}").SendAsync("FutureFlightAdded", flightDto);
         }
     }
 }
