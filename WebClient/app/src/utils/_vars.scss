@@ -2,6 +2,7 @@ $primary: #121838;
 $secondary: #99a1cfc5;
 $primaryLight: #344188a4;
 $error: #bb0000;
+$good: #008b00;
 $light: #fff;
 
 $tablePadding: 0.1rem;
@@ -48,7 +49,8 @@ $recordHeight: 3rem;
             } @else {
                 max-height: calc(#{$recordHeight} * 4.5);
             }
-            &__empty {
+            &__empty,
+            :deep(.#{#{ $name }__table-#{$name}s__empty }) {
                 height: $recordHeight;
                 display: flex;
                 justify-content: center;

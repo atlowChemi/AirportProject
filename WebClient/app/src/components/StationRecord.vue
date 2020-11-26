@@ -1,5 +1,5 @@
 <template>
-    <div class="station__record">
+    <div class="station__record" :class="{ available: !station.currentFlight }">
         <p class="station__record-name">{{ station.name }}</p>
         <p class="station__record-state">
             {{ station.currentFlight ? 'Occupied' : 'Available' }}
@@ -40,7 +40,10 @@ export default component;
     &:not(:last-of-type) {
         border-bottom: 1px solid $primary;
     }
-    &.delayed {
+    &.available {
+        color: $good;
+    }
+    &:not(.available) {
         color: $error;
     }
 }
