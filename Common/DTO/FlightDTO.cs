@@ -14,6 +14,7 @@ namespace Common.DTO
         public int AirplaneId { get; init; }
         public Guid? ControlTowerId { get; init; }
         public Guid? StationId { get; init; }
+        public bool IsWaiting => StationId.HasValue;
 
         public static FlightDTO FromDBModel(Flight flight)
         {
