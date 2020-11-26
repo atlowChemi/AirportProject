@@ -11,6 +11,8 @@ namespace BL.Services
 {
     public class ControlTowerService : IControlTowerService
     {
+        private readonly object lockObj = new();
+
         public ControlTower ControlTower { get; init; }
 
         public IEnumerable<IRelatedToStation> NextStations => ControlTower?.FirstStations;
@@ -81,7 +83,7 @@ namespace BL.Services
         {
             // TODO : If the flight has started out from the queue, we might call it again?
             if (flightService is null) throw new ArgumentNullException(nameof(flightService), "A flight cannot arrive to the control tower as null! This is not Malaysia Airlines!");
-            IEnumerable<IStationFlightHandler> relevantFirstStations = GetRelevantFlightHandler(FlightDirection.Landing);
+            IEnumerable<IStationFlightHandler> relevantFirstStations = GetRelevantFlightHandler(flightService.Flight.Direction);
 
             IStationFlightHandler avaialabeStation = relevantFirstStations?.FirstOrDefault(ss => ss.IsHandlerAvailable);
             if (avaialabeStation is not null && avaialabeStation.FlightArrived(flightService))
@@ -119,13 +121,16 @@ namespace BL.Services
             bool isTakeoffStation = TakeoffStations?.Contains(flightHandler) ?? false;
 
             IFlightService flightService = null;
-            if (isLandingStation && LandingFlights.TryDequeue(out Flight landingFlight))
+            lock (lockObj)
             {
-                flightService = new FlightService(landingFlight);
-            }
-            else if (isTakeoffStation && TakeoffFlights.TryDequeue(out Flight takeoffFlight))
-            {
-                flightService = new FlightService(takeoffFlight);
+                if (isLandingStation && LandingFlights.TryDequeue(out Flight landingFlight))
+                {
+                    flightService = new FlightService(landingFlight);
+                }
+                else if (isTakeoffStation && TakeoffFlights.TryDequeue(out Flight takeoffFlight))
+                {
+                    flightService = new FlightService(takeoffFlight);
+                }
             }
             if (flightService is not null)
             {
