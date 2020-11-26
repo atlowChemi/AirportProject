@@ -1,9 +1,9 @@
 <template>
     <div class="station__table">
-        <p class="station__table-title">
-            Stations
+        <div class="station__table-title">
+            <div class="station__table-title__verbal">Stations</div>
             <Switch mode1="list" mode2="flow" @update:mode="modeChanged" />
-        </p>
+        </div>
         <div class="station__table-stations">
             <slot />
         </div>
