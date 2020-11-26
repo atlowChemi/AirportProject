@@ -8,6 +8,10 @@
             v-else-if="name === 'list'"
             d="M27,24 L27,26 L13,26 L13,24 L27,24 Z M27,19 L27,21 L13,21 L13,19 L27,19 Z M27,14 L27,16 L13,16 L13,14 L27,14 Z"
         ></path>
+        <path
+            v-else-if="name === 'more'"
+            d="M204,102c28.05,0,51-22.95,51-51S232.05,0,204,0s-51,22.95-51,51S175.95,102,204,102z M204,153c-28.05,0-51,22.95-51,51    s22.95,51,51,51s51-22.95,51-51S232.05,153,204,153z M204,306c-28.05,0-51,22.95-51,51s22.95,51,51,51s51-22.95,51-51    S232.05,306,204,306z"
+        ></path>
     </svg>
 </template>
 
@@ -17,18 +21,21 @@ import { defineComponent, computed } from 'vue';
 const component = defineComponent({
     props: {
         name: {
-            type: String as () => 'flow' | 'list',
+            type: String as () => 'flow' | 'list' | 'more',
             required: true,
         },
     },
     setup(props) {
         const viewBox = computed(() => {
-            if (props.name === 'flow') {
-                return '0 0 41 32';
-            } else if (props.name === 'list') {
-                return '0 0 14 12';
-            } else {
-                return '0 0 0 0';
+            switch (props.name) {
+                case 'flow':
+                    return '0 0 41 32';
+                case 'list':
+                    return '0 0 14 12';
+                case 'more':
+                    return '0 0 408 408';
+                default:
+                    return '0 0 0 0';
             }
         });
         const pathTransform = computed(() => {
