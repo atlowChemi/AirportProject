@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import StationTable from '@/components/StationTable.vue';
+import StationTable from '@/components/Stations/StationTable.vue';
 
 const routes: Array<RouteRecordRaw> = [
     {

@@ -17,8 +17,8 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import StationRecord from '@/components/StationRecord.vue';
-import TableHeaders from '@/components/TableHeaders.vue';
+import StationRecord from '@/components/Stations/StationRecord.vue';
+import TableHeaders from '@/components/Tables/TableHeaders.vue';
 import { data } from '@/services';
 
 const component = defineComponent({

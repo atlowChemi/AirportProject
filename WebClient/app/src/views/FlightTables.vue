@@ -7,7 +7,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import FlightTable from '@/components/FlightTable.vue';
+import FlightTable from '@/components/Flights/FlightTable.vue';
 import { data } from '@/services';
 
 const component = defineComponent({

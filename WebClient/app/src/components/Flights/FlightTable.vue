@@ -23,8 +23,8 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { Flight } from '@/models/Flight';
-import FlightRecord from '@/components/FlightRecord.vue';
-import TableHeaders from '@/components/TableHeaders.vue';
+import FlightRecord from '@/components/Flights/FlightRecord.vue';
+import TableHeaders from '@/components/Tables/TableHeaders.vue';
 
 const component = defineComponent({
     components: { FlightRecord, TableHeaders },
