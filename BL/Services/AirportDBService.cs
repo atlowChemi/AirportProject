@@ -19,13 +19,6 @@ namespace BL.Services
             this.serviceScopeFactory = serviceScopeFactory;
         }
 
-        public async Task<Flight> AddNewFutureIncomingFlight(Flight flight)
-        {
-            using IServiceScope scope = serviceScopeFactory.CreateScope();
-            IRepository<Flight> repo = scope.ServiceProvider.GetRequiredService<IRepository<Flight>>();
-            return await repo.AddAsync(flight);
-        }
-
         public async Task FlightMoved(FlightEventArgs flightEvent)
         {
             Flight flight = flightEvent.Flight;
@@ -47,7 +40,7 @@ namespace BL.Services
             await repo.UpdateAsync(flight);
         }
 
-        private void OpenFlightHistoryRow(Flight flight, Station to)
+        private static void OpenFlightHistoryRow(Flight flight, Station to)
         {
             FlightHistory flightHistory = new FlightHistory { StationId = to.Id, EnterStationTime = DateTime.Now };
             if (flight.History is null)
@@ -57,17 +50,16 @@ namespace BL.Services
             flight.History.Add(flightHistory);
         }
 
-        private void CloseFlighHistoryRow(Flight flight, Station from)
+        private static void CloseFlighHistoryRow(Flight flight, Station from)
         {
             FlightHistory flightHistory = flight.History.FirstOrDefault(fh => fh.StationId == from.Id && !fh.LeaveStationTime.HasValue);
             if (flightHistory is not null) flightHistory.LeaveStationTime = DateTime.Now;
         }
 
-        private void CloseFlighHistoryRowAndOpenNewOne(Flight flight, Station from, Station to)
+        private static void CloseFlighHistoryRowAndOpenNewOne(Flight flight, Station from, Station to)
         {
             CloseFlighHistoryRow(flight, from);
             OpenFlightHistoryRow(flight, to);
         }
-
     }
 }

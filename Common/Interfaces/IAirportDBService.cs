@@ -1,4 +1,5 @@
 ﻿using Common.Events;
+using Common.Models;
 using System.Threading.Tasks;
 
 namespace Common.Interfaces
@@ -12,7 +13,7 @@ namespace Common.Interfaces
         /// Update the database when a <see cref="Models.Flight">flight</see> has moved.
         /// </summary>
         /// <param name="flightEvent">The flight event arguments.</param>
-        /// <returns>An awaitable task.</returns>
+        /// <returns>A <see cref="Task"/> that represents the asynchronous <see cref="Flight"/> moving in DB</returns>
         Task FlightMoved(FlightEventArgs flightEvent);
     }
 }
