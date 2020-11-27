@@ -1,7 +1,7 @@
 import { computed, ComputedRef, Ref, ref } from 'vue';
 
 const prettifyDate = (number: number) =>
-    Math.abs(number) > 9 ? `${number}` : `0${number}`;
+    (number = Math.abs(number)) > 9 ? `${number}` : `0${number}`;
 const amPmify = (hour: number) => (hour >= 12 ? 'PM' : 'AM');
 
 const showDateStringAsTime = (date: string) => {
