@@ -9,15 +9,16 @@
                     </slot>
                 </div>
                 <div class="modal__wrapper-modal__top-close" @click="close">
+                    <div class="modal__wrapper-modal__top-close__bubble"></div>
                     &times;
                 </div>
             </div>
             <div class="modal__wrapper-modal__content">
-                <slot name="default">
+                <slot>
                     <span>Nothing to show :(</span>
                 </slot>
             </div>
-            <div class="modal__wrapper-modal__actions">
+            <div class="modal__wrapper-modal__actions" v-if="slots.actions">
                 <slot name="actions" />
             </div>
         </div>
@@ -36,6 +37,9 @@ const component = defineComponent({
         title: {
             type: String,
         },
+    },
+    setup(_, { slots }) {
+        return { slots };
     },
 });
 
@@ -91,7 +95,19 @@ export default component;
                 height: $modalSectionHeight;
                 color: rgba($color: $primary, $alpha: 0.3);
                 border-left: 1px solid $lightGray;
-                transition: all 250ms;
+                transition: color 350ms ease-in;
+                position: relative;
+                &__bubble {
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    background-color: $primaryLight;
+                    transition: opacity 350ms ease-in;
+                    opacity: 0;
+                    &:hover {
+                        opacity: 1;
+                    }
+                }
                 &:hover {
                     color: $primary;
                 }
@@ -103,6 +119,10 @@ export default component;
         }
         &__actions {
             height: $modalSectionHeight;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid $lightGray;
         }
     }
 }
