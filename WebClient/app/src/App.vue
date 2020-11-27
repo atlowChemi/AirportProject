@@ -57,6 +57,16 @@ body {
     color: $primary;
     padding: $pagePadding;
     height: calc(100% - #{$pagePadding});
+    .list-enter-active,
+    .list-leave-active,
+    .list-move {
+        transition: all 1s ease;
+    }
+    .list-enter-from,
+    .list-leave-to {
+        opacity: 0;
+        transform: scale(0.3);
+    }
 }
 </style>
 

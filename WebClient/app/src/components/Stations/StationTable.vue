@@ -7,11 +7,13 @@
             :columns="'1fr 2fr 4rem'"
             :data="['name', 'state', 'more']"
         />
-        <station-record
-            v-for="station in data.stations"
-            :key="station.id"
-            :station="station"
-        />
+        <transition-group name="list">
+            <station-record
+                v-for="station in data.stations"
+                :key="station.id"
+                :station="station"
+            />
+        </transition-group>
     </template>
 </template>
 

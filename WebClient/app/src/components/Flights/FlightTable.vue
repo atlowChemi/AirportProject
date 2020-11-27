@@ -10,11 +10,13 @@
                     :data="['from', 'ETA', 'time left', 'to']"
                     :columns="'4rem repeat(2, 1fr) 4rem'"
                 />
-                <flight-record
-                    v-for="flight in flights"
-                    :key="flight.id"
-                    :flight="flight"
-                />
+                <transition-group name="list">
+                    <flight-record
+                        v-for="flight in flights"
+                        :key="flight.id"
+                        :flight="flight"
+                    />
+                </transition-group>
             </template>
         </div>
     </div>
