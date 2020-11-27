@@ -2,6 +2,8 @@ $primary: #121838;
 $secondary: #99a1cfc5;
 $primaryLight: #344188a4;
 $primaryLight2: #1c2558;
+$lightGray: #9e9e9e;
+$shadowGray: #00000094;
 $error: #bb0000;
 $good: #008b00;
 $light: #fff;
@@ -13,10 +15,15 @@ $titleHeight: 3rem;
 $recordHeight: 3rem;
 
 $toggleHeight: 2.5rem;
-$toggleWidth: 6rem;
+$toggleWidth: 5rem;
+$togglePadding: 0 0.1rem;
 $toggleRadius: 1.25rem;
 $toggleIcons: 1.4rem;
 $toggleDuration: 550ms;
+
+$modalPadding: 1.5rem;
+$modalRadius: 0.15rem;
+$modalSectionHeight: 4.5rem;
 
 @mixin tabelify($name, $full-page: false) {
     .#{ $name }__table {

@@ -4,19 +4,30 @@
         <p class="station__record-state">
             {{ station.currentFlight ? 'Occupied' : 'Available' }}
         </p>
-        <div class="station__record-to" @click="log">
+        <div class="station__record-to" @click="toggle">
+            <div class="station__record-to__bubble"></div>
             <icon name="more" />
+            <teleport to="#app" v-if="showInfo">
+                <modal
+                    v-if="showInfo"
+                    :close="() => (showInfo = false)"
+                    :title="station.name"
+                >
+                    <slot>Main</slot>
+                </modal>
+            </teleport>
         </div>
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { Station } from '@/models';
 import Icon from '@/components/Icons/Icon.vue';
+import Modal from '@/components/Modal/Modal.vue';
 
 const component = defineComponent({
-    components: { Icon },
+    components: { Icon, Modal },
     props: {
         station: {
             type: Object as () => Station,
@@ -24,8 +35,9 @@ const component = defineComponent({
         },
     },
     setup() {
-        const log = (e: MouseEvent) => console.log(e);
-        return { log };
+        const showInfo = ref(false);
+        const toggle = () => (showInfo.value = !showInfo.value);
+        return { showInfo, toggle };
     },
 });
 
@@ -45,17 +57,27 @@ export default component;
     &-to {
         height: 2.5rem;
         width: 2.5rem;
+        position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
         border-radius: 50%;
         background: transparent;
         cursor: pointer;
-        &:hover {
+        overflow: hidden;
+        &__bubble {
             background: linear-gradient(
                 rgba($secondary, 0.4),
                 rgba($primaryLight, 0.4)
             );
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            opacity: 0;
+            transition: opacity 350ms;
+            &:hover {
+                opacity: 1;
+            }
         }
         svg {
             height: 1.5rem;

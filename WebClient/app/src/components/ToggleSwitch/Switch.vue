@@ -44,6 +44,7 @@ export default component;
     justify-content: space-around;
     position: absolute;
     right: $pagePadding;
+    padding: $togglePadding;
     background: $secondary;
     background: linear-gradient(
         0,
