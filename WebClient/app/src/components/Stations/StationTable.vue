@@ -3,12 +3,12 @@
         No stations found!
     </span>
     <template v-else>
-        <table-headers
+        <TableHeaders
             :columns="'1fr 2fr 4rem'"
             :data="['name', 'state', 'more']"
         />
         <transition-group name="list">
-            <station-record
+            <StationRecord
                 v-for="station in data.stations"
                 :key="station.id"
                 :station="station"

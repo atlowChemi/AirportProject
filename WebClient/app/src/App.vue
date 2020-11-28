@@ -2,14 +2,14 @@
     <h1 class="airport__title">Welcome To {{ name }} Airport</h1>
     <div class="airport__grid">
         <div class="airport__grid-station__container">
-            <station-section>
+            <StationSection>
                 <router-view />
-            </station-section>
+            </StationSection>
         </div>
-        <flight-tables />
+        <FlightTables />
     </div>
     <transition name="scroll">
-        <connectivity-bar v-if="connectionState" :state="connectionState" />
+        <ConnectivityBar v-if="connectionState" :state="connectionState" />
     </transition>
 </template>
 

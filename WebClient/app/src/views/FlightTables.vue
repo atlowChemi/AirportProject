@@ -1,7 +1,7 @@
 <template>
     <div>
-        <flight-table title="Landing" :flights="data.landingFlights" />
-        <flight-table title="Takeoff" :flights="data.takeoffFlights" />
+        <FlightTable title="Landing" :flights="data.landingFlights" />
+        <FlightTable title="Takeoff" :flights="data.takeoffFlights" />
     </div>
 </template>
 

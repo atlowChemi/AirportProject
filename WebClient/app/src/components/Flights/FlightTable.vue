@@ -6,12 +6,12 @@
                 No flights
             </span>
             <template v-else>
-                <table-headers
+                <TableHeaders
                     :data="['from', 'ETA', 'time left', 'to']"
                     :columns="'4rem repeat(2, 1fr) 4rem'"
                 />
                 <transition-group name="list">
-                    <flight-record
+                    <FlightRecord
                         v-for="flight in flights"
                         :key="flight.id"
                         :flight="flight"
