@@ -6,7 +6,6 @@ export interface Flight extends HasId {
     direction: FlightDirection;
     from: string;
     to: string;
-    history: never[];
     plannedTime: string;
     stationId?: guid;
     isWaiting: boolean;

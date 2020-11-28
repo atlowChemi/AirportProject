@@ -7,5 +7,7 @@ export { FlightDirection } from './FlightDirection';
 export { Station } from './Station';
 export { StationControlTowerRelation } from './StationControlTowerRelation';
 export { StationRelation } from './StationRelation';
+export { FlightHistory } from './FlightHistory';
+export { PaginatedData } from './PaginatedData';
 export { AirportData } from './AirportData';
 export { ConnectionState } from './ConnectionState';
