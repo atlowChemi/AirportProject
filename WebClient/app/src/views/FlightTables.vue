@@ -1,13 +1,13 @@
 <template>
     <div>
-        <Table title="Landing" :headers="tableHeaders">
+        <Table title="Landing" :headers="tableHeaders" has-headers>
             <template #default v-if="data.landingFlights.length">
                 <FlightTable :flights="data.landingFlights" />
             </template>
         </Table>
-        <Table title="Takeoff" :headers="tableHeaders">
+        <Table title="Takeoff" :headers="tableHeaders" has-headers>
             <template #default v-if="data.takeoffFlights.length">
-                <FlightTable :flights="data.landingFlights" />
+                <FlightTable :flights="data.takeoffFlights" />
             </template>
         </Table>
     </div>

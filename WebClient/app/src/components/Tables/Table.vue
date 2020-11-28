@@ -40,7 +40,9 @@ const component = defineComponent({
         },
     },
     setup(props, { slots }) {
-        const showTitle = computed(() => props.hasHeaders && slots.default);
+        const showTitle = computed(
+            () => props.hasHeaders && Boolean(slots.default),
+        );
         return { showTitle };
     },
 });

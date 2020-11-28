@@ -55,13 +55,13 @@ const moveFlightToStation = (flight: Flight, station: Station) => {
     }
 };
 const removeFlightFromStation = (flight: Flight, station: Station) => {
-    const flightInd = _data.value.flights.find(f => f.id == flight.id);
-    const stationInd = _data.value.stations.find(s => s.id == station.id);
-    if (flightInd) {
-        flightInd.stationId = undefined;
+    const flightInd = _data.value.flights.findIndex(f => f.id == flight.id);
+    const stationInd = _data.value.stations.findIndex(s => s.id == station.id);
+    if (flightInd >= 0) {
+        _data.value.flights[flightInd].stationId = undefined;
     }
-    if (stationInd?.currentFlight) {
-        stationInd.currentFlight = undefined;
+    if (stationInd >= 0) {
+        _data.value.stations[stationInd].currentFlight = undefined;
     }
 };
 
