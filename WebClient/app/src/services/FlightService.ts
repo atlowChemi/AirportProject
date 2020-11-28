@@ -46,6 +46,9 @@ const getStationFlightHistory = async (stationId: guid, page = 1) => {
     const paginatedStationHistory = await hubService.invokeFlightHub<
         PaginatedData<FlightHistory>
     >('GetStationFlightHistory', stationId, start, constants.PAGINATION_LIMIT);
+    paginatedStationHistory.maxPage = Math.ceil(
+        paginatedStationHistory.total / constants.PAGINATION_LIMIT,
+    );
     return paginatedStationHistory;
 };
 
