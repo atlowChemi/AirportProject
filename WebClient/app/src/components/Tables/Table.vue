@@ -5,10 +5,7 @@
             <slot name="table-title" />
         </div>
         <div class="table__contents">
-            <TableHeaders
-                v-if="hasData && hasHeaders"
-                v-bind="{ ...headers }"
-            />
+            <TableHeaders v-if="showTitle" v-bind="{ ...headers }" />
             <slot name="default">
                 <span class="table__contents-empty">
                     No entries available.
@@ -42,9 +39,9 @@ const component = defineComponent({
             default: () => ({ data: [], columns: '' }),
         },
     },
-    setup(_, { slots }) {
-        const hasData = computed(() => Boolean(slots.default));
-        return { hasData };
+    setup(props, { slots }) {
+        const showTitle = computed(() => props.hasHeaders && slots.default);
+        return { showTitle };
     },
 });
 

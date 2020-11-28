@@ -2,8 +2,8 @@
     <Table
         title="Stations"
         :headers="tableHeaders"
+        :has-headers="Boolean(data.stations.length) && isTableView"
         full-page
-        :hasHeaders="isTableView"
     >
         <template #table-title>
             <Switch mode1="list" mode2="flow" @update:mode="modeChanged" />
