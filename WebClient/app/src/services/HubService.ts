@@ -1,9 +1,28 @@
+import { ConnectionState } from '@/models';
 import {
     HubConnection,
     HubConnectionBuilder,
     LogLevel,
 } from '@microsoft/signalr';
+import { ref } from 'vue';
+
 let connection: HubConnection;
+
+//#region Connection state
+const connectionState = ref<ConnectionState>('connecting');
+
+const connectionChanged = (newState: ConnectionState) => {
+    connectionState.value = newState;
+    if (newState === 'connected') {
+        setTimeout(() => {
+            //Only if value is still connected - remove state.
+            if (connectionState.value === 'connected') {
+                connectionState.value = '';
+            }
+        }, 1500);
+    }
+};
+//#endregion
 
 // async function start() {
 //     try {
@@ -51,13 +70,20 @@ const install = async (url: string) => {
             .configureLogging(LogLevel.Information)
             .withAutomaticReconnect()
             .build();
-        // connection.onclose(() => start());
-        return connection.start();
+        connection.onclose(() => connectionChanged('disconnected'));
+        connection.onreconnecting(() => connectionChanged('connecting'));
+        connection.onreconnected(() => connectionChanged('connected'));
+        const connectionPromise = connection.start();
+        connectionPromise
+            .then(() => connectionChanged('connected'))
+            .catch(() => connectionChanged('disconnected'));
+        return connectionPromise;
     }
     return;
 };
 
 export const hubService = {
+    connectionState,
     invokeFlightHub,
     registerFlightHubListener,
     unregisterFlightHubListener,

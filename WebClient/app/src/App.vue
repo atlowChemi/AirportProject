@@ -8,18 +8,22 @@
         </div>
         <flight-tables />
     </div>
+    <transition name="scroll">
+        <connectivity-bar v-if="connectionState" :state="connectionState" />
+    </transition>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import { name } from '@/services';
+import { name, hubService } from '@/services';
 import FlightTables from '@/views/FlightTables.vue';
 import StationSection from '@/views/StationSection.vue';
+import ConnectivityBar from '@/components/ConnectivityBar/ConnectivityBar.vue';
 
 const component = defineComponent({
-    components: { FlightTables, StationSection },
+    components: { FlightTables, StationSection, ConnectivityBar },
     setup() {
-        return { name };
+        return { name, connectionState: hubService.connectionState };
     },
 });
 
@@ -66,6 +70,15 @@ body {
     .list-leave-to {
         opacity: 0;
         transform: scale(0.3);
+    }
+
+    .scroll-enter-active,
+    .scroll-leave-active {
+        transition: all 600ms ease;
+    }
+    .scroll-enter-from,
+    .scroll-leave-to {
+        transform: translateY(100%);
     }
 }
 </style>

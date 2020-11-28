@@ -8,3 +8,4 @@ export { Station } from './Station';
 export { StationControlTowerRelation } from './StationControlTowerRelation';
 export { StationRelation } from './StationRelation';
 export { AirportData } from './AirportData';
+export { ConnectionState } from './ConnectionState';
