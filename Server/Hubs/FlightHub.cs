@@ -2,6 +2,7 @@
 using Common.Interfaces;
 using Common.Models;
 using Microsoft.AspNetCore.SignalR;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -25,6 +26,11 @@ namespace Server.Hubs
         public IEnumerable<Airplane> GetAirplanes()
         {
             return airportService.GetAirplanes();
+        }
+
+        public PaginatedDTO<FlightHistoryDTO> GetStationFlightHistory(Guid stationId, int startFrom = 0, int paginationLimit = 15)
+        {
+            return airportService.GetStationHistory(stationId, startFrom, paginationLimit);
         }
 
         public void FlightArrival(Flight flight)

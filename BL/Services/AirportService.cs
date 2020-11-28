@@ -62,7 +62,7 @@ namespace BL.Services
             IEnumerable<StationRelationDTO> stationRelations = stationRelationRepository.GetAll()
                 .AsEnumerable()
                 .Where(sr => controlTower.Stations.Any(s => sr.StationFromId == s.Id))
-                .Select(sr =>  StationRelationDTO.FromDBModel(sr));
+                .Select(sr => StationRelationDTO.FromDBModel(sr));
             IEnumerable<StationControlTowerRelationDTO> firstStations = controlTower.FirstStations
                 .Select(sctr => StationControlTowerRelationDTO.FromDBModel(sctr));
             ControlTowerDTO controlTowerDTO = ControlTowerDTO.FromDBModel(controlTower);
@@ -80,6 +80,16 @@ namespace BL.Services
         public IEnumerable<Flight> GetWaitingFlights()
         {
             return flightRepository.GetAll().Where(f => f.History.Count <= 0 && f.ControlTowerId == null).OrderBy(f => f.PlannedTime);
+        }
+
+        public PaginatedDTO<FlightHistoryDTO> GetStationHistory(Guid stationId, int startFrom = 0, int paginationLimit = 15)
+        {
+            Station station = stationRepository.GetAll().FirstOrDefault(s => s.Id == stationId) ??
+                throw new KeyNotFoundException("No Station with the given ID was found");
+            IEnumerable<FlightHistoryDTO> flightHistories = station.History
+                .Skip(startFrom).Take(paginationLimit).Select(fh => FlightHistoryDTO.FromDBModel(fh));
+            int totalHistory = station.History.Count;
+            return new PaginatedDTO<FlightHistoryDTO> { Elements = flightHistories, Total = totalHistory };
         }
 
         private void InitializeWaitingFlights()

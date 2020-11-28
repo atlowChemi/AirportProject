@@ -1,5 +1,6 @@
 ﻿using Common.DTO;
 using Common.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -32,5 +33,12 @@ namespace Common.Interfaces
         /// <param name="name">The name of the control tower</param>
         /// <returns>The data of the control tower.</returns>
         AirportDataDTO GetAirportData(string name);
+        /// <summary>
+        /// Get the <see cref="FlightHistory"/> of the a <see cref="Station"/> with a given id.
+        /// </summary>
+        /// <param name="stationId">Id of requested station.</param>
+        /// <param name="startFrom">Row of history to start from. (pagination)</param>
+        /// <returns>The flight history of the station.</returns>
+        PaginatedDTO<FlightHistoryDTO> GetStationHistory(Guid stationId, int startFrom = 0, int paginationLimit = 15);
     }
 }

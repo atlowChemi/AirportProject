@@ -40,7 +40,10 @@ namespace Server
             {
                 string relativeDataSource = Path.Combine(Environment.CurrentDirectory, @"..\", "DAL", "airport.db");
                 string dataSource = Path.GetFullPath(relativeDataSource);
-                opt.UseSqlite($"Data Source={dataSource}").ConfigureWarnings(warn => warn.Ignore(CoreEventId.LazyLoadOnDisposedContextWarning));
+                opt
+                    .UseSqlite($"Data Source={dataSource}")
+                    .UseLazyLoadingProxies()
+                    .ConfigureWarnings(warn => warn.Ignore(CoreEventId.LazyLoadOnDisposedContextWarning));
             });
 
             services.AddSingleton<INotifier, FlightHubNotifier>();
@@ -53,11 +56,6 @@ namespace Server
             services.AddScoped<IAirportService, AirportService>();
             services.AddSignalR().AddNewtonsoftJsonProtocol(o => o.PayloadSerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
             services.AddControllers();
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "AirportAPI", Version = "v1" });
-            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -67,9 +65,6 @@ namespace Server
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "AirportAPI v1"));
 
             app.UseCors("SignalRCorsPolicy");
 
