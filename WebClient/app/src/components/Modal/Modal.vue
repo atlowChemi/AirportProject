@@ -65,9 +65,11 @@ export default component;
         left: 50%;
         transform: translateX(-50%);
         min-width: 55%;
+        max-height: calc(100% - 12rem);
         background: $light;
         border-radius: $modalRadius;
         box-shadow: 0 0 1rem $modalRadius $shadowGray;
+        overflow-y: auto;
         &__top {
             display: flex;
             align-items: center;
