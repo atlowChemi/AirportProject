@@ -1,12 +1,5 @@
 <template>
-    <span class="station__table-stations__empty" v-if="!data.stations.length">
-        No stations found!
-    </span>
-    <template v-else>
-        <TableHeaders
-            :columns="'1fr 2fr 4rem'"
-            :data="['name', 'state', 'more']"
-        />
+    <template v-if="data.stations.length">
         <transition-group name="list">
             <StationRecord
                 v-for="station in data.stations"
@@ -20,11 +13,10 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import StationRecord from '@/components/Stations/StationRecord.vue';
-import TableHeaders from '@/components/Tables/TableHeaders.vue';
 import { data } from '@/services';
 
 const component = defineComponent({
-    components: { StationRecord, TableHeaders },
+    components: { StationRecord },
     setup() {
         return { data };
     },

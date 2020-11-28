@@ -1,19 +1,32 @@
 <template>
     <div>
-        <FlightTable title="Landing" :flights="data.landingFlights" />
-        <FlightTable title="Takeoff" :flights="data.takeoffFlights" />
+        <Table title="Landing" :headers="tableHeaders">
+            <template #default v-if="data.landingFlights.length">
+                <FlightTable :flights="data.landingFlights" />
+            </template>
+        </Table>
+        <Table title="Takeoff" :headers="tableHeaders">
+            <template #default v-if="data.takeoffFlights.length">
+                <FlightTable :flights="data.landingFlights" />
+            </template>
+        </Table>
     </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import Table from '@/components/Tables/Table.vue';
 import FlightTable from '@/components/Flights/FlightTable.vue';
 import { data } from '@/services';
 
 const component = defineComponent({
-    components: { FlightTable },
+    components: { FlightTable, Table },
     setup() {
-        return { data };
+        const tableHeaders = {
+            columns: '4rem repeat(2, 1fr) 4rem',
+            data: ['from', 'ETA', 'time left', 'to'],
+        };
+        return { data, tableHeaders };
     },
 });
 

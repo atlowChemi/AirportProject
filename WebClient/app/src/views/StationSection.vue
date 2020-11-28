@@ -1,35 +1,41 @@
 <template>
-    <div class="station__table">
-        <div class="station__table-title">
-            <div class="station__table-title__verbal">Stations</div>
+    <Table
+        title="Stations"
+        :headers="tableHeaders"
+        full-page
+        :hasHeaders="isTableView"
+    >
+        <template #table-title>
             <Switch mode1="list" mode2="flow" @update:mode="modeChanged" />
-        </div>
-        <div class="station__table-stations">
-            <slot />
-        </div>
-    </div>
+        </template>
+        <template #default v-if="data.stations.length"><slot /></template>
+    </Table>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import { data } from '@/services/AirportService';
 import Switch from '@/components/ToggleSwitch/Switch.vue';
+import Table from '@/components/Tables/Table.vue';
 
 const component = defineComponent({
-    components: { Switch },
+    components: { Table, Switch },
     setup() {
         const router = useRouter();
+        const isTableView = ref(true);
         const modeChanged = (mode: number) => {
             const name = mode == 1 ? 'ListView' : 'FlowView';
+            isTableView.value = name === 'ListView';
             router.push({ name });
         };
-        return { modeChanged };
+        const tableHeaders = {
+            columns: '1fr 2fr 4rem',
+            data: ['name', 'state', 'more'],
+        };
+        return { modeChanged, tableHeaders, isTableView, data };
     },
 });
 
 export default component;
 </script>
-
-<style lang="scss" scoped>
-@include tabelify(station, true);
-</style>

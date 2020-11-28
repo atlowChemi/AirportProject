@@ -33,6 +33,7 @@ export default component;
     top: 0;
     border-bottom: 1px solid $primary;
     background: $light;
+    z-index: 2;
     p {
         margin: 0;
         font-weight: bold;
