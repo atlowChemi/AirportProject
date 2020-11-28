@@ -42,7 +42,7 @@ namespace BL.Services
         }
 
 
-        public IEnumerable<Airplane> GetAirplanes() => airplaneRepository.GetAll();
+        public IEnumerable<AirplaneDTO> GetAirplanes() => airplaneRepository.GetAll().Select(a => AirplaneDTO.FromDBModel(a));
 
         public AirportDataDTO GetAirportData(string name)
         {

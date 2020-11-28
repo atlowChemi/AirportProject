@@ -15,7 +15,7 @@ namespace Common.Interfaces
         /// Get all <see cref="Airplane">airplanes</see> available.
         /// </summary>
         /// <returns>All airplanes in the system.</returns>
-        IEnumerable<Airplane> GetAirplanes();
+        IEnumerable<AirplaneDTO> GetAirplanes();
         /// <summary>
         /// Handle the situation of a new <see cref="Flight"/> arriving the airport.
         /// </summary>

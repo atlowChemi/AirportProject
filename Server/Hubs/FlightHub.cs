@@ -23,7 +23,7 @@ namespace Server.Hubs
             return airportService.GetAirportData(name);
         }
 
-        public IEnumerable<Airplane> GetAirplanes()
+        public IEnumerable<AirplaneDTO> GetAirplanes()
         {
             return airportService.GetAirplanes();
         }
