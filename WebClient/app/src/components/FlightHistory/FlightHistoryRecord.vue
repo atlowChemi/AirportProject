@@ -25,14 +25,18 @@ const component = defineComponent({
             return `${flight.to}-${shortId}`;
         });
         const enter = computed(() =>
-            timeService.showDateStringReadable(
-                props.history.enterStationTime || '',
-            ),
+            props.history.enterStationTime
+                ? timeService.showDateStringReadable(
+                      props.history.enterStationTime,
+                  )
+                : 'TBA',
         );
         const leave = computed(() =>
-            timeService.showDateStringReadable(
-                props.history.enterStationTime || '',
-            ),
+            props.history.leaveStationTime
+                ? timeService.showDateStringReadable(
+                      props.history.leaveStationTime,
+                  )
+                : 'TBA',
         );
         return { flightName, enter, leave };
     },
@@ -50,7 +54,7 @@ export default component;
     p {
         margin: 0;
     }
-    &:not(:last-of-type) {
+    &:not(:first-of-type) {
         border-bottom: 1px solid $primary;
     }
 }
