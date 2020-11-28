@@ -70,7 +70,7 @@ export default component;
         border-radius: $toggleRadius;
         background-clip: padding-box;
         background: $primaryLight;
-        background: linear-gradient(224.46deg, $primaryLight, $primaryLight2);
+        background: $buttonBG;
         box-shadow: 0 0.25rem 0.4rem 0 $primary;
         z-index: 1;
         transition: transform $toggleDuration;
