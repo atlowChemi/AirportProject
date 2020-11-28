@@ -18,6 +18,12 @@ const showDateStringAsTime = (date: string) => {
     return `${hours}:${minutes}:${seconds} ${ampm}`;
 };
 
+const showDateStringReadable = (date: string) => {
+    const time = showDateStringAsTime(date);
+    const dateObj = new Date(date);
+    return `${dateObj.toLocaleDateString('iw-IL')} ${time}`;
+};
+
 const getTimeLeftTillDate = (date: string) =>
     Date.parse(date) - new Date().getTime();
 
@@ -60,4 +66,8 @@ const createCountDown: (
     return [hours, minutes, seconds, isLate];
 };
 
-export const timeService = { showDateStringAsTime, createCountDown };
+export const timeService = {
+    showDateStringAsTime,
+    showDateStringReadable,
+    createCountDown,
+};

@@ -6,15 +6,17 @@
         </p>
         <div class="station__record-to" @click="toggle">
             <div class="station__record-to__bubble"></div>
-            <icon name="more" />
+            <Icon name="more" />
             <teleport to="#app" v-if="showInfo">
-                <modal
+                <Modal
                     v-if="showInfo"
                     :close="() => (showInfo = false)"
                     :title="station.name"
                 >
-                    <slot>Main</slot>
-                </modal>
+                    <template #default>
+                        <StationInfo :station="station" />
+                    </template>
+                </Modal>
             </teleport>
         </div>
     </div>
@@ -25,9 +27,10 @@ import { defineComponent, ref } from 'vue';
 import { Station } from '@/models';
 import Icon from '@/components/Icons/Icon.vue';
 import Modal from '@/components/Modal/Modal.vue';
+import StationInfo from '@/components/Stations/StationInfo.vue';
 
 const component = defineComponent({
-    components: { Icon, Modal },
+    components: { Icon, Modal, StationInfo },
     props: {
         station: {
             type: Object as () => Station,
