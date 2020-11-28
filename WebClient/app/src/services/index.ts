@@ -7,4 +7,5 @@ export {
     moveFlight,
 } from './AirportService';
 export { timeService } from './TimeService';
+export { flightService } from './FlightService';
 export { hubService } from './HubService';

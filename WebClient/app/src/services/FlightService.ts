@@ -1,4 +1,12 @@
-import { AirportData, Flight, Station } from '@/models';
+import { constants } from '@/constants';
+import {
+    AirportData,
+    Flight,
+    FlightHistory,
+    guid,
+    PaginatedData,
+    Station,
+} from '@/models';
 import { name, addFlight, setData } from './';
 import { moveFlight } from './AirportService';
 import { hubService } from './HubService';
@@ -32,4 +40,17 @@ const listenToFlightChanges = async () => {
     );
 };
 
-export const flightService = { registerAndGetFlights, listenToFlightChanges };
+const getStationFlightHistory = async (stationId: guid, page = 1) => {
+    await hubService.install(HUB_URL);
+    const start = (page - 1) * constants.PAGINATION_LIMIT;
+    const paginatedStationHistory = await hubService.invokeFlightHub<
+        PaginatedData<FlightHistory>
+    >('GetStationFlightHistory', stationId, start, constants.PAGINATION_LIMIT);
+    return paginatedStationHistory;
+};
+
+export const flightService = {
+    registerAndGetFlights,
+    listenToFlightChanges,
+    getStationFlightHistory,
+};
