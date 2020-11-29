@@ -26,6 +26,7 @@
                 key="next"
                 v-if="currentPage < maximalPage"
                 @click="moveTo(nextPage)"
+                class="nexty"
             >
                 {{ nextPage }}
             </button>
@@ -39,7 +40,7 @@
             <button
                 :disabled="disabled"
                 key="last"
-                v-if="currentPage < maximalPage - 3"
+                v-if="currentPage < maximalPage - 1"
                 @click="moveTo(maximalPage)"
             >
                 {{ maximalPage }}
