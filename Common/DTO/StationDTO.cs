@@ -8,6 +8,7 @@ namespace Common.DTO
         public Guid Id { get; init; }
         public string Name { get; init; }
         public Guid ControlTowerId { get; init; }
+        public FlightDTO CurrentFlight { get; init; }
 
 
         public static StationDTO FromDBModel(Station station)
@@ -16,7 +17,8 @@ namespace Common.DTO
             {
                 Id = station.Id,
                 Name = station.Name,
-                ControlTowerId = station.ControlTowerId
+                ControlTowerId = station.ControlTowerId,
+                CurrentFlight = station.CurrentFlight != null ? FlightDTO.FromDBModel(station.CurrentFlight) : null
             };
         }
     }
