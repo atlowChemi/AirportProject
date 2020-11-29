@@ -1,15 +1,17 @@
 <template>
     <div
-        class="flowchart-node"
+        class="node"
         @mousedown.prevent="handleMousedown"
         :class="{ selected: options.selected === node.id }"
     >
-        <div class="node-port node-input"></div>
-        <div class="node-main">
-            <div class="node-type" :title="node.name">{{ node.name }}</div>
-            <div class="node-label"></div>
+        <div class="node__port node__port-input"></div>
+        <div class="node__main">
+            <div class="node__main-name" :title="node.name">
+                {{ node.name }}
+            </div>
+            <div class="node__main-flight"></div>
         </div>
-        <div class="node-port node-output"></div>
+        <div class="node__port node__port-output"></div>
     </div>
 </template>
 
@@ -64,11 +66,9 @@ export default component;
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss" vars="{ nodeTop, nodeLeft }">
-$portSize: 12;
-
-.flowchart-node {
-    width: 80px;
-    height: 80px;
+.node {
+    width: $chartNodeSize;
+    height: $chartNodeSize;
     position: absolute;
     background: $grayBg;
     z-index: 1;
@@ -76,23 +76,18 @@ $portSize: 12;
     top: var(--nodeTop);
     left: var(--nodeLeft);
     cursor: move;
-    transform-origin: top left;
-    .node-main {
-        text-align: center;
-        .node-type {
+    &__main {
+        &-name {
             background: $primary;
             color: $light;
-            font-size: 13px;
-            padding: 6px;
+            font-size: $chartFontSize;
+            padding: $chartNamePadding;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        .node-label {
-            font-size: 13px;
-        }
     }
-    .node-port {
+    &__port {
         position: absolute;
         width: #{$portSize}px;
         height: #{$portSize}px;
@@ -101,14 +96,15 @@ $portSize: 12;
         border: 1px solid $lightGray;
         border-radius: 50%;
         background: $light;
-        &.node-input {
+        &-input {
             top: #{-2 + $portSize/-2}px;
         }
-        &.node-output {
+        &-output {
             bottom: #{-2 + $portSize/-2}px;
         }
     }
     &.selected {
+        transform: scale(1.1);
         box-shadow: 0 0 3px 2px $primary;
     }
 }
