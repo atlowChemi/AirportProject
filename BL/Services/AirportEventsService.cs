@@ -15,12 +15,14 @@ namespace BL.Services
 
         public AirportEventsService(INotifier notifier, IAirportDBService airportDBService)
         {
-            this.notifier = notifier;
-            this.airportDBService = airportDBService;
+            this.notifier = notifier ?? throw new ArgumentNullException(nameof(notifier));
+            this.airportDBService = airportDBService ?? throw new ArgumentNullException(nameof(airportDBService));
         }
 
         public void AddStationsToListenTo(IEnumerable<IFlightChanger> stationServices)
         {
+            if (stationServices is null)
+                throw new ArgumentNullException(nameof(stationServices), "services can't be null!");
             IEnumerable<IFlightChanger> newStations = stationServices.Where(fc => !flightChangers.Any(flc => fc == flc));
             foreach (IFlightChanger stationService in newStations)
             {
