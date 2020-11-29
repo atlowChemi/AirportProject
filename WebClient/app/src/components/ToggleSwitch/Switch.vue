@@ -1,18 +1,23 @@
 <template>
-    <div class="toggle" :class="`mode${numeralMode}`" @click="toggle">
+    <div class="toggle" :class="`mode${mode}`" @click="toggle">
         <div class="toggle__bubble"></div>
-        <icon :name="mode1" :class="{ selected: !mode }" />
-        <icon :name="mode2" :class="{ selected: mode }" />
+        <icon :name="mode1" :class="{ selected: mode === 1 }" />
+        <icon :name="mode2" :class="{ selected: mode === 2 }" />
     </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue';
+import { defineComponent } from 'vue';
 import Icon from '@/components/Icons/Icon.vue';
 
 const component = defineComponent({
     components: { Icon },
+    emits: ['update:mode'],
     props: {
+        mode: {
+            type: Number,
+            default: 1,
+        },
         mode1: {
             type: String,
             required: true,
@@ -22,14 +27,12 @@ const component = defineComponent({
             required: true,
         },
     },
-    setup(_, { emit }) {
-        const mode = ref(false);
-        const numeralMode = computed(() => (mode.value ? 2 : 1));
+    setup(props, { emit }) {
         const toggle = () => {
-            mode.value = !mode.value;
-            emit('update:mode', numeralMode.value);
+            const newMode = props.mode === 1 ? 2 : 1;
+            emit('update:mode', newMode);
         };
-        return { mode, numeralMode, toggle };
+        return { toggle };
     },
 });
 
