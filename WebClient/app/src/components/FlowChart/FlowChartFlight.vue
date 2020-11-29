@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue';
-import { Flight } from '@/models';
+import { Flight, Guid } from '@/models';
 import { flowChartService } from '@/services';
 import Icon from '@/components/Icons/Icon.vue';
 
@@ -26,12 +26,11 @@ const component = defineComponent({
             () => props.flight.stationId,
             () => {
                 const [x = 0, y = 0] = flowChartService.getNodeLocation(
-                    props.flight.stationId,
+                    props.flight.stationId ?? Guid.empty,
                 );
 
                 let theta = Math.atan2(y - yPos.value, x - xPos.value);
                 theta *= 180 / Math.PI;
-                theta += 45;
 
                 xPos.value = x;
                 yPos.value = y;
@@ -59,7 +58,7 @@ export default component;
     top: calc(var(--yPos) + #{$chartNameSize} + calc(#{$chartNodeSize} / 2));
     left: calc(var(--xPos) + calc(#{$chartNodeSize} / 2));
     z-index: 3;
-    transform: translate(-50%, -50%) rotate(var(--angle));
+    transform: translate(-50%, -50%) rotate(calc(var(--angle) + 90deg));
     transition: all 800ms ease-in, transform 150ms ease-in-out;
 }
 </style>
