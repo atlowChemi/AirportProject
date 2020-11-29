@@ -64,16 +64,18 @@ const component = defineComponent({
         watch(
             () => props.station.currentFlight,
             (val, oldVal) => {
-                if (val && currentPage.value === 1) {
-                    const newFlightHistory: FlightHistory = {
-                        flight: val,
-                        station: props.station,
-                        id: Guid.newGuid(),
-                        enterStationTime: new Date().toISOString(),
-                        leaveStationTime: undefined,
-                    };
-                    flightHistory.data.elements.unshift(newFlightHistory);
-                    flightHistory.data.elements.pop();
+                if (val) {
+                    if (currentPage.value === 1) {
+                        const newFlightHistory: FlightHistory = {
+                            flight: val,
+                            station: props.station,
+                            id: Guid.newGuid(),
+                            enterStationTime: new Date().toISOString(),
+                            leaveStationTime: undefined,
+                        };
+                        flightHistory.data.elements.unshift(newFlightHistory);
+                        flightHistory.data.elements.pop();
+                    }
                     flightHistory.data.maxPage = Math.ceil(
                         ++flightHistory.data.total / constants.PAGINATION_LIMIT,
                     );
