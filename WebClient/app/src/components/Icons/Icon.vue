@@ -12,6 +12,10 @@
             v-else-if="name === 'more'"
             d="M204,102c28.05,0,51-22.95,51-51S232.05,0,204,0s-51,22.95-51,51S175.95,102,204,102z M204,153c-28.05,0-51,22.95-51,51    s22.95,51,51,51s51-22.95,51-51S232.05,153,204,153z M204,306c-28.05,0-51,22.95-51,51s22.95,51,51,51s51-22.95,51-51    S232.05,306,204,306z"
         ></path>
+        <path
+            v-else-if="name === 'flight'"
+            d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"
+        />
     </svg>
 </template>
 
@@ -21,7 +25,7 @@ import { defineComponent, computed } from 'vue';
 const component = defineComponent({
     props: {
         name: {
-            type: String as () => 'flow' | 'list' | 'more',
+            type: String as () => 'flow' | 'list' | 'more' | 'flight',
             required: true,
         },
     },
@@ -34,6 +38,8 @@ const component = defineComponent({
                     return '0 0 14 12';
                 case 'more':
                     return '0 0 408 408';
+                case 'flight':
+                    return '0 0 24 24';
                 default:
                     return '0 0 0 0';
             }
