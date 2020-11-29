@@ -6,6 +6,11 @@
         @mouseup="handleUp"
         @mousedown="handleDown"
     >
+        <FlowChartFlight
+            v-for="flight in data.movingFlights"
+            :key="flight.id"
+            :flight="flight"
+        />
         <svg>
             <FlowchartLink
                 :link-data="link"
@@ -27,10 +32,11 @@
 import { defineComponent, onMounted } from 'vue';
 import FlowchartLink from '@/components/FlowChart/FlowChartLink.vue';
 import FlowchartNode from '@/components/FlowChart/FlowChartNode.vue';
+import FlowChartFlight from '@/components/FlowChart/FlowChartFlight.vue';
 import { flowChartService, data } from '@/services';
 
 const component = defineComponent({
-    components: { FlowchartLink, FlowchartNode },
+    components: { FlowchartLink, FlowchartNode, FlowChartFlight },
     emits: ['node-click', 'canvas-click'],
     setup() {
         addEventListener('resize', flowChartService.initializeChart);
@@ -40,6 +46,7 @@ const component = defineComponent({
             data,
             ...flowChartService,
             initializeChart: undefined,
+            getNodeLocation: undefined,
         };
     },
 });
