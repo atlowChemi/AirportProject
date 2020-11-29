@@ -4,7 +4,7 @@
         {{ station.currentFlight ? 'Occupied' : 'Available' }}
     </p>
 
-    <Table title="Station History" :headers="tableHeader">
+    <Table title="Flight History" :headers="tableHeader">
         <template v-if="flightHistory.data.elements.length">
             <FlightHistoryRecord
                 v-for="history in flightHistory.data.elements"
@@ -22,12 +22,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue';
-import { Station, PaginatedData, FlightHistory } from '@/models';
+import { defineComponent, reactive, ref, watch } from 'vue';
+import { Station, PaginatedData, FlightHistory, Guid } from '@/models';
 import { flightService } from '@/services';
 import FlightHistoryRecord from '@/components/FlightHistory/FlightHistoryRecord.vue';
 import Pagination from '@/components/Pagination/Pagination.vue';
 import Table from '@/components/Tables/Table.vue';
+import { constants } from '@/constants';
 
 const component = defineComponent({
     components: { FlightHistoryRecord, Pagination, Table },
@@ -59,6 +60,32 @@ const component = defineComponent({
                 page,
             );
         };
+
+        watch(
+            () => props.station.currentFlight,
+            (val, oldVal) => {
+                if (val && currentPage.value === 1) {
+                    const newFlightHistory: FlightHistory = {
+                        flight: val,
+                        station: props.station,
+                        id: Guid.newGuid(),
+                        enterStationTime: new Date().toISOString(),
+                        leaveStationTime: undefined,
+                    };
+                    flightHistory.data.elements.unshift(newFlightHistory);
+                    flightHistory.data.elements.pop();
+                    flightHistory.data.maxPage = Math.ceil(
+                        ++flightHistory.data.total / constants.PAGINATION_LIMIT,
+                    );
+                } else if (!val && oldVal) {
+                    if (
+                        flightHistory.data.elements[0].flight.id === oldVal.id
+                    ) {
+                        flightHistory.data.elements[0].leaveStationTime = new Date().toISOString();
+                    }
+                }
+            },
+        );
 
         loadFlightHistoryData();
 
