@@ -68,7 +68,7 @@ export default component;
 <style scoped lang="scss" vars="{ nodeTop, nodeLeft }">
 .node {
     width: $chartNodeSize;
-    height: $chartNodeSize;
+    height: calc(#{$chartNodeSize} + #{$chartNameSize});
     position: absolute;
     background: $grayBg;
     z-index: 1;

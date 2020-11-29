@@ -55,7 +55,7 @@ const getPortPosition: (
     if (type === 'top') {
         return [x + 40, y];
     } else if (type === 'bottom') {
-        return [x + 40, y + 80];
+        return [x + 40, y + 107.2];
     } else {
         return [0, 0];
     }
@@ -153,7 +153,7 @@ const handleDown = (e: MouseEvent) => {
 const calculateMaximalSizes = () => {
     const { clientHeight, clientWidth } = getClientDimensions();
     const maximalColCount = Math.ceil(clientWidth / 80);
-    const maximalRowCount = Math.ceil(clientHeight / 80);
+    const maximalRowCount = Math.ceil(clientHeight / 120);
     const colWidth = clientWidth / (maximalColCount + 1);
     const rowHeight = clientHeight / (maximalRowCount + 1);
 
@@ -189,6 +189,11 @@ const initializeChart = () => {
     nodes.push(...buildStationNodes());
 };
 
+const getNodeLocation = (id: guid) => {
+    const node = findNodeWithID(id);
+    return [node?.x, node?.y];
+};
+
 export const flowChartService = {
     root,
     lines,
@@ -199,4 +204,5 @@ export const flowChartService = {
     handleDown,
     nodeSelected,
     initializeChart,
+    getNodeLocation,
 };
