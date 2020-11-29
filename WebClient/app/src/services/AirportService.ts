@@ -49,7 +49,7 @@ export const addMovingFlight = (flight: Flight) =>
 export const removeFlight = (flight: Flight) =>
     (_data.value.flights = _data.value.flights.filter(f => f.id !== flight.id));
 export const removeMovingFlight = (flight: Flight) =>
-    (_data.value.flights = _data.value.movingFlights.filter(
+    (_data.value.movingFlights = _data.value.movingFlights.filter(
         f => f.id !== flight.id,
     ));
 
