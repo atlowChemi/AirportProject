@@ -54,7 +54,7 @@ export default component;
     p {
         margin: 0;
     }
-    &:not(:first-of-type) {
+    &:not(:last-of-type) {
         border-bottom: 1px solid $primary;
     }
 }
