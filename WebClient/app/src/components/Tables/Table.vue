@@ -1,5 +1,5 @@
 <template>
-    <div class="table" :class="{ 'full-page': fullPage }">
+    <div class="table" :class="{ 'full-page': fullPage, bordered }">
         <div class="table__title">
             <div class="table__title-verbal">{{ title }}</div>
             <slot name="table-title" />
@@ -27,6 +27,10 @@ const component = defineComponent({
             required: true,
         },
         fullPage: {
+            type: Boolean,
+            default: false,
+        },
+        bordered: {
             type: Boolean,
             default: false,
         },
@@ -59,6 +63,9 @@ export default component;
         max-height: calc(100% - #{$tableMargin});
         overflow: hidden;
     }
+    &.bordered {
+        border: 1px solid $primary;
+    }
     &__title {
         display: flex;
         height: $titleHeight;
@@ -73,6 +80,9 @@ export default component;
         background: $light;
         overflow-y: auto;
         max-height: calc(#{$recordHeight} * 4.5);
+        .bordered & {
+            height: calc(#{$recordHeight} * 4.5);
+        }
         .full-page & {
             max-height: $maximalTableContentsHeight;
         }

@@ -4,7 +4,7 @@
         {{ station.currentFlight ? 'Occupied' : 'Available' }}
     </p>
 
-    <Table title="Flight History" :headers="tableHeader">
+    <Table title="Flight History" :headers="tableHeader" bordered>
         <template v-if="flightHistory.data.elements.length">
             <FlightHistoryRecord
                 v-for="history in flightHistory.data.elements"
