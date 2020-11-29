@@ -11,6 +11,7 @@ const _data = ref<AirportData>({
     stationRelations: [],
     landingFlights: [],
     takeoffFlights: [],
+    movingFlights: [],
 });
 
 watch(
@@ -36,33 +37,51 @@ watch(
 
 export const data = readonly(_data);
 
-export const setData = (data: AirportData) => (_data.value = data);
+export const setData = (data: AirportData) => {
+    _data.value = data;
+    _data.value.movingFlights = [];
+};
 
 export const addFlight = (flight: Flight) => _data.value.flights.push(flight);
+export const addMovingFlight = (flight: Flight) =>
+    _data.value.movingFlights.push(flight);
 
 export const removeFlight = (flight: Flight) =>
     (_data.value.flights = _data.value.flights.filter(f => f.id !== flight.id));
+export const removeMovingFlight = (flight: Flight) =>
+    (_data.value.flights = _data.value.movingFlights.filter(
+        f => f.id !== flight.id,
+    ));
 
 const moveFlightToStation = (flight: Flight, station: Station) => {
-    const flightInd = _data.value.flights.findIndex(f => f.id == flight.id);
+    const flightInd = _data.value.movingFlights.findIndex(
+        f => f.id == flight.id,
+    );
     const stationInd = _data.value.stations.findIndex(s => s.id == station.id);
     if (flightInd >= 0) {
-        _data.value.flights[flightInd].isWaiting = false;
-        _data.value.flights[flightInd].stationId = station.id;
+        _data.value.movingFlights[flightInd].isWaiting = false;
+        _data.value.movingFlights[flightInd].stationId = station.id;
     }
     if (stationInd >= 0) {
         _data.value.stations[stationInd].currentFlight = flight;
     }
 };
 const removeFlightFromStation = (flight: Flight, station: Station) => {
-    const flightInd = _data.value.flights.findIndex(f => f.id == flight.id);
+    const flightInd = _data.value.movingFlights.findIndex(
+        f => f.id == flight.id,
+    );
     const stationInd = _data.value.stations.findIndex(s => s.id == station.id);
     if (flightInd >= 0) {
-        _data.value.flights[flightInd].stationId = undefined;
+        _data.value.movingFlights[flightInd].stationId = undefined;
     }
     if (stationInd >= 0) {
         _data.value.stations[stationInd].currentFlight = undefined;
     }
+};
+const moveFlightToFirstStation = (flight: Flight, station: Station) => {
+    removeFlight(flight);
+    addMovingFlight(flight);
+    moveFlightToStation(flight, station);
 };
 
 export const moveFlight = (
@@ -72,14 +91,14 @@ export const moveFlight = (
 ) => {
     if (!from && to) {
         //Flight time arrived and it moved to first station.
-        moveFlightToStation(flight, to);
+        moveFlightToFirstStation(flight, to);
     } else if (from && to) {
         //Flight moved between two stations.
         removeFlightFromStation(flight, from);
         moveFlightToStation(flight, to);
     } else if (from && !to) {
         //Flight moved from last station and lost in the dark.
-        removeFlight(flight);
+        removeMovingFlight(flight);
         removeFlightFromStation(flight, from);
     }
 };

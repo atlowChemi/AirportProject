@@ -15,4 +15,6 @@ export type AirportData = {
 
     takeoffFlights: Flight[];
     landingFlights: Flight[];
+
+    movingFlights: Flight[];
 };

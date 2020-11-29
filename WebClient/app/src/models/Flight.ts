@@ -9,4 +9,6 @@ export interface Flight extends HasId {
     plannedTime: string;
     stationId?: guid;
     isWaiting: boolean;
+    x: number;
+    y: number;
 }
