@@ -87,7 +87,10 @@ namespace BL.Services
             Station station = stationRepository.GetAll().FirstOrDefault(s => s.Id == stationId) ??
                 throw new KeyNotFoundException("No Station with the given ID was found");
             IEnumerable<FlightHistoryDTO> flightHistories = station.History
-                .Skip(startFrom).Take(paginationLimit).Select(fh => FlightHistoryDTO.FromDBModel(fh));
+                .OrderByDescending(fh => fh.EnterStationTime)
+                .Skip(startFrom)
+                .Take(paginationLimit)
+                .Select(fh => FlightHistoryDTO.FromDBModel(fh));
             int totalHistory = station.History.Count;
             return new PaginatedDTO<FlightHistoryDTO> { Elements = flightHistories, Total = totalHistory };
         }
