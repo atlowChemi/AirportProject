@@ -70,7 +70,7 @@ $portSize: 12;
     width: 80px;
     height: 80px;
     position: absolute;
-    background: $light;
+    background: $grayBg;
     z-index: 1;
     opacity: 0.9;
     top: var(--nodeTop);

@@ -53,10 +53,8 @@ export default component;
 <style lang="scss" scoped>
 .table {
     margin: $tableMargin 0;
-    padding: $tablePadding;
     color: $light;
     background-color: $primary;
-    border: $tableBorderWidth solid $primary;
     &.full-page {
         max-height: calc(100% - #{$tableMargin});
         overflow: hidden;
@@ -69,7 +67,6 @@ export default component;
         margin: 0;
         font-weight: 800;
         position: relative;
-        padding-bottom: $tablePadding;
     }
     &__contents {
         color: $primary;
