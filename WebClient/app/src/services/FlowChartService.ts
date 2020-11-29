@@ -36,6 +36,17 @@ const nodeOptions = computed<FlowChartNodeOptions>(() => ({
 }));
 
 const findNodeWithID = (id: guid) => nodes.find(i => id === i.id);
+const getClientDimensions = () => {
+    const {
+        CLIENT_HEIGHT_FALLBACK,
+        CLIENT_WIDTH_FALLBACK,
+    } = constants.flowCharts;
+    const { clientWidth, clientHeight } = root.value ?? {
+        clientWidth: CLIENT_WIDTH_FALLBACK,
+        clientHeight: CLIENT_HEIGHT_FALLBACK,
+    };
+    return { clientWidth, clientHeight };
+};
 const getPortPosition: (
     type: 'top' | 'bottom',
     x: number,
@@ -49,15 +60,25 @@ const getPortPosition: (
         return [0, 0];
     }
 };
-const moveSelectedNode = (dx: number, dy: number) => {
-    const index = nodes.findIndex(item => item.id === action.dragging);
-
-    if (index >= 0) {
-        nodes[index].x += dx;
-        nodes[index].y += dy;
-    }
+const buildControlTowerRelations = () => {
+    return data.value.firstStations.map<FlowChartLinkModel>(fs => {
+        const toNode = findNodeWithID(fs.stationToId);
+        const { clientWidth, clientHeight } = getClientDimensions();
+        let x = (toNode?.x || 0) > clientWidth / 2 ? clientWidth : scene.x;
+        let y = (toNode?.y || 0) > clientHeight / 2 ? clientHeight : scene.y;
+        const [startX, startY] = [x, y];
+        x = scene.x + (toNode?.x || 0);
+        y = scene.y + (toNode?.y || 0);
+        const [endX, endY] = getPortPosition('top', x, y);
+        return {
+            id: Guid.newGuid(),
+            start: [startX, startY],
+            end: [endX, endY],
+            direction: fs.direction,
+        };
+    });
 };
-const lines = computed(() => {
+const buildStationRelations = () => {
     return data.value.stationRelations.map<FlowChartLinkModel>(sr => {
         const fromNode = findNodeWithID(sr.stationFromId);
         const toNode = findNodeWithID(sr.stationToId);
@@ -76,6 +97,20 @@ const lines = computed(() => {
             direction: sr.direction,
         };
     });
+};
+
+const moveSelectedNode = (dx: number, dy: number) => {
+    const index = nodes.findIndex(item => item.id === action.dragging);
+
+    if (index >= 0) {
+        nodes[index].x += dx;
+        nodes[index].y += dy;
+    }
+};
+const lines = computed(() => {
+    const firstStations = buildControlTowerRelations();
+    const stationRelations = buildStationRelations();
+    return [...firstStations, ...stationRelations];
 });
 const nodeSelected = (id: guid, e: MouseEvent) => {
     action.dragging = id;
@@ -116,14 +151,7 @@ const handleDown = (e: MouseEvent) => {
 };
 
 const calculateMaximalSizes = () => {
-    const {
-        CLIENT_HEIGHT_FALLBACK,
-        CLIENT_WIDTH_FALLBACK,
-    } = constants.flowCharts;
-    const { clientWidth, clientHeight } = root.value ?? {
-        clientWidth: CLIENT_WIDTH_FALLBACK,
-        clientHeight: CLIENT_HEIGHT_FALLBACK,
-    };
+    const { clientHeight, clientWidth } = getClientDimensions();
     const maximalColCount = Math.ceil(clientWidth / 80);
     const maximalRowCount = Math.ceil(clientHeight / 80);
     const colWidth = clientWidth / (maximalColCount + 1);
