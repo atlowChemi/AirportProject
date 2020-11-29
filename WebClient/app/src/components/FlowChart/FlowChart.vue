@@ -27,7 +27,7 @@
 import { defineComponent, onMounted } from 'vue';
 import FlowchartLink from '@/components/FlowChart/FlowChartLink.vue';
 import FlowchartNode from '@/components/FlowChart/FlowChartNode.vue';
-import { flowChartService } from '@/services';
+import { flowChartService, data } from '@/services';
 
 const component = defineComponent({
     components: { FlowchartLink, FlowchartNode },
@@ -37,6 +37,7 @@ const component = defineComponent({
         removeEventListener('resize', flowChartService.initializeChart);
         onMounted(() => flowChartService.initializeChart());
         return {
+            data,
             ...flowChartService,
             initializeChart: undefined,
         };
@@ -52,9 +53,10 @@ export default component;
     margin: 0;
     position: relative;
     overflow: hidden;
+    height: $maximalTableContentsHeight;
     svg {
         width: 100%;
-        height: calc(#{$maximalTableContentsHeight} - 0.25rem);
+        height: 100%;
     }
 }
 </style>
