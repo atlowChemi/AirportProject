@@ -6,11 +6,13 @@
         @mouseup="handleUp"
         @mousedown="handleDown"
     >
-        <FlowChartFlight
-            v-for="flight in data.movingFlights"
-            :key="flight.id"
-            :flight="flight"
-        />
+        <transition-group name="fade">
+            <FlowChartFlight
+                v-for="flight in data.movingFlights"
+                :key="flight.id"
+                :flight="flight"
+            />
+        </transition-group>
         <svg>
             <FlowchartLink
                 :link-data="link"

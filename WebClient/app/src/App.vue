@@ -81,6 +81,15 @@ body {
     .scroll-leave-to {
         transform: translateY(100%);
     }
+
+    .fade-enter-active,
+    .fade-leave-active {
+        transition: all 200ms ease;
+    }
+    .fade-enter-from,
+    .fade-leave-to {
+        opacity: 0;
+    }
 }
 </style>
 
