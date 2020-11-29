@@ -1,6 +1,5 @@
 import { constants } from '@/constants';
 import {
-    FlowChartFlightLink,
     FlowChartLinkModel,
     FlowChartNodeModel,
     FlowChartNodeOptions,
@@ -14,7 +13,6 @@ import { positionService } from './PositionService';
 const { CENTER_X, CENTER_Y } = constants.flowCharts;
 const scene = reactive({ x: CENTER_X, y: CENTER_Y });
 const nodes = reactive<FlowChartNodeModel[]>([]);
-const links = reactive<FlowChartFlightLink[]>([]);
 const root = ref<HTMLDivElement | null>(null);
 const action = reactive<{
     scrolling: boolean;
@@ -59,22 +57,23 @@ const moveSelectedNode = (dx: number, dy: number) => {
         nodes[index].y += dy;
     }
 };
-const lines = computed<FlowChartLinkModel[]>(() => {
-    return links.map(link => {
-        const fromNode = findNodeWithID(link.from);
-        const toNode = findNodeWithID(link.to);
+const lines = computed(() => {
+    return data.value.stationRelations.map<FlowChartLinkModel>(sr => {
+        const fromNode = findNodeWithID(sr.stationFromId);
+        const toNode = findNodeWithID(sr.stationToId);
 
         let x = scene.x + (fromNode?.x || 0);
         let y = scene.y + (fromNode?.y || 0);
-        const [cx, cy] = getPortPosition('bottom', x, y);
+        const [startX, startY] = getPortPosition('bottom', x, y);
         x = scene.x + (toNode?.x || 0);
         y = scene.y + (toNode?.y || 0);
-        const [ex, ey] = getPortPosition('top', x, y);
+        const [endX, endY] = getPortPosition('top', x, y);
+
         return {
-            start: [cx, cy],
-            end: [ex, ey],
-            id: link.id,
-            direction: link.direction,
+            id: Guid.newGuid(),
+            start: [startX, startY],
+            end: [endX, endY],
+            direction: sr.direction,
         };
     });
 });
@@ -94,17 +93,6 @@ const handleMove = (e: MouseEvent) => {
         mouse.lastX = mouse.x;
         mouse.lastY = mouse.y;
         moveSelectedNode(diffX, diffY);
-    }
-    if (action.scrolling && root.value) {
-        [mouse.x, mouse.y] = positionService.getMousePosition(root.value, e);
-        const diffX = mouse.x - mouse.lastX;
-        const diffY = mouse.y - mouse.lastY;
-
-        mouse.lastX = mouse.x;
-        mouse.lastY = mouse.y;
-
-        scene.x += diffX;
-        scene.y += diffY;
     }
 };
 const handleUp = () => {
@@ -127,14 +115,50 @@ const handleDown = (e: MouseEvent) => {
     }
 };
 
+const calculateMaximalSizes = () => {
+    const {
+        CLIENT_HEIGHT_FALLBACK,
+        CLIENT_WIDTH_FALLBACK,
+    } = constants.flowCharts;
+    const { clientWidth, clientHeight } = root.value ?? {
+        clientWidth: CLIENT_WIDTH_FALLBACK,
+        clientHeight: CLIENT_HEIGHT_FALLBACK,
+    };
+    const maximalColCount = Math.ceil(clientWidth / 80);
+    const maximalRowCount = Math.ceil(clientHeight / 80);
+    const colWidth = clientWidth / (maximalColCount + 1);
+    const rowHeight = clientHeight / (maximalRowCount + 1);
+
+    return [maximalColCount, colWidth, rowHeight];
+};
+
+const buildStationNodes = () => {
+    const [maxCols, colWidth, rowHeight] = calculateMaximalSizes();
+    const lastLocation = {
+        currentInRow: 0,
+        x: colWidth,
+        y: rowHeight,
+    };
+    return data.value.stations.map<FlowChartNodeModel>(s => {
+        const item = {
+            id: s.id,
+            name: s.name,
+            x: lastLocation.x,
+            y: lastLocation.y,
+        };
+        lastLocation.x += colWidth * 2;
+        if (++lastLocation.currentInRow >= maxCols / 2) {
+            lastLocation.y += rowHeight * 2;
+            lastLocation.x = colWidth;
+            lastLocation.currentInRow = 0;
+        }
+        return item;
+    });
+};
+
 const initializeChart = () => {
-    const tmp = data.value.stations.map<FlowChartNodeModel>(s => ({
-        id: s.id,
-        name: s.name,
-        x: 0,
-        y: 0,
-    }));
-    nodes.push(...tmp);
+    nodes.length = 0;
+    nodes.push(...buildStationNodes());
 };
 
 export const flowChartService = {
