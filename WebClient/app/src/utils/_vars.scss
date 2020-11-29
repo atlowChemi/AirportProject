@@ -11,9 +11,26 @@ $dark: #000;
 
 $tablePadding: 0.1rem;
 $pagePadding: 0.2rem;
+$tableBorderWidth: 0.2rem;
 $tableMargin: 0.4rem;
 $titleHeight: 3rem;
 $recordHeight: 3rem;
+
+//Full page height - 100vh
+//Padding from top - pagePadding
+//Height of airport title - titleHeight
+//Margin of tables from title - tableMargin
+//Border of table - tableBorderWidth
+//Padding of table before title - tablePadding
+//Height of table title - titleHeight
+//Padding of table after title - tablePadding
+//Margin of tables from page end - tableMargin
+//Padding from bottom - pagePadding
+$maximalTableContentsHeight: calc(
+    100vh - #{$pagePadding} - #{$titleHeight} - #{$tableMargin} - #{$tableBorderWidth} -
+        #{$tablePadding} - #{$titleHeight} - #{$tablePadding} - #{$tableMargin} -
+        #{$pagePadding}
+);
 
 $toggleHeight: 2.5rem;
 $toggleWidth: 5rem;

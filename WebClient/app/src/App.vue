@@ -88,7 +88,7 @@ body {
     &__title {
         display: flex;
         margin: 0;
-        height: $recordHeight;
+        height: $titleHeight;
         justify-content: center;
         align-items: center;
     }

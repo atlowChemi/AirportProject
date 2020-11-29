@@ -56,7 +56,7 @@ export default component;
     padding: $tablePadding;
     color: $light;
     background-color: $primary;
-    border: $tablePadding solid $primary;
+    border: $tableBorderWidth solid $primary;
     &.full-page {
         max-height: calc(100% - #{$tableMargin});
         overflow: hidden;
@@ -77,11 +77,7 @@ export default component;
         overflow-y: auto;
         max-height: calc(#{$recordHeight} * 4.5);
         .full-page & {
-            max-height: calc(
-                100vh - #{$pagePadding} - #{$recordHeight} - #{$tableMargin} - #{$tablePadding} -
-                    #{$tablePadding} - #{$titleHeight} - #{$tablePadding} - #{$pagePadding} -
-                    #{$tableMargin}
-            );
+            max-height: $maximalTableContentsHeight;
         }
         &-empty {
             height: $recordHeight;
