@@ -77,7 +77,8 @@ const component = defineComponent({
                         flightHistory.data.elements.pop();
                     }
                     flightHistory.data.maxPage = Math.ceil(
-                        ++flightHistory.data.total / constants.PAGINATION_LIMIT,
+                        ++flightHistory.data.total /
+                            constants.global.PAGINATION_LIMIT,
                     );
                 } else if (!val && oldVal) {
                     if (

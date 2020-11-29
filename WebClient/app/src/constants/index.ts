@@ -1,3 +1,3 @@
-const PAGINATION_LIMIT = 10;
+import { global } from './global';
 
-export const constants = { PAGINATION_LIMIT };
+export const constants = { global };
