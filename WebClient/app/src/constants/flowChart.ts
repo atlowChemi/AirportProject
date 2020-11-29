@@ -1,4 +1,11 @@
 const CENTER_Y = 0;
 const CENTER_X = 0;
+const CLIENT_WIDTH_FALLBACK = 480;
+const CLIENT_HEIGHT_FALLBACK = 600;
 
-export const flowCharts = { CENTER_Y, CENTER_X };
+export const flowCharts = {
+    CENTER_Y,
+    CENTER_X,
+    CLIENT_WIDTH_FALLBACK,
+    CLIENT_HEIGHT_FALLBACK,
+};

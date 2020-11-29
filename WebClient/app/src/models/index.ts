@@ -14,4 +14,3 @@ export { ConnectionState } from './ConnectionState';
 export { FlowChartLinkModel } from './FlowChartLink';
 export { FlowChartNodeModel } from './FlowChartNode';
 export { FlowChartNodeOptions } from './FlowChartNodeOptions';
-export { FlowChartFlightLink } from './FlowChartFlightLink';
