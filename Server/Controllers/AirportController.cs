@@ -32,11 +32,12 @@ namespace Server.Controllers
             try
             {
                 return airportService.GetAirportData(name);
-                throw new AggregateException();
-            } catch (KeyNotFoundException)
+            }
+            catch (KeyNotFoundException)
             {
                 return NotFound("No control tower with the given name was found!");
-            } catch
+            }
+            catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Some unknown error happened, please try again");
             }
