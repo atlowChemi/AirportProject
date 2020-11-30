@@ -24,24 +24,6 @@ const connectionChanged = (newState: ConnectionState) => {
 };
 //#endregion
 
-// async function start() {
-//     try {
-//         await connection.start();
-//     } catch (err) {
-//         console.error('Failed to connect with hub', err);
-//         return new Promise<void>((resolve, reject) =>
-//             setTimeout(async () => {
-//                 try {
-//                     await start();
-//                     resolve();
-//                 } catch (error) {
-//                     reject();
-//                 }
-//             }, 5000),
-//         );
-//     }
-// }
-
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type CallbackFn = (...args: any[]) => void;
 

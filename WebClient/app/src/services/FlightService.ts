@@ -11,16 +11,23 @@ import { name, addFlight, setData } from './';
 import { moveFlight } from './AirportService';
 import { hubService } from './HubService';
 
-const HUB_URL = `${process.env.VUE_APP_SERVER}/FlightHub`;
+const { SERVER_URL, HUB_NAME, API_PREFIX } = constants.server;
+const HUB_URL = `${SERVER_URL}/${HUB_NAME}`;
+const API_URL = `${SERVER_URL}/${API_PREFIX}`;
 
 const registerAndGetFlights = async () => {
     await hubService.install(HUB_URL);
 
-    const airportData = await hubService.invokeFlightHub<AirportData>(
-        'RegisterToControlTowerAndGetData',
+    const hubRegistration = hubService.invokeFlightHub<AirportData>(
+        'RegisterToControlTower',
         name,
     );
-    setData(airportData);
+
+    const getAirportData = fetch(`${API_URL}/${name}`);
+
+    const [airportData] = await Promise.all([getAirportData, hubRegistration]);
+
+    setData(await airportData.json());
     hubService.registerFlightHubListener(
         'FutureFlightAdded',
         (flight: Flight) => {
@@ -42,11 +49,17 @@ const listenToFlightChanges = async () => {
 
 const getStationFlightHistory = async (stationId: guid, page = 1) => {
     const { PAGINATION_LIMIT } = constants.global;
-    await hubService.install(HUB_URL);
-    const start = (page - 1) * PAGINATION_LIMIT;
-    const paginatedStationHistory = await hubService.invokeFlightHub<
-        PaginatedData<FlightHistory>
-    >('GetStationFlightHistory', stationId, start, PAGINATION_LIMIT);
+    const startFrom = `${(page - 1) * PAGINATION_LIMIT}`;
+
+    const urlParams = new URLSearchParams({
+        stationId,
+        startFrom,
+        paginationLimit: `${PAGINATION_LIMIT}`,
+    });
+
+    const history = await fetch(`${API_URL}/history?` + urlParams);
+
+    const paginatedStationHistory: PaginatedData<FlightHistory> = await history.json();
     paginatedStationHistory.maxPage = Math.ceil(
         paginatedStationHistory.total / PAGINATION_LIMIT,
     );
