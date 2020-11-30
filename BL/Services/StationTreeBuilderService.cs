@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Common.Enums;
+using Common.Constants;
 
 namespace BL.Services
 {
@@ -74,7 +75,9 @@ namespace BL.Services
             foreach (Station station in stations)
             {
                 response = true;
-                int waitingTimeMS = randomDataGeneratorService.CreateRandomNumber(1 * 1000, 6 * 1000);
+                int waitingTimeMS = randomDataGeneratorService.CreateRandomNumber(
+                    Constants.MINIMAL_STATION_DELAY,
+                    Constants.MAXIMAL_STATION_DELAY);
                 StationService stationService = new StationService(station, waitingTimeMS);
                 stationServices.Add(stationService);
             }

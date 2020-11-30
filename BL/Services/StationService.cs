@@ -43,7 +43,7 @@ namespace BL.Services
         {
             lock (lockObj)
             {
-                if (CurrentFlight != null) return false;
+                if (CurrentFlight is not null) return false;
                 CurrentFlight = flight;
                 CurrentFlight.StartWaitingInStationAsync(WaitingTimeMS);
                 CurrentFlight.ReadyToContinue += CurrentFlight_ReadyToContinue;
