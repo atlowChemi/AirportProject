@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using BL.Services;
+using Common.Constants;
 using Common.Interfaces;
 using Common.Repositories;
 using DAL;
@@ -30,14 +31,14 @@ namespace Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options => options.AddPolicy("SignalRCorsPolicy", builder =>
+            services.AddCors(options => options.AddPolicy(Constants.CORS_POLICY_NAME, builder =>
             {
                 builder.WithOrigins("http://localhost:8080", "http://localhost:56673")
                     .WithMethods("GET", "POST").AllowAnyHeader().AllowCredentials();
             }));
             services.AddDbContext<AirportContext>(opt =>
             {
-                string relativeDataSource = Path.Combine(Environment.CurrentDirectory, @"..\", "DAL", "airport.db");
+                string relativeDataSource = Path.Combine(Environment.CurrentDirectory, @"..\", "DAL", Constants.DATABASE_NAME);
                 string dataSource = Path.GetFullPath(relativeDataSource);
                 opt
                     .UseSqlite($"Data Source={dataSource}")
@@ -65,7 +66,7 @@ namespace Server
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors("SignalRCorsPolicy");
+            app.UseCors(Constants.CORS_POLICY_NAME);
 
             app.UseRouting();
 
