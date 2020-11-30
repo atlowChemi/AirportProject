@@ -23,7 +23,7 @@ const component = defineComponent({
         const yPos = ref(0);
         const angle = ref(0);
         watch(
-            () => props.flight.stationId,
+            [() => props.flight.stationId, () => flowChartService.nodes],
             () => {
                 const [x = 0, y = 0] = flowChartService.getNodeLocation(
                     props.flight.stationId ?? Guid.empty,
@@ -37,7 +37,7 @@ const component = defineComponent({
                 angle.value = theta;
                 setTimeout(() => (angle.value = 0), 800);
             },
-            { immediate: true },
+            { immediate: true, deep: true },
         );
         return { xPos, yPos, angle };
     },
@@ -59,6 +59,6 @@ export default component;
     left: calc(var(--xPos) + calc(#{$chartNodeSize} / 2));
     z-index: 3;
     transform: translate(-50%, -50%) rotate(calc(var(--angle) + 90deg));
-    transition: all 800ms ease-in, transform 150ms ease-in-out;
+    transition: all 500ms ease-in 200ms, transform 200ms ease-in-out;
 }
 </style>
