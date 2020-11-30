@@ -30,5 +30,19 @@ namespace Common.DTO
                 StationId = flight.StationId
             };
         }
+        public static Flight ToDBModel(FlightDTO flight)
+        {
+            return new()
+            {
+                Id = flight.Id,
+                To = flight.To,
+                From = flight.From,
+                PlannedTime = flight.PlannedTime,
+                Direction = flight.Direction,
+                AirplaneId = flight.AirplaneId,
+                ControlTowerId = flight.ControlTowerId,
+                StationId = flight.StationId
+            };
+        }
     }
 }
