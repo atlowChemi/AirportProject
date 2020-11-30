@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+using System;
 using System.Collections.Generic;
 
 namespace Common.Models
@@ -8,6 +9,24 @@ namespace Common.Models
     /// </summary>
     public class ControlTower
     {
+        /// <summary>
+        /// The lazy loading handler.
+        /// </summary>
+        private readonly ILazyLoader lazyLoader;
+
+        /// <summary>
+        /// Create a new instance of a Control Tower.
+        /// </summary>
+        public ControlTower() { }
+        /// <summary>
+        /// Create a new instance of a Control Tower.
+        /// </summary>
+        /// <param name="lazyLoader">Lazy loader to use through out the model.</param>
+        public ControlTower(ILazyLoader lazyLoader)
+        {
+            this.lazyLoader = lazyLoader;
+        }
+
         /// <summary>
         /// ID of the Control Tower.
         /// </summary>
@@ -23,15 +42,45 @@ namespace Common.Models
         /// The stations connected directly to the control tower.
         /// <seealso cref="StationControlTowerRelation"/>
         /// </summary>
-        public virtual ICollection<StationControlTowerRelation> FirstStations { get; set; }
+        private ICollection<StationControlTowerRelation> firstStations;
+        /// <summary>
+        /// The stations connected directly to the control tower.
+        /// <seealso cref="StationControlTowerRelation"/>
+        /// </summary>
+        public virtual ICollection<StationControlTowerRelation> FirstStations
+        {
+            get => lazyLoader.Load(this, ref firstStations);
+            set => firstStations = value;
+        }
+
+
         /// <summary>
         /// The flights waiting at the Control tower.
         /// <seealso cref="Flight"/>
         /// </summary>
-        public virtual ICollection<Flight> FlightsWaiting { get; set; }
+        private ICollection<Flight> flightsWaiting;
+        /// <summary>
+        /// The flights waiting at the Control tower.
+        /// <seealso cref="Flight"/>
+        /// </summary>
+        public virtual ICollection<Flight> FlightsWaiting
+        {
+            get => lazyLoader.Load(this, ref flightsWaiting);
+            set => flightsWaiting = value;
+        }
+
+
         /// <summary>
         /// The <see cref="Station">Stations</see> of the Control tower.
         /// </summary>
-        public virtual ICollection<Station> Stations { get; set; }
+        private ICollection<Station> stations;
+        /// <summary>
+        /// The <see cref="Station">Stations</see> of the Control tower.
+        /// </summary>
+        public virtual ICollection<Station> Stations
+        {
+            get => lazyLoader.Load(this, ref stations);
+            set => stations = value;
+        }
     }
 }
