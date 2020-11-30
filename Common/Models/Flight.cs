@@ -1,5 +1,4 @@
 ﻿using Common.Enums;
-using Microsoft.EntityFrameworkCore.Infrastructure;
 using System;
 using System.Collections.Generic;
 
@@ -10,15 +9,6 @@ namespace Common.Models
     /// </summary>
     public class Flight
     {
-        private readonly ILazyLoader lazyLoader;
-
-        public Flight() { }
-        public Flight(ILazyLoader lazyLoader)
-        {
-            this.lazyLoader = lazyLoader;
-        }
-
-
         /// <summary>
         /// The ID of the flight.
         /// </summary>
@@ -67,14 +57,6 @@ namespace Common.Models
         /// <summary>
         /// The history of this flight regarding the stations.
         /// </summary>
-        private ICollection<FlightHistory> history;
-        /// <summary>
-        /// The history of this flight regarding the stations.
-        /// </summary>
-        public virtual ICollection<FlightHistory> History
-        {
-            get => lazyLoader.Load(this, ref history);
-            set => history = value;
-        }
+        public virtual ICollection<FlightHistory> History { get; set; }
     }
 }
