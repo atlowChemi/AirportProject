@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace DAL.Repositories
 {
+    /// <summary>
+    /// Simple extendable generic repository.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of entity the repository should handle.</typeparam>
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, new()
     {
         protected readonly AirportContext AirportContext;

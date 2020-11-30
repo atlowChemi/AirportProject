@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DAL
 {
+    /// <summary>
+    /// The DbContext handeling the airport related tables.
+    /// </summary>
     public class AirportContext : DbContext
     {
         public AirportContext(DbContextOptions<AirportContext> options) : base(options) { }
