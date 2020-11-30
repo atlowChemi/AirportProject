@@ -1,5 +1,6 @@
 ﻿using Common.Models;
 using Simulator.API;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,13 +11,15 @@ namespace Simulator.Services
     {
         private ICollection<Airplane> airplanes;
         private readonly IHubConnectionService hubConnectionService;
+        private readonly IWebClientService webClientService;
         private readonly IRandomDataService randomDataService;
 
-        public AirplaneSelectorService(IHubConnectionService hubConnectionService, IRandomDataService randomDataService)
+        public AirplaneSelectorService(IWebClientService webClientService, IHubConnectionService hubConnectionService, IRandomDataService randomDataService)
         {
+            this.webClientService = webClientService;
             this.hubConnectionService = hubConnectionService;
             this.randomDataService = randomDataService;
-            Task.WaitAll(GetAirplanesFromHub());
+            Task.WaitAll(GetAirplanesFromAPI());
             hubConnectionService.Listen<ICollection<Airplane>>("AirplaneUpdates", a => airplanes = a);
         }
 
@@ -28,9 +31,9 @@ namespace Simulator.Services
             return airplanes.ElementAtOrDefault(indexInCollectionBounds);
         }
 
-        private async Task GetAirplanesFromHub()
+        private async Task GetAirplanesFromAPI()
         {
-            airplanes = await hubConnectionService.GetAirplanes();
+            airplanes = await webClientService.GetAirplanes() ?? Array.Empty<Airplane>();
         }
     }
 }

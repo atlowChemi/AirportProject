@@ -10,15 +10,15 @@ namespace Simulator.Services
     public class FlightGeneratorService : IFlightGeneratorService
     {
         private readonly IRandomDataService randomDataService;
-        private readonly IHubConnectionService hubConnectionService;
+        private readonly IWebClientService webClientService;
         private readonly IAirplaneSelectorService airplaneSelectorService;
 
         public FlightGeneratorService(IRandomDataService randomDataService,
-            IHubConnectionService hubConnectionService,
+            IWebClientService webClientService,
             IAirplaneSelectorService airplaneSelectorService)
         {
             this.randomDataService = randomDataService;
-            this.hubConnectionService = hubConnectionService;
+            this.webClientService = webClientService;
             this.airplaneSelectorService = airplaneSelectorService;
         }
 
@@ -47,7 +47,7 @@ namespace Simulator.Services
         private async Task<Flight> SendFlightToHub()
         {
             Flight flight = CreateFlight();
-            await hubConnectionService.CreateFlight(flight);
+            await webClientService.CreateFlight(flight);
             return flight;
         }
 

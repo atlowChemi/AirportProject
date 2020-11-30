@@ -24,6 +24,7 @@ namespace Simulator
                 .AddSingleton<IRandomDataService, RandomDataService>()
                 .AddSingleton<IFlightGeneratorService, FlightGeneratorService>()
                 .AddSingleton<IAirplaneSelectorService, AirplaneSelectorService>()
+                .AddSingleton<IWebClientService, WebClientService>()
                 .AddSingleton<IHubConnectionService, HubConnectionService>()
                 .BuildServiceProvider();
 

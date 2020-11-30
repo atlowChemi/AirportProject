@@ -1,7 +1,4 @@
-﻿using Common.Models;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace Simulator.API
 {
@@ -10,17 +7,6 @@ namespace Simulator.API
     /// </summary>
     public interface IHubConnectionService
     {
-        /// <summary>
-        /// Get all airplanes from Hub.
-        /// </summary>
-        /// <returns>A <see cref="Task"/> that represents the asynchronous <see cref="Airplane"/> fetching.</returns>
-        public Task<ICollection<Airplane>> GetAirplanes();
-        /// <summary>
-        /// Send a new flight to hub.
-        /// </summary>
-        /// <param name="flight">Flight to send.</param>
-        /// <returns>A <see cref="Task"/> that represents the asynchronous <see cref="Flight"/> creating.</returns>
-        public Task CreateFlight(Flight flight);
         /// <summary>
         /// Registers a handler that will be invoked when the hub method with the specified method name is invoked.
         /// </summary>

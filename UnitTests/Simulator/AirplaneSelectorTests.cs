@@ -12,9 +12,10 @@ namespace UnitTests.Simulator
         public void GettingAirplaneReturnsExpectedAirplane()
         {
             Airplane[] airplanes = new Airplane[] { new Airplane(), new Airplane(), new Airplane() };
-            IHubConnectionService hubConnectionService = new HubConnectionServiceMock(airplanes);
+            IHubConnectionService hubConnectionService = new HubConnectionServiceMock();
+            IWebClientService webClientService = new WebClientMock(airplanes);
             IRandomDataService randomDataService = new RandomDataServiceMock();
-            IAirplaneSelectorService airplaneSelectorService = new AirplaneSelectorService(hubConnectionService, randomDataService);
+            IAirplaneSelectorService airplaneSelectorService = new AirplaneSelectorService(webClientService, hubConnectionService, randomDataService);
 
             Airplane airplane = airplaneSelectorService.GetAirplane();
 
@@ -25,9 +26,10 @@ namespace UnitTests.Simulator
         [Fact]
         public void GetAirplaneFromNullArrayReturnsNull()
         {
-            IHubConnectionService hubConnectionService = new HubConnectionServiceMock(null);
+            IHubConnectionService hubConnectionService = new HubConnectionServiceMock();
+            IWebClientService webClientService = new WebClientMock(null);
             IRandomDataService randomDataService = new RandomDataServiceMock();
-            IAirplaneSelectorService airplaneSelectorService = new AirplaneSelectorService(hubConnectionService, randomDataService);
+            IAirplaneSelectorService airplaneSelectorService = new AirplaneSelectorService(webClientService, hubConnectionService, randomDataService);
 
             Airplane airplane = airplaneSelectorService.GetAirplane();
 
@@ -39,9 +41,10 @@ namespace UnitTests.Simulator
         public void GetAirplaneFromEmptyArrayReturnsNull()
         {
             Airplane[] airplanes = new Airplane[] {};
-            IHubConnectionService hubConnectionService = new HubConnectionServiceMock(airplanes);
+            IWebClientService webClientService = new WebClientMock(airplanes);
+            IHubConnectionService hubConnectionService = new HubConnectionServiceMock();
             IRandomDataService randomDataService = new RandomDataServiceMock();
-            IAirplaneSelectorService airplaneSelectorService = new AirplaneSelectorService(hubConnectionService, randomDataService);
+            IAirplaneSelectorService airplaneSelectorService = new AirplaneSelectorService(webClientService, hubConnectionService, randomDataService);
 
             Airplane airplane = airplaneSelectorService.GetAirplane();
 
