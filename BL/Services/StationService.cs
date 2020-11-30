@@ -85,7 +85,7 @@ namespace BL.Services
                 throw new ArgumentException("Sender must be a station service!", nameof(sender));
 
             //If manages to move to next station, unsubscribe, otherwise wait for next available.
-            if (availableStation.FlightArrived(CurrentFlight))
+            if (availableStation.IsHandlerAvailable && availableStation.FlightArrived(CurrentFlight))
             {
                 // Unregister from all from all stations.
                 IEnumerable<IStationFlightHandler> nextStations = GetNextStationListByDirection(CurrentFlight.Flight.Direction);
@@ -111,6 +111,7 @@ namespace BL.Services
             if (Station.CurrentFlight?.History?.Any(h => h.Station.Id == Station.Id && !h.LeaveStationTime.HasValue) ?? false)
             {
                 FlightArrived(new FlightService(Station.CurrentFlight));
+                FlightChanged?.Invoke(this, new(Station.CurrentFlight, Station, Station));
             }
         }
 

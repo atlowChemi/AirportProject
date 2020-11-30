@@ -86,7 +86,7 @@ namespace BL.Services
             IEnumerable<IStationFlightHandler> relevantFirstStations = GetRelevantFlightHandler(flightService.Flight.Direction);
 
             IStationFlightHandler avaialabeStation = relevantFirstStations?.FirstOrDefault(ss => ss.IsHandlerAvailable);
-            if (avaialabeStation is not null && avaialabeStation.FlightArrived(flightService))
+            if (avaialabeStation is not null && avaialabeStation.IsHandlerAvailable && avaialabeStation.FlightArrived(flightService))
             {
                 FlightChanged?.Invoke(this, new FlightEventArgs(flightService.Flight, null, avaialabeStation.Station));
             }

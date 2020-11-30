@@ -10,6 +10,7 @@ namespace Common.Events
         public Station StationTo {get; init;}
         public bool IsFromControlTowerToFirstStation => StationFrom is null && StationTo is not null;
         public bool IsFromLastStationToEnd => StationFrom is not null && StationTo is null;
+        public bool IsStationSelfInvoke => StationFrom == StationTo;
 
         public FlightEventArgs(Flight flight, Station stationFrom, Station stationTo)
         {

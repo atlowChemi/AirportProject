@@ -22,6 +22,10 @@ namespace BL.Services
         public async Task FlightMoved(FlightEventArgs flightEvent)
         {
             Flight flight = flightEvent.Flight;
+            if (flightEvent.IsStationSelfInvoke)
+            {
+                return;
+            }
             if (flightEvent.IsFromControlTowerToFirstStation)
             {
                 OpenFlightHistoryRow(flight, flightEvent.StationTo);
