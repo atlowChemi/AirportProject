@@ -3,6 +3,7 @@ using Common.Enums;
 using Simulator.API;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Simulator.Services
@@ -26,7 +27,7 @@ namespace Simulator.Services
         }
 
         public FlightDirection RandomFlightDirection() =>
-            random.Next() % 2 == 0 ? FlightDirection.Landing : FlightDirection.Takeoff;
+            Enum.GetValues<FlightDirection>().OrderBy(e => Guid.NewGuid()).FirstOrDefault();
 
         public string RandomFlightTarget()
         {
