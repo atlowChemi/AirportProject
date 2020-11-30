@@ -26,7 +26,6 @@
                 key="next"
                 v-if="currentPage < maximalPage"
                 @click="moveTo(nextPage)"
-                class="nexty"
             >
                 {{ nextPage }}
             </button>
