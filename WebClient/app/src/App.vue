@@ -82,13 +82,14 @@ body {
         transform: translateY(100%);
     }
 
-    .fade-enter-active,
-    .fade-leave-active {
-        transition: all 200ms ease;
+    .fly-enter-active,
+    .fly-leave-active {
+        transition: all 600ms ease;
     }
-    .fade-enter-from,
-    .fade-leave-to {
+    .fly-enter-from,
+    .fly-leave-to {
         opacity: 0;
+        transform: scale(8);
     }
 }
 </style>

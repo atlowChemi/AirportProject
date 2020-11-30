@@ -6,7 +6,7 @@
         @mouseup="handleUp"
         @mousedown="handleDown"
     >
-        <transition-group name="fade">
+        <transition-group name="fly">
             <FlowChartFlight
                 v-for="flight in data.movingFlights"
                 :key="flight.id"
