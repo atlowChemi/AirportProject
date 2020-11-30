@@ -12,7 +12,6 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Server.Hubs;
 using Server.HubServices;
@@ -33,7 +32,7 @@ namespace Server
         {
             services.AddCors(options => options.AddPolicy("SignalRCorsPolicy", builder =>
             {
-                builder.WithOrigins("http://localhost:8080")
+                builder.WithOrigins("http://localhost:8080", "http://localhost:56673")
                     .WithMethods("GET", "POST").AllowAnyHeader().AllowCredentials();
             }));
             services.AddDbContext<AirportContext>(opt =>
