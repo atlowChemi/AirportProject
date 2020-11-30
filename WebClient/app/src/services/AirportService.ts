@@ -89,8 +89,8 @@ export const moveFlight = (
     from: Station | null,
     to: Station | null,
 ) => {
-    if (!from && to) {
-        //Flight time arrived and it moved to first station.
+    if ((!from && to) || (from && from === to)) {
+        //Flight time arrived and it moved to first station, or it was pre-fetched and was now stationed on itself.
         moveFlightToFirstStation(flight, to);
     } else if (from && to) {
         //Flight moved between two stations.
