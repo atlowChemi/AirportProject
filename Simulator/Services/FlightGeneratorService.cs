@@ -1,4 +1,5 @@
-﻿using Common.Enums;
+﻿using Common.Constants;
+using Common.Enums;
 using Common.Models;
 using Simulator.API;
 using System;
@@ -25,7 +26,9 @@ namespace Simulator.Services
         {
             for (; ; )
             {
-                await randomDataService.RandomDelay();
+                await randomDataService.RandomDelay(
+                    Constants.MINIMAL_FLIGHT_CREATION_DELAY,
+                    Constants.MAXIMAL_FLIGHT_CREATION_DELAY);
                 Flight flight = await SendFlightToHub();
                 action?.Invoke(FlightToMessage(flight));
             }
@@ -35,8 +38,9 @@ namespace Simulator.Services
             FlightDirection direction = randomDataService.RandomFlightDirection();
             (string from, string to) = PickRandomTarget(direction);
             Airplane airplane = airplaneSelectorService.GetAirplane();
-            DateTime plannedTime = DateTime.Now.AddSeconds(randomDataService.RandomNumber(15, 45));
-            if (airplane == null) return null;
+            int rndDelay = randomDataService.RandomNumber(Constants.MINIMAL_FLIGHT_DELAY, Constants.MAXIMAL_FLIGHT_DELAY);
+            DateTime plannedTime = DateTime.Now.AddSeconds(rndDelay);
+            if (airplane is null) return null;
             return new Flight { Direction = direction, AirplaneId = airplane.Id, From = from, To = to, PlannedTime = plannedTime };
         }
 
@@ -52,9 +56,9 @@ namespace Simulator.Services
             string randomTarget = randomDataService.RandomFlightTarget();
             if (direction == FlightDirection.Landing)
             {
-                return (randomTarget, "TLV");
+                return (randomTarget, Constants.CONTROL_TOWER_NAME);
             }
-            return ("TLV", randomTarget);
+            return (Constants.CONTROL_TOWER_NAME, randomTarget);
         }
 
         private static string FlightToMessage(Flight flight)

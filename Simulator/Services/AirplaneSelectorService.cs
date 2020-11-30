@@ -24,7 +24,7 @@ namespace Simulator.Services
         {
             if (airplanes == null || airplanes.Count <= 0) return null;
             if (airplanes.Count == 1) return airplanes.First();
-            int indexInCollectionBounds = randomDataService.RandomNumber(0, airplanes.Count);
+            int indexInCollectionBounds = randomDataService.RandomNumber(max: airplanes.Count);
             return airplanes.ElementAtOrDefault(indexInCollectionBounds);
         }
 

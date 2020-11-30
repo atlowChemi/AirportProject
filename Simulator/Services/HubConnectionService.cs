@@ -14,8 +14,9 @@ namespace Simulator.Services
 
         public HubConnectionService()
         {
+            string serverUrl = Environment.GetEnvironmentVariable("SERVER_URL");
             connection = new HubConnectionBuilder()
-              .WithUrl("http://localhost:63199/flighthub")
+              .WithUrl($"{serverUrl}/flighthub")
               .WithAutomaticReconnect()
               .Build();
             connection.StartAsync();

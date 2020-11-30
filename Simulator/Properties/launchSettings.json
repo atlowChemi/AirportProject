@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Simulator": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "SERVER_URL": "http://localhost:63199"
+      }
+    }
+  }
+}
