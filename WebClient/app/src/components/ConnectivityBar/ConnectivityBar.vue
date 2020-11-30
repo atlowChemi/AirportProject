@@ -1,10 +1,11 @@
 <template>
     <div class="connectivity__bar" :class="{ error, attempt, success }">
         <span v-if="error">
-            An unhadled issue has terminated the connection with the server.
+            Oops! An unhadled issue has terminated the connection with the
+            server.
         </span>
         <span v-else-if="attempt">
-            Attempting to connect to server.
+            Attempting to connect to server, hold the black box :)
         </span>
         <span v-else-if="success">
             Successfully initialized connection with server.
