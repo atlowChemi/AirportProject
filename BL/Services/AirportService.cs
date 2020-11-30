@@ -46,7 +46,7 @@ namespace BL.Services
 
         public AirportDataDTO GetAirportData(string name)
         {
-            ControlTower controlTower = stationTreeBuilder[name]?.ControlTower ?? throw new ArgumentOutOfRangeException(nameof(name), "No control tower with given name found!");
+            ControlTower controlTower = stationTreeBuilder[name]?.ControlTower ?? throw new KeyNotFoundException("No control tower with given name found!");
             IEnumerable<FlightDTO> flights = flightRepository.GetAll()
                 .Where(f => f.History.Count <= 0
                             && (f.ControlTowerId == controlTower.Id
