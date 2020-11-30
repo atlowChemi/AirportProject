@@ -21,7 +21,7 @@ namespace DAL
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             SetControlTowerNameToBeUnique(modelBuilder);
-            SetStationFlightRelation(modelBuilder);
+            DefineStationFlightRelation(modelBuilder);
             DefineStationToStationRelation(modelBuilder);
             DefineStationToControlTowerRelation(modelBuilder);
             InjectPrePopulatedData(modelBuilder);
@@ -34,7 +34,7 @@ namespace DAL
                 .IsUnique();
         }
 
-        private void SetStationFlightRelation(ModelBuilder modelBuilder)
+        private void DefineStationFlightRelation(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Station>()
                 .HasOne(s => s.CurrentFlight)
