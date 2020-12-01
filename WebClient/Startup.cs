@@ -45,8 +45,8 @@ namespace WebClient
                     npmScript: Debugger.IsAttached ? "serve" : null,
                     regex: "Compiled successfully",
                     forceKill: true);
-            });
 #endif
+            });
         }
     }
 }
