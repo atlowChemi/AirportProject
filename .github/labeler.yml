@@ -1,6 +1,6 @@
 # Add 'repo' label to any root file changes
 workflows:
-    - .git/**/*
+    - .github/**/*
 
 # Add 'repo' label to any root file changes
 repo:
