@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from 'vue';
+import { defineComponent, computed, useCssVars } from 'vue';
 
 const component = defineComponent({
     props: {
@@ -51,6 +51,7 @@ const component = defineComponent({
                 return 'unset';
             }
         });
+        useCssVars(() => ({ pathTransform: pathTransform.value }));
         return { viewBox, pathTransform };
     },
 });
@@ -58,7 +59,7 @@ const component = defineComponent({
 export default component;
 </script>
 
-<style lang="scss" scoped vars="{ pathTransform }">
+<style lang="scss" scoped>
 svg {
     height: 100%;
     path {

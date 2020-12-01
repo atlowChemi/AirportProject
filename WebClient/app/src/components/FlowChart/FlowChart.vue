@@ -25,7 +25,7 @@
             :key="`node${node.id}`"
             :node="node"
             :options="nodeOptions"
-            @nodeSelected="nodeSelected(node.id, $event)"
+            @nodeselected="nodeSelected(node.id, $event)"
         />
     </div>
 </template>

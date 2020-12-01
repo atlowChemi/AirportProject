@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, useCssVars } from 'vue';
 import { FlowChartLinkModel, FlightDirection } from '@/models';
 import { positionService } from '@/services';
 
@@ -31,6 +31,11 @@ const component = defineComponent({
                 : '#d40d0d',
         );
 
+        useCssVars(() => ({
+            color: color.value,
+            arrowTransform: arrowTransform.value,
+        }));
+
         return {
             arrowTransform,
             dAttr,
@@ -42,7 +47,7 @@ const component = defineComponent({
 export default component;
 </script>
 
-<style scoped lang="scss" vars="{ color, arrowTransform }">
+<style scoped lang="scss">
 g {
     fill: none;
     stroke: var(--color);

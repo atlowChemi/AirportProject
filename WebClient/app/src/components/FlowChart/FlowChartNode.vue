@@ -2,6 +2,7 @@
     <div
         class="node"
         @mousedown.prevent="handleMousedown"
+        @dblclick="log"
         :class="{ selected: options.selected === node.id }"
     >
         <div class="node__port node__port-input"></div>
@@ -13,14 +14,29 @@
         </div>
         <div class="node__port node__port-output"></div>
     </div>
+    <teleport to="#app" v-if="showInfo">
+        <Modal
+            v-if="showInfo"
+            :close="() => (showInfo = false)"
+            :title="station?.name || ''"
+        >
+            <template #default>
+                <StationInfo :station="station" />
+            </template>
+        </Modal>
+    </teleport>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue';
+import { computed, defineComponent, ref, useCssVars } from 'vue';
 import { FlowChartNodeModel, Guid, FlowChartNodeOptions } from '@/models';
+import { data } from '@/services';
+
+import Modal from '@/components/Modal/Modal.vue';
+import StationInfo from '@/components/Stations/StationInfo.vue';
 
 const component = defineComponent({
-    name: 'FlowchartNode',
+    components: { Modal, StationInfo },
     props: {
         node: {
             type: Object as () => FlowChartNodeModel,
@@ -40,24 +56,38 @@ const component = defineComponent({
             }),
         },
     },
+    emits: ['nodeselected'],
     setup(props, { emit }) {
+        const showInfo = ref(false);
+        const station = computed(() =>
+            data.value.stations.find(s => s.id === props.node.id),
+        );
         const nodeTop = computed(
             () => `${props.options.centerY + props.node.y}px`,
         );
         const nodeLeft = computed(
             () => `${props.options.centerX + props.node.x}px`,
         );
+
+        useCssVars(() => ({
+            nodeTop: nodeTop.value,
+            nodeLeft: nodeLeft.value,
+        }));
         const handleMousedown = (e: MouseEvent) => {
             const target = (e.target || e.srcElement) as HTMLElement;
             if (!target.classList.contains('node-port')) {
-                emit('node-selected', e);
+                emit('nodeselected', e);
             }
         };
+        const log = () => (showInfo.value = true);
 
         return {
             nodeTop,
             nodeLeft,
             handleMousedown,
+            log,
+            showInfo,
+            station,
         };
     },
 });
@@ -65,7 +95,7 @@ export default component;
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss" vars="{ nodeTop, nodeLeft }">
+<style scoped lang="scss">
 .node {
     width: $chartNodeSize;
     height: calc(#{$chartNodeSize} + #{$chartNameSize});

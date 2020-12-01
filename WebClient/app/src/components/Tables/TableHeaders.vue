@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, useCssVars } from 'vue';
 
 const component = defineComponent({
     props: {
@@ -18,12 +18,15 @@ const component = defineComponent({
             required: true,
         },
     },
+    setup(props) {
+        useCssVars(() => ({ columns: props.columns }));
+    },
 });
 
 export default component;
 </script>
 
-<style lang="scss" scoped vars="{ columns }">
+<style lang="scss">
 .table__header {
     display: grid;
     grid-template-columns: var(--columns);

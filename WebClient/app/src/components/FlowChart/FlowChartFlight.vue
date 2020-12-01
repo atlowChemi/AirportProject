@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue';
+import { defineComponent, ref, watch, useCssVars } from 'vue';
 import { Flight, Guid } from '@/models';
 import { flowChartService } from '@/services';
 import Icon from '@/components/Icons/Icon.vue';
@@ -39,6 +39,11 @@ const component = defineComponent({
             },
             { immediate: true, deep: true },
         );
+        useCssVars(() => ({
+            xPos: `${xPos.value}px`,
+            yPos: `${yPos.value}px`,
+            angle: `${angle.value}deg`,
+        }));
         return { xPos, yPos, angle };
     },
 });
@@ -46,11 +51,7 @@ const component = defineComponent({
 export default component;
 </script>
 
-<style
-    lang="scss"
-    scoped
-    vars="{ xPos: `${xPos}px`, yPos: `${yPos}px`, angle: `${angle}deg` }"
->
+<style lang="scss" scoped>
 .flight {
     height: 3rem;
     width: 3rem;
