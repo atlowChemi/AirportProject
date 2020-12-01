@@ -14,6 +14,10 @@ BL:
 common:
     - Common/**/*
 
+# Add 'common' label to any change within the 'Common' package
+DAL:
+    - DAL/**/*
+
 # Add 'server' label to any change within the 'Server' package
 server:
     - Server/**/*
