@@ -1,6 +1,10 @@
-name: .NET Core
+name: Build and Run tests.
 
-on: [push, pull_request]
+on:
+    push:
+        branches:
+            - master
+    pull_request:
 
 jobs:
     tests:
