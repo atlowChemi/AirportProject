@@ -3,6 +3,9 @@ using System.Collections.Generic;
 
 namespace Common.Interfaces
 {
+    /// <summary>
+    /// Service that builds logical services for <see cref="ControlTower">Control Towers</see> and <see cref="Station">Stations</see> and connects them by the <see cref="StationRelation"/>.
+    /// </summary>
     public interface IStationTreeBuilderService
     {
         /// <summary>

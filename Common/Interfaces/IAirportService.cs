@@ -38,6 +38,7 @@ namespace Common.Interfaces
         /// </summary>
         /// <param name="stationId">Id of requested station.</param>
         /// <param name="startFrom">Row of history to start from. (pagination)</param>
+        /// <param name="paginationLimit">The limit of items to fetch.</param>
         /// <returns>The flight history of the station.</returns>
         PaginatedDTO<FlightHistoryDTO> GetStationHistory(Guid stationId, int startFrom = 0, int paginationLimit = 15);
     }
