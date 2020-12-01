@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Reflection;
 using BL.Services;
 using Common.Constants;
 using Common.Interfaces;
@@ -60,7 +61,15 @@ namespace Server
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "AirportAPI", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Airport API",
+                    Version = "v1",
+                    Description = "The API that handles the 1019 final project"
+                });
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath, true);
             });
         }
 
@@ -73,7 +82,11 @@ namespace Server
             }
 
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "AirportAPI v1"));
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "AirportAPI v1");
+                c.DocumentTitle = "Airport API";
+            });
 
             app.UseCors(Constants.CORS_POLICY_NAME);
 

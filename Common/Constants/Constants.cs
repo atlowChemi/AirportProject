@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Common.Constants
 {
@@ -19,5 +15,8 @@ namespace Common.Constants
         public static readonly IReadOnlyList<string> AVAILABLE_AIRPORTS = new string[] { "JFK", "IST", "SAW", "STN", "LTN", "ATH" };
         public const string DATABASE_NAME = "airport.db";
         public const string CORS_POLICY_NAME = "SignalRCorsPolicy";
+        public const string UNKNOWN_ERROR_MSG = "Some unknown error happened, please try again.";
+        public const string RESPONSE_TYPE_SUCCESS = "Success";
+        public const string RESPONSE_TYPE_FAILURE = "Failure";
     }
 }
