@@ -1,0 +1,38 @@
+# Add 'repo' label to any root file changes
+workflows:
+    - .git/**/*
+
+# Add 'repo' label to any root file changes
+repo:
+    - ./*
+
+# Add 'BL' label to any change within the 'BL' package
+BL:
+    - BL/**/*
+
+# Add 'common' label to any change within the 'Common' package
+common:
+    - Common/**/*
+
+# Add 'server' label to any change within the 'Server' package
+server:
+    - Server/**/*
+
+# Add 'simulator' label to any change within the 'Simulator' package
+simulator:
+    - Simulator/**/*
+
+# Add 'unitTests' label to any change within the 'UnitTests' package
+unitTests:
+    - UnitTests/**/*
+
+# Add 'webClient' label to any change within the 'WebClient' package
+webClient:
+    - WebClient/**/*
+
+# Add 'test' label to any change to *.spec.js files within the source dir
+Vue-app:
+    - WebClient/app/**/*
+
+markdowns:
+    - "**/*.md"
