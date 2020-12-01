@@ -13,13 +13,21 @@ namespace DAL.Repositories
     /// <typeparam name="TEntity">The type of entity the repository should handle.</typeparam>
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class, new()
     {
+        /// <summary>
+        /// The context of the the DB.
+        /// </summary>
         protected readonly AirportContext AirportContext;
 
+        /// <summary>
+        /// Create new reposirty.
+        /// </summary>
+        /// <param name="airportContext">Airport context object.</param>
         public Repository(AirportContext airportContext)
         {
             AirportContext = airportContext;
         }
 
+        
         public virtual IQueryable<TEntity> GetAll()
         {
             try
