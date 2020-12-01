@@ -28,59 +28,6 @@ namespace Server.Controllers
         }
 
         /// <summary>
-        /// Gets all of the data regarding the control tower with specified name.
-        /// </summary>
-        /// <param name="name" example="IST">Name of the control tower. 3 upper case chars.</param>
-        /// <returns>All the relavant data for the requested control tower.</returns>
-        /// <response code="200">Returns the data of the control tower.</response>
-        /// <response code="400">If name is empty or invalid.</response>
-        /// <response code="404">If now control nower found with given name.</response>
-        /// <response code="500">If some unknown error happened.</response>
-        [HttpGet("{name}")]
-        [Produces("application/json")]
-        [ProducesResponseType(typeof(AirportDataDTO), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(HttpResponseDTO), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(HttpResponseDTO), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(HttpResponseDTO), StatusCodes.Status500InternalServerError)]
-        public ActionResult<AirportDataDTO> GetControllTowerData([RegularExpression(@"^[A-Z]{3}$")] string name)
-        {
-            if (!ModelState.IsValid)
-            {
-                HttpResponseDTO response = new()
-                {
-                    ResponseType = Constants.RESPONSE_TYPE_SUCCESS,
-                    Message = "Invalid name!",
-                    FailureReason = $"Name must be 3 upper case characters. {name} is invalid!"
-                };
-                return BadRequest(response);
-            }
-            try
-            {
-                return airportService.GetAirportData(name);
-            }
-            catch (KeyNotFoundException e)
-            {
-                HttpResponseDTO response = new()
-                {
-                    ResponseType = Constants.RESPONSE_TYPE_FAILURE,
-                    Message = "No control tower with the given name was found!",
-                    FailureReason = e.Message
-                };
-                return NotFound(response);
-            }
-            catch (Exception e)
-            {
-                HttpResponseDTO response = new()
-                {
-                    ResponseType = Constants.RESPONSE_TYPE_FAILURE,
-                    Message = "Some unknown error happened, please try again.",
-                    FailureReason = e.Message
-                };
-                return StatusCode(StatusCodes.Status500InternalServerError, response);
-            }
-        }
-
-        /// <summary>
         /// Get all airplanes known to Airport API.
         /// </summary>
         /// <returns>All airplanes known to the system.</returns>
@@ -178,6 +125,60 @@ namespace Server.Controllers
                 {
                     ResponseType = Constants.RESPONSE_TYPE_FAILURE,
                     Message = Constants.UNKNOWN_ERROR_MSG,
+                    FailureReason = e.Message
+                };
+                return StatusCode(StatusCodes.Status500InternalServerError, response);
+            }
+        }
+
+
+        /// <summary>
+        /// Gets all of the data regarding the control tower with specified name.
+        /// </summary>
+        /// <param name="name" example="IST">Name of the control tower. 3 upper case chars.</param>
+        /// <returns>All the relavant data for the requested control tower.</returns>
+        /// <response code="200">Returns the data of the control tower.</response>
+        /// <response code="400">If name is empty or invalid.</response>
+        /// <response code="404">If now control nower found with given name.</response>
+        /// <response code="500">If some unknown error happened.</response>
+        [HttpGet("controlTower/{name}")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(AirportDataDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(HttpResponseDTO), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(HttpResponseDTO), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(HttpResponseDTO), StatusCodes.Status500InternalServerError)]
+        public ActionResult<AirportDataDTO> GetControllTowerData([RegularExpression(@"^[A-Z]{3}$")] string name)
+        {
+            if (!ModelState.IsValid)
+            {
+                HttpResponseDTO response = new()
+                {
+                    ResponseType = Constants.RESPONSE_TYPE_SUCCESS,
+                    Message = "Invalid name!",
+                    FailureReason = $"Name must be 3 upper case characters. {name} is invalid!"
+                };
+                return BadRequest(response);
+            }
+            try
+            {
+                return airportService.GetAirportData(name);
+            }
+            catch (KeyNotFoundException e)
+            {
+                HttpResponseDTO response = new()
+                {
+                    ResponseType = Constants.RESPONSE_TYPE_FAILURE,
+                    Message = "No control tower with the given name was found!",
+                    FailureReason = e.Message
+                };
+                return NotFound(response);
+            }
+            catch (Exception e)
+            {
+                HttpResponseDTO response = new()
+                {
+                    ResponseType = Constants.RESPONSE_TYPE_FAILURE,
+                    Message = "Some unknown error happened, please try again.",
                     FailureReason = e.Message
                 };
                 return StatusCode(StatusCodes.Status500InternalServerError, response);

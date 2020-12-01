@@ -23,11 +23,17 @@ const registerAndGetFlights = async () => {
         name,
     );
 
-    const getAirportData = fetch(`${API_URL}/${name}`);
+    const getAirportData = fetch(`${API_URL}/controlTower/${name}`);
 
     const [airportData] = await Promise.all([getAirportData, hubRegistration]);
 
-    setData(await airportData.json());
+    if (airportData.status === 200) {
+        setData(await airportData.json());
+    } else {
+        console.error(
+            `Something went wrong with the fetch request. return with ${airportData.status} status code.`,
+        );
+    }
     hubService.registerFlightHubListener(
         'FutureFlightAdded',
         (flight: Flight) => {
@@ -59,10 +65,22 @@ const getStationFlightHistory = async (stationId: guid, page = 1) => {
 
     const history = await fetch(`${API_URL}/history?` + urlParams);
 
-    const paginatedStationHistory: PaginatedData<FlightHistory> = await history.json();
-    paginatedStationHistory.maxPage = Math.ceil(
-        paginatedStationHistory.total / PAGINATION_LIMIT,
-    );
+    let paginatedStationHistory: PaginatedData<FlightHistory> = {
+        total: 0,
+        maxPage: 1,
+        elements: [],
+    };
+
+    if (history.status === 200) {
+        paginatedStationHistory = await history.json();
+        paginatedStationHistory.maxPage = Math.ceil(
+            paginatedStationHistory.total / PAGINATION_LIMIT,
+        );
+    } else {
+        console.error(
+            `Something went wrong with the fetch request. return with ${history.status} status code.`,
+        );
+    }
     return paginatedStationHistory;
 };
 
