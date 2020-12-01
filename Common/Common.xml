@@ -1,0 +1,550 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Common</name>
+    </assembly>
+    <members>
+        <member name="T:Common.Enums.FlightDirection">
+            <summary>
+            The possible directions for a flight or station.
+            </summary>
+        </member>
+        <member name="T:Common.Interfaces.IAirportDBService">
+            <summary>
+            Service that can save changes to airport DB.
+            </summary>
+        </member>
+        <member name="M:Common.Interfaces.IAirportDBService.FlightMoved(Common.Events.FlightEventArgs)">
+            <summary>
+            Update the database when a <see cref="T:Common.Models.Flight">flight</see> has moved.
+            </summary>
+            <param name="flightEvent">The flight event arguments.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> that represents the asynchronous <see cref="T:Common.Models.Flight"/> moving in DB</returns>
+        </member>
+        <member name="T:Common.Interfaces.IAirportEventsService">
+            <summary>
+            Service that registers to all relevant events and handels them.
+            </summary>
+        </member>
+        <member name="M:Common.Interfaces.IAirportEventsService.AddStationsToListenTo(System.Collections.Generic.IEnumerable{Common.Interfaces.IFlightChanger})">
+            <summary>
+            Add stations which need to be registered to.
+            </summary>
+            <param name="stationServices">The station to register to.</param>
+        </member>
+        <member name="T:Common.Interfaces.IAirportService">
+            <summary>
+            Service to handle the whole orchestra of the airport.
+            </summary>
+        </member>
+        <member name="M:Common.Interfaces.IAirportService.GetAirplanes">
+            <summary>
+            Get all <see cref="T:Common.Models.Airplane">airplanes</see> available.
+            </summary>
+            <returns>All airplanes in the system.</returns>
+        </member>
+        <member name="M:Common.Interfaces.IAirportService.HandleNewFlightArrivedAsync(Common.Models.Flight)">
+            <summary>
+            Handle the situation of a new <see cref="T:Common.Models.Flight"/> arriving the airport.
+            </summary>
+            <param name="flight">The flight that has arrived.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task"/> that represents the asynchronous <see cref="T:Common.Models.Flight"/> handeling</returns>
+        </member>
+        <member name="M:Common.Interfaces.IAirportService.GetWaitingFlights">
+            <summary>
+            Get all <see cref="T:Common.Models.Flight">Flights</see> which did not yet start the land/takeoff procedure.
+            </summary>
+            <returns>A <see cref="T:System.Collections.Generic.IEnumerable`1"/> with waiting flights.</returns>
+        </member>
+        <member name="M:Common.Interfaces.IAirportService.GetAirportData(System.String)">
+            <summary>
+            Get the relavent data of a <see cref="T:Common.Models.ControlTower"/> with the a given name.
+            </summary>
+            <param name="name">The name of the control tower</param>
+            <returns>The data of the control tower.</returns>
+        </member>
+        <member name="M:Common.Interfaces.IAirportService.GetStationHistory(System.Guid,System.Int32,System.Int32)">
+            <summary>
+            Get the <see cref="T:Common.Models.FlightHistory"/> of the a <see cref="T:Common.Models.Station"/> with a given id.
+            </summary>
+            <param name="stationId">Id of requested station.</param>
+            <param name="startFrom">Row of history to start from. (pagination)</param>
+            <returns>The flight history of the station.</returns>
+        </member>
+        <member name="T:Common.Interfaces.IControlTowerService">
+            <summary>
+            Logical wrapper for control towers.
+            </summary>
+        </member>
+        <member name="P:Common.Interfaces.IControlTowerService.ControlTower">
+            <summary>
+            The control tower the service is handeling.
+            </summary>
+        </member>
+        <member name="T:Common.Interfaces.IFlightChanger">
+            <summary>
+            Element that can modify flights.
+            </summary>
+        </member>
+        <member name="E:Common.Interfaces.IFlightChanger.FlightChanged">
+            <summary>
+            Flight was changed.
+            </summary>
+        </member>
+        <member name="T:Common.Interfaces.IFlightService">
+            <summary>
+            Logical wrapper for Flights.
+            </summary>
+        </member>
+        <member name="P:Common.Interfaces.IFlightService.Flight">
+            <summary>
+            The flight the service is handeling.
+            </summary>
+        </member>
+        <member name="E:Common.Interfaces.IFlightService.ReadyToContinue">
+            <summary>
+            Raised when flight is done waiting in a station.
+            </summary>
+        </member>
+        <member name="M:Common.Interfaces.IFlightService.StartWaitingInStationAsync(System.Int32)">
+            <summary>
+            Start waiting with the flight in given station.
+            </summary>
+            <param name="delayInMS">Amount of delay in MS of the given station.</param>
+            <returns>An awaitable task untill waiting has complete.</returns>
+        </member>
+        <member name="T:Common.Interfaces.IFutureFlightNotifier">
+            <summary>
+            Can notifiy regarding new future flights added.
+            </summary>
+        </member>
+        <member name="M:Common.Interfaces.IFutureFlightNotifier.NotifyFutureFlightAdded(Common.Models.Flight)">
+            <summary>
+            Notify there was a new flight added which is a future flight.
+            </summary>
+            <param name="flight">The added flight.</param>
+        </member>
+        <member name="T:Common.Interfaces.IGetFlights">
+            <summary>
+            Element that is capable of getting a flight.
+            </summary>
+        </member>
+        <member name="M:Common.Interfaces.IGetFlights.FlightArrived(Common.Interfaces.IFlightService)">
+            <summary>
+            Accept an incoming flight.
+            </summary>
+            <param name="flight">Flight to accept.</param>
+            <returns>True if flight was accepted, false if flight was declined.</returns>
+        </member>
+        <member name="T:Common.Interfaces.IHasNextStations">
+            <summary>
+            An object which might be connected to continuation stations.
+            </summary>
+        </member>
+        <member name="P:Common.Interfaces.IHasNextStations.NextStations">
+            <summary>
+            The relations to next stations, unsorted.
+            </summary>
+        </member>
+        <member name="P:Common.Interfaces.IHasNextStations.TakeoffStations">
+            <summary>
+            A enumerable of the next flight handlers for takeoff.
+            </summary>
+        </member>
+        <member name="P:Common.Interfaces.IHasNextStations.LandingStations">
+            <summary>
+            A enumerable of the next flight handlers for landing.
+            </summary>
+        </member>
+        <member name="M:Common.Interfaces.IHasNextStations.ConnectToNextStations(System.Collections.Generic.IEnumerable{Common.Interfaces.IStationFlightHandler},System.Collections.Generic.IEnumerable{Common.Interfaces.IStationFlightHandler})">
+            <summary>
+            Set the next station's flight handlers.
+            </summary>
+            <param name="landingStations">The handlers for the next landing stations</param>
+            <param name="takeoffStations">The handlers for the next takeoff stations</param>
+        </member>
+        <member name="T:Common.Interfaces.INotifier">
+            <summary>
+            service that notifies When changes happen.
+            </summary>
+        </member>
+        <member name="M:Common.Interfaces.INotifier.NotifyFlightChanges(Common.Events.FlightEventArgs)">
+            <summary>
+            Notify that a <see cref="T:Common.Models.Flight">flight</see> has changed (moved between stations).
+            </summary>
+            <param name="flightEvent">The Flight event arguments.</param>
+        </member>
+        <member name="T:Common.Interfaces.IRandomDataGeneratorService">
+            <summary>
+            Generator of random data.
+            </summary>
+        </member>
+        <member name="M:Common.Interfaces.IRandomDataGeneratorService.CreateRandomNumber(System.Int32,System.Int32)">
+            <summary>
+            Create a random number.
+            </summary>
+            <param name="min">minimal limit for created number.</param>
+            <param name="min">maximal limit for created number.</param>
+            <returns>A generated number between given boundaries.</returns>
+        </member>
+        <member name="T:Common.Interfaces.IRelatedToStation">
+            <summary>
+            Element which has a relation to a station.
+            </summary>
+        </member>
+        <member name="P:Common.Interfaces.IRelatedToStation.StationToId">
+            <summary>
+            The Guid of the station this element is related to.
+            </summary>
+        </member>
+        <member name="P:Common.Interfaces.IRelatedToStation.Direction">
+            <summary>
+            Direction of relation with station.
+            </summary>
+        </member>
+        <member name="T:Common.Interfaces.IStationFlightHandler">
+            <summary>
+            Element that can handle Incoming flights.
+            </summary>
+        </member>
+        <member name="P:Common.Interfaces.IStationFlightHandler.Station">
+            <summary>
+            The station the service is handeling.
+            </summary>
+        </member>
+        <member name="P:Common.Interfaces.IStationFlightHandler.IsHandlerAvailable">
+            <summary>
+            Is handler is available currently.
+            </summary>
+        </member>
+        <member name="T:Common.Interfaces.IStationService">
+            <summary>
+            Logical wrapper for Stations.
+            </summary>
+        </member>
+        <member name="P:Common.Interfaces.IStationService.CurrentFlight">
+            <summary>
+            The logical flight currently in station.
+            </summary>
+        </member>
+        <member name="P:Common.Interfaces.IStationService.WaitingTimeMS">
+            <summary>
+            The waiting time required for this station.
+            </summary>
+        </member>
+        <member name="P:Common.Interfaces.IStationTreeBuilderService.Item(System.String)">
+            <summary>
+            Indexer to return the controlTowerService by its name.
+            </summary>
+            <param name="name">Name of control tower to get.</param>
+            <returns>The controlTowerService with a control tower with this name, or null - if no tower found.</returns>
+        </member>
+        <member name="M:Common.Interfaces.IStationTreeBuilderService.BuildStationsTree(System.Collections.Generic.IEnumerable{Common.Models.ControlTower},System.Collections.Generic.IEnumerable{Common.Models.Station})">
+            <summary>
+            Build all Station services, and connect them as defined in the station relations.
+            </summary>
+            <param name="controlTowers">All of the control towers to build station tree of.</param>
+            <param name="stations">Stations related to control towers.</param>
+        </member>
+        <member name="T:Common.Models.Airplane">
+            <summary>
+            An airplane for the DB
+            </summary>
+        </member>
+        <member name="P:Common.Models.Airplane.Id">
+            <summary>
+            ID of the airplane.
+            </summary>
+        </member>
+        <member name="P:Common.Models.Airplane.AirLine">
+            <summary>
+            Name of airline which owns the airplane.
+            </summary>
+        </member>
+        <member name="P:Common.Models.Airplane.Flights">
+            <summary>
+            All the <see cref="T:Common.Models.Flight">flights</see> this plane has been a part of.
+            </summary>
+        </member>
+        <member name="T:Common.Models.ControlTower">
+            <summary>
+            A control tower from DB
+            </summary>
+        </member>
+        <member name="P:Common.Models.ControlTower.Id">
+            <summary>
+            ID of the Control Tower.
+            </summary>
+        </member>
+        <member name="P:Common.Models.ControlTower.Name">
+            <summary>
+            Name of the Control Tower.
+            </summary>
+            <example>TLV</example>
+            <example>JFK</example>
+        </member>
+        <member name="P:Common.Models.ControlTower.FirstStations">
+            <summary>
+            The stations connected directly to the control tower.
+            <seealso cref="T:Common.Models.StationControlTowerRelation"/>
+            </summary>
+        </member>
+        <member name="P:Common.Models.ControlTower.FlightsWaiting">
+            <summary>
+            The flights waiting at the Control tower.
+            <seealso cref="T:Common.Models.Flight"/>
+            </summary>
+        </member>
+        <member name="P:Common.Models.ControlTower.Stations">
+            <summary>
+            The <see cref="T:Common.Models.Station">Stations</see> of the Control tower.
+            </summary>
+        </member>
+        <member name="T:Common.Models.Flight">
+            <summary>
+            A flight from DB
+            </summary>
+        </member>
+        <member name="P:Common.Models.Flight.Id">
+            <summary>
+            The ID of the flight.
+            </summary>
+        </member>
+        <member name="P:Common.Models.Flight.To">
+            <summary>
+            Name of <see cref="T:Common.Models.ControlTower">control tower</see> flight is directed to.
+            </summary>
+        </member>
+        <member name="P:Common.Models.Flight.From">
+            <summary>
+            Name of <see cref="T:Common.Models.ControlTower">control tower</see> the flight departed from.
+            </summary>
+        </member>
+        <member name="P:Common.Models.Flight.PlannedTime">
+            <summary>
+            The planned takeoff/landing time at requested <see cref="T:Common.Models.ControlTower">Control Tower</see>.
+            </summary>
+        </member>
+        <member name="P:Common.Models.Flight.Direction">
+            <summary>
+            The <see cref="T:Common.Enums.FlightDirection">direction</see> this flight is moving to in relation to the given <see cref="T:Common.Models.ControlTower">Control Tower</see>
+            </summary>
+        </member>
+        <member name="P:Common.Models.Flight.AirplaneId">
+            <summary>
+            Id of the <see cref="T:Common.Models.Airplane">Airplane</see> taking this flight.
+            </summary>
+        </member>
+        <member name="P:Common.Models.Flight.Airplane">
+            <summary>
+            The <see cref="T:Common.Models.Airplane">Airplane</see> taking this flight.
+            </summary>
+        </member>
+        <member name="P:Common.Models.Flight.ControlTowerId">
+            <summary>
+            Id of the <see cref="T:Common.Models.ControlTower">Control Tower</see> this flight is related to.
+            </summary>
+        </member>
+        <member name="P:Common.Models.Flight.ControlTower">
+            <summary>
+            The <see cref="T:Common.Models.ControlTower">Control Tower</see> this flight is related to.
+            </summary>
+        </member>
+        <member name="P:Common.Models.Flight.StationId">
+            <summary>
+            Id of the <see cref="T:Common.Models.Station">Station</see> this flight is currently at.
+            </summary>
+        </member>
+        <member name="P:Common.Models.Flight.Station">
+            <summary>
+            The <see cref="T:Common.Models.Station">Station</see> this flight is currently at.
+            </summary>
+        </member>
+        <member name="P:Common.Models.Flight.History">
+            <summary>
+            The history of this flight regarding the stations.
+            </summary>
+        </member>
+        <member name="T:Common.Models.FlightHistory">
+            <summary>
+            The history of the <see cref="T:Common.Models.Flight">Flight</see> and the <see cref="T:Common.Models.Station">Station</see>
+            </summary>
+        </member>
+        <member name="P:Common.Models.FlightHistory.Id">
+            <summary>
+            The ID of this History record.
+            </summary>
+        </member>
+        <member name="P:Common.Models.FlightHistory.EnterStationTime">
+            <summary>
+            The time the <see cref="T:Common.Models.Flight">flight</see> entered the <see cref="T:Common.Models.Station">station</see>.
+            </summary>
+        </member>
+        <member name="P:Common.Models.FlightHistory.LeaveStationTime">
+            <summary>
+            The time the <see cref="T:Common.Models.Flight">flight</see> left the <see cref="T:Common.Models.Station">station</see>.
+            </summary>
+        </member>
+        <member name="P:Common.Models.FlightHistory.FlightId">
+            <summary>
+            The ID of the <see cref="P:Common.Models.FlightHistory.Flight">Flight</see> this is the history of.
+            </summary>
+        </member>
+        <member name="P:Common.Models.FlightHistory.Flight">
+            <summary>
+            The <see cref="P:Common.Models.FlightHistory.Flight">Flight</see> this is the history of.
+            </summary>
+        </member>
+        <member name="P:Common.Models.FlightHistory.StationId">
+            <summary>
+            The ID of the <see cref="P:Common.Models.FlightHistory.Station">Station</see> this is the history of.
+            </summary>
+        </member>
+        <member name="P:Common.Models.FlightHistory.Station">
+            <summary>
+            The <see cref="P:Common.Models.FlightHistory.Station">Station</see> this is the history of.
+            </summary>
+        </member>
+        <member name="T:Common.Models.Station">
+            <summary>
+            A station from DB
+            </summary>
+        </member>
+        <member name="P:Common.Models.Station.Id">
+            <summary>
+            The Id of the station.
+            </summary>
+        </member>
+        <member name="P:Common.Models.Station.Name">
+            <summary>
+            The name of the station.
+            </summary>
+        </member>
+        <member name="P:Common.Models.Station.CurrentFlightId">
+            <summary>
+            The Id of the currnet <see cref="T:Common.Models.Flight">Flight</see> in the DB.
+            </summary>
+        </member>
+        <member name="P:Common.Models.Station.CurrentFlight">
+            <summary>
+            The currnet <see cref="T:Common.Models.Flight">Flight</see> in the DB.
+            </summary>
+        </member>
+        <member name="P:Common.Models.Station.ControlTowerId">
+            <summary>
+            The Id of the <see cref="T:Common.Models.ControlTower">Control Tower</see> this station belongs to.
+            </summary>
+        </member>
+        <member name="P:Common.Models.Station.ControlTower">
+            <summary>
+            The <see cref="T:Common.Models.ControlTower">Control Tower</see> this station belongs to.
+            </summary>
+        </member>
+        <member name="P:Common.Models.Station.ControlTowerRelation">
+            <summary>
+            The relation with a control tower.
+            </summary>
+        </member>
+        <member name="P:Common.Models.Station.ParentStations">
+            <summary>
+            The stations which are parents for this station.
+            </summary>
+        </member>
+        <member name="P:Common.Models.Station.ChildrenStations">
+            <summary>
+            The stations which are children for this station.
+            </summary>
+        </member>
+        <member name="P:Common.Models.Station.History">
+            <summary>
+            The <see cref="T:Common.Models.FlightHistory">History</see> of <see cref="T:Common.Models.Flight">Flights</see> which have been throught this station.
+            </summary>
+        </member>
+        <member name="T:Common.Models.StationControlTowerRelation">
+            <summary>
+            The relationship between a <see cref="T:Common.Models.Station">station</see> and a <see cref="T:Common.Models.ControlTower">control tower</see>.
+            </summary>
+        </member>
+        <member name="P:Common.Models.StationControlTowerRelation.Direction">
+            <summary>
+            The <see cref="T:Common.Enums.FlightDirection">direction</see> the flights can arrive to this station.
+            </summary>
+        </member>
+        <member name="P:Common.Models.StationControlTowerRelation.StationToId">
+            <summary>
+            The ID of the <see cref="T:Common.Models.Station">Station</see> which is related to the <see cref="T:Common.Models.ControlTower">control tower</see>.
+            </summary>
+        </member>
+        <member name="P:Common.Models.StationControlTowerRelation.Station">
+            <summary>
+            The <see cref="T:Common.Models.Station">Station</see> which is related to the <see cref="T:Common.Models.ControlTower">control tower</see>.
+            </summary>
+        </member>
+        <member name="P:Common.Models.StationControlTowerRelation.ControlTowerId">
+            <summary>
+            The ID of the <see cref="T:Common.Models.ControlTower">control tower</see> related to the <see cref="P:Common.Models.StationControlTowerRelation.Station">Station</see>
+            </summary>
+        </member>
+        <member name="P:Common.Models.StationControlTowerRelation.ControlTower">
+            <summary>
+            The ID of the <see cref="T:Common.Models.ControlTower">control tower</see> related to the <see cref="P:Common.Models.StationControlTowerRelation.Station">Station</see>
+            </summary>
+        </member>
+        <member name="T:Common.Models.StationRelation">
+            <summary>
+            The relationship between two <see cref="T:Common.Models.Station">stations</see>.
+            </summary>
+        </member>
+        <member name="P:Common.Models.StationRelation.StationFromId">
+            <summary>
+            The ID of the <see cref="T:Common.Models.Station">Station</see> which is the parent of the relation.
+            </summary>
+        </member>
+        <member name="P:Common.Models.StationRelation.StationToId">
+            <summary>
+            The ID of the <see cref="T:Common.Models.Station">Station</see> which is the child of the relation.
+            </summary>
+        </member>
+        <member name="P:Common.Models.StationRelation.Direction">
+            <summary>
+            The <see cref="T:Common.Enums.FlightDirection">direction</see> of the connection between the two <see cref="T:Common.Models.Station">Stations</see>.
+            </summary>
+        </member>
+        <member name="P:Common.Models.StationRelation.StationFrom">
+            <summary>
+            The <see cref="T:Common.Models.Station">Station</see> which is the parent of the relation.
+            </summary>
+        </member>
+        <member name="P:Common.Models.StationRelation.StationTo">
+            <summary>
+            The <see cref="T:Common.Models.Station">Station</see> which is the child of the relation.
+            </summary>
+        </member>
+        <member name="T:Common.Repositories.IRepository`1">
+            <summary>
+            Simple extendable generic repository.
+            </summary>
+            <typeparam name="TEntity">Type of Entity to handle</typeparam>
+        </member>
+        <member name="M:Common.Repositories.IRepository`1.GetAll">
+            <summary>
+            Get all TEntities from DbContext.
+            </summary>
+            <returns>An <see cref="T:System.Linq.IQueryable`1"/> representing the DbSet of the <typeparamref name="TEntity"/> type.</returns>
+        </member>
+        <member name="M:Common.Repositories.IRepository`1.AddAsync(`0)">
+            <summary>
+            Add a new entity to the DB.
+            </summary>
+            <param name="entity">Entity that should be added.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task`1"/> representing the addition to the DB.</returns>
+        </member>
+        <member name="M:Common.Repositories.IRepository`1.UpdateAsync(`0)">
+            <summary>
+            Update a item in the DB.
+            </summary>
+            <param name="entity">Entity that should be updated.</param>
+            <returns>A <see cref="T:System.Threading.Tasks.Task`1"/> representing the update in the DB.</returns>
+        </member>
+    </members>
+</doc>

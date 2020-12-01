@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using BL.Services;
 using Common.Constants;
@@ -67,9 +68,13 @@ namespace Server
                     Version = "v1",
                     Description = "The API that handles the 1019 final project"
                 });
-                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                c.IncludeXmlComments(xmlPath, true);
+                var currentAssembly = Assembly.GetExecutingAssembly();
+                var xmlDocs = currentAssembly.GetReferencedAssemblies()
+                                             .Union(new AssemblyName[] { currentAssembly.GetName() })
+                                             .Select(a => Path.Combine(Path.GetDirectoryName(currentAssembly.Location), $"{a.Name}.xml"))
+                                             .Where(f => File.Exists(f))
+                                             .ToArray();
+                Array.ForEach(xmlDocs, doc => c.IncludeXmlComments(doc));
             });
         }
 
