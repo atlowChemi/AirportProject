@@ -8,16 +8,39 @@ using Common.Constants;
 
 namespace BL.Services
 {
+    /// <summary>
+    /// Service that builds logical services for <see cref="ControlTower">Control Towers</see> and <see cref="Station">Stations</see> and connects them by the <see cref="StationRelation"/>.
+    /// </summary>
     public class StationTreeBuilderService : IStationTreeBuilderService
     {
+        /// <summary>
+        /// Enable locking multi-threads, to avoid Malaysian issues.
+        /// </summary>
         private readonly object builderLock = new object();
+        /// <summary>
+        /// The random data generator.
+        /// </summary>
         private readonly IRandomDataGeneratorService randomDataGeneratorService;
+        /// <summary>
+        /// The airport event service to add all stations to.
+        /// </summary>
         private readonly IAirportEventsService airportEventsService;
+        /// <summary>
+        /// All station services.
+        /// </summary>
         private ICollection<IStationService> stationServices;
+        /// <summary>
+        /// All control tower services.
+        /// </summary>
         private ICollection<IControlTowerService> controlTowerServices;
 
         public IControlTowerService this[string name] => controlTowerServices?.FirstOrDefault(cst => cst.ControlTower.Name == name);
 
+        /// <summary>
+        /// Generate a new instance of the station tree builder service.
+        /// </summary>
+        /// <param name="randomDataGeneratorService">The random data genrator to use.</param>
+        /// <param name="airportEventsService">The airport event service to use.</param>
         public StationTreeBuilderService(IRandomDataGeneratorService randomDataGeneratorService, IAirportEventsService airportEventsService)
         {
             this.randomDataGeneratorService = randomDataGeneratorService;
