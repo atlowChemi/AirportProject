@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Common.Data
 {
@@ -26,7 +28,7 @@ namespace Common.Data
         /// <param name="items">An IEnumerable of items.</param>
         public MyQueue(IEnumerable<T> items)
         {
-            _items = new LinkedList<T>(items);
+            _items = new LinkedList<T>(items ?? Enumerable.Empty<T>());
         }
 
         /// <summary>
@@ -56,6 +58,7 @@ namespace Common.Data
         /// <summary>
         /// Remove item from Queue.
         /// </summary>
+        /// <exception cref="InvalidOperationException">The Queue is empty.</exception>
         public void Dequeue()
         {
             if (_items.Count <= 0) return;
