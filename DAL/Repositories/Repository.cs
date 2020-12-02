@@ -54,7 +54,7 @@ namespace DAL.Repositories
             }
             catch (DbUpdateException dbEx)
             {
-                throw new Exception($"Issue while saving to DB: {dbEx.Message}");
+                throw new DbUpdateException($"Issue while saving to DB: {dbEx.Message}");
             }
             catch (Exception ex)
             {
@@ -77,7 +77,7 @@ namespace DAL.Repositories
 
             catch (DbUpdateException dbEx)
             {
-                throw new Exception($"Issue while saving to DB: {dbEx.Message}");
+                throw new DbUpdateException($"Issue while saving to DB: {dbEx.Message}");
             }
             catch (Exception ex)
             {
