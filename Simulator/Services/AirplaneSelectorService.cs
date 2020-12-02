@@ -7,17 +7,33 @@ using System.Threading.Tasks;
 
 namespace Simulator.Services
 {
+    /// <summary>
+    /// Service that returns a random airplane from a set of airplanes.
+    /// </summary>
     public class AirplaneSelectorService : IAirplaneSelectorService
     {
+        /// <summary>
+        /// The airplanes available for flight usage.
+        /// </summary>
         private ICollection<Airplane> airplanes;
-        private readonly IHubConnectionService hubConnectionService;
+        /// <summary>
+        /// Rhe web client service.
+        /// </summary>
         private readonly IWebClientService webClientService;
+        /// <summary>
+        /// The random data generator.
+        /// </summary>
         private readonly IRandomDataService randomDataService;
 
+        /// <summary>
+        /// Generate a new instance of the airplane selector service.
+        /// </summary>
+        /// <param name="webClientService">The Web API service.</param>
+        /// <param name="hubConnectionService">The hub connection</param>
+        /// <param name="randomDataService">The random data generator.</param>
         public AirplaneSelectorService(IWebClientService webClientService, IHubConnectionService hubConnectionService, IRandomDataService randomDataService)
         {
             this.webClientService = webClientService;
-            this.hubConnectionService = hubConnectionService;
             this.randomDataService = randomDataService;
             Task.WaitAll(GetAirplanesFromAPI());
             hubConnectionService.Listen<ICollection<Airplane>>("AirplaneUpdates", a => airplanes = a);
@@ -31,6 +47,10 @@ namespace Simulator.Services
             return airplanes.ElementAtOrDefault(indexInCollectionBounds);
         }
 
+        /// <summary>
+        /// Request the airplanes from the UI.
+        /// </summary>
+        /// <returns>A task representing all the time I was eating better.</returns>
         private async Task GetAirplanesFromAPI()
         {
             airplanes = await webClientService.GetAirplanes() ?? Array.Empty<Airplane>();
