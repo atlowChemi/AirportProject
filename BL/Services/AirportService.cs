@@ -10,18 +10,55 @@ using System.Threading.Tasks;
 
 namespace BL.Services
 {
+    /// <summary>
+    /// Service to handle the whole orchestra of the airport.
+    /// </summary>
     public class AirportService : IAirportService
     {
+        /// <summary>
+        /// The repository to handle the airplanes.
+        /// </summary>
         private readonly IRepository<Airplane> airplaneRepository;
+        /// <summary>
+        /// The repository to handle the stations.
+        /// </summary>
         private readonly IRepository<Station> stationRepository;
+        /// <summary>
+        /// The repository to handle the station relation.
+        /// </summary>
         private readonly IRepository<StationRelation> stationRelationRepository;
+        /// <summary>
+        /// The repository to handle the control towers.
+        /// </summary>
         private readonly IRepository<ControlTower> controlTowerRepository;
+        /// <summary>
+        /// The repository to handle the flights.
+        /// </summary>
         private readonly IRepository<Flight> flightRepository;
+        /// <summary>
+        /// The Station tree builder.
+        /// </summary>
         private readonly IStationTreeBuilderService stationTreeBuilder;
+        /// <summary>
+        /// The future flight notifier.
+        /// </summary>
         private readonly IFutureFlightNotifier notifier;
 
+        /// <summary>
+        /// Flag and mark if this run is the initial creation of the services.
+        /// </summary>
         private static bool InitialCreate = true;
 
+        /// <summary>
+        /// Generate a new instance of the Airport service.
+        /// </summary>
+        /// <param name="airplaneRepository">The reposirty to handle the airplanes.</param>
+        /// <param name="stationRepository">The reposirty to handle the stations.</param>
+        /// <param name="stationRelationRepository">The reposirty to handle the station relations.</param>
+        /// <param name="controlTowerRepository">The reposirty to handle the control towers.</param>
+        /// <param name="flightRepository">The reposirty to handle the flights.</param>
+        /// <param name="stationTreeBuilder">The station tree builder</param>
+        /// <param name="notifier">The notifier to update regarding future flights.</param>
         public AirportService(IRepository<Airplane> airplaneRepository,
             IRepository<Station> stationRepository,
             IRepository<StationRelation> stationRelationRepository,
@@ -95,6 +132,9 @@ namespace BL.Services
             return new PaginatedDTO<FlightHistoryDTO> { Elements = flightHistories, Total = totalHistory };
         }
 
+        /// <summary>
+        /// Initialize the flights waiting to enter control towers.
+        /// </summary>
         private void InitializeWaitingFlights()
         {
             InitialCreate = false;
@@ -104,7 +144,11 @@ namespace BL.Services
                 SendFlightToControlTowerAtTime(flight);
             }
         }
-
+        /// <summary>
+        /// Hold the flights waiting untill it's there time to shine.
+        /// </summary>
+        /// <param name="flight">Flight to delay.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Flight is aimed to a non existant control tower.</exception>
         private async void SendFlightToControlTowerAtTime(Flight flight)
         {
             string controlTowerName = flight.Direction == FlightDirection.Landing ? flight.To : flight.From;
@@ -119,7 +163,9 @@ namespace BL.Services
             }
             controlTowerService.FlightArrived(new FlightService(await dbFlightTask));
         }
-
+        /// <summary>
+        /// Build the station tree of all control towers and stations.
+        /// </summary>
         private void CreateStationTrees()
         {
             IEnumerable<ControlTower> controlTowers = controlTowerRepository.GetAll();

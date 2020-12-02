@@ -10,10 +10,20 @@ using System.Threading.Tasks;
 
 namespace BL.Services
 {
+    /// <summary>
+    /// Service that can save changes to airport DB.
+    /// </summary>
     public class AirportDBService : IAirportDBService
     {
+        /// <summary>
+        /// A scope factory to help this service (Singelton) to reach out to the Db (Scoped).
+        /// </summary>
         private readonly IServiceScopeFactory serviceScopeFactory;
 
+        /// <summary>
+        /// Generate a new instance of the Airport DB service.
+        /// </summary>
+        /// <param name="serviceScopeFactory">The scoping factory.</param>
         public AirportDBService(IServiceScopeFactory serviceScopeFactory)
         {
             this.serviceScopeFactory = serviceScopeFactory;
@@ -44,6 +54,11 @@ namespace BL.Services
             await repo.UpdateAsync(flight);
         }
 
+        /// <summary>
+        /// Open a new flight history row in DB when flight moved in to new station.
+        /// </summary>
+        /// <param name="flight">Flight that has moved.</param>
+        /// <param name="to">Station the flight moved to.</param>
         private static void OpenFlightHistoryRow(Flight flight, Station to)
         {
             FlightHistory flightHistory = new FlightHistory { StationId = to.Id, EnterStationTime = DateTime.Now };
@@ -53,13 +68,22 @@ namespace BL.Services
             }
             flight.History.Add(flightHistory);
         }
-
+        /// <summary>
+        /// Close an existing flight history row in DB when flight moved out of a station.
+        /// </summary>
+        /// <param name="flight">Flight that has moved.</param>
+        /// <param name="from">Station the flight moved from.</param>
         private static void CloseFlighHistoryRow(Flight flight, Station from)
         {
             FlightHistory flightHistory = flight.History.FirstOrDefault(fh => fh.StationId == from.Id && !fh.LeaveStationTime.HasValue);
             if (flightHistory is not null) flightHistory.LeaveStationTime = DateTime.Now;
         }
-
+        /// <summary>
+        /// Close old row, and open a new one, since flight ledt a station, and entered a new one.
+        /// </summary>
+        /// <param name="flight">Flight that has moved.</param>
+        /// <param name="from">Station the flight moved from.</param>
+        /// <param name="to">Station the flight moved to.</param>
         private static void CloseFlighHistoryRowAndOpenNewOne(Flight flight, Station from, Station to)
         {
             CloseFlighHistoryRow(flight, from);
