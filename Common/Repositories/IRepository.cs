@@ -29,7 +29,7 @@ namespace Common.Repositories
         /// </summary>
         /// <param name="entity">Entity that should be updated.</param>
         /// <returns>A <see cref="Task{TEntity}"/> representing the update in the DB.</returns>
-        /// <exception cref="DbUpdateException">Unhadled DB exception</exception>
+        /// <exception cref="Microsoft.EntityFrameworkCore.DbUpdateException">Unhadled DB exception</exception>
         /// <exception cref="Exception">An unknown issue happend.</exception>
         Task<TEntity> UpdateAsync(TEntity entity);
     }
