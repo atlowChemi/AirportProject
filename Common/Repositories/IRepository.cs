@@ -16,6 +16,7 @@ namespace Common.Repositories
         /// <returns>An <see cref="IQueryable{TEntity}"/> representing the DbSet of the <typeparamref name="TEntity"/> type.</returns>
         /// <exception cref="Exception">An unknown issue happend.</exception>
         IQueryable<TEntity> GetAll();
+#pragma warning disable CS1574 // XML comment has cref attribute that could not be resolved
         /// <summary>
         /// Add a new entity to the DB.
         /// </summary>
@@ -24,13 +25,15 @@ namespace Common.Repositories
         /// <exception cref="DbUpdateException">Unhadled DB exception</exception>
         /// <exception cref="Exception">An unknown issue happend.</exception>
         Task<TEntity> AddAsync(TEntity entity);
+
         /// <summary>
         /// Update a item in the DB.
         /// </summary>
         /// <param name="entity">Entity that should be updated.</param>
         /// <returns>A <see cref="Task{TEntity}"/> representing the update in the DB.</returns>
-        /// <exception cref="Microsoft.EntityFrameworkCore.DbUpdateException">Unhadled DB exception</exception>
+        /// <exception cref="DbUpdateException">Unhadled DB exception</exception>
         /// <exception cref="Exception">An unknown issue happend.</exception>
         Task<TEntity> UpdateAsync(TEntity entity);
+#pragma warning restore CS1574 // XML comment has cref attribute that could not be resolved
     }
 }
