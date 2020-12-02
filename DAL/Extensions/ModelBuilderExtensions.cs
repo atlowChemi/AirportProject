@@ -6,6 +6,10 @@ namespace DAL.Extensions
 {
     public static class ModelBuilderExtensions
     {
+        /// <summary>
+        /// Defince the control tower model, and set it's name unique.
+        /// </summary>
+        /// <param name="modelBuilder">The builder being used to construct the model for this context.</param>
         public static ModelBuilder SetControlTowerNameToBeUnique(this ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ControlTower>()
@@ -14,6 +18,10 @@ namespace DAL.Extensions
             return modelBuilder;
         }
 
+        /// <summary>
+        /// Define the relation of station and flight.
+        /// </summary>
+        /// <param name="modelBuilder">The builder being used to construct the model for this context.</param>
         public static ModelBuilder DefineStationFlightRelation(this ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Station>()
@@ -23,6 +31,10 @@ namespace DAL.Extensions
             return modelBuilder;
         }
 
+        /// <summary>
+        /// Define the control tower ans station relations.
+        /// </summary>
+        /// <param name="modelBuilder">The builder being used to construct the model for this context.</param>
         public static ModelBuilder DefineStationToControlTowerRelation(this ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<StationControlTowerRelation>(entity =>
@@ -40,6 +52,10 @@ namespace DAL.Extensions
             return modelBuilder;
         }
 
+        /// <summary>
+        /// Define the self relation of the stations.
+        /// </summary>
+        /// <param name="modelBuilder">The builder being used to construct the model for this context.</param>
         public static ModelBuilder DefineStationToStationRelation(this ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<StationRelation>(entity =>
@@ -57,6 +73,11 @@ namespace DAL.Extensions
             return modelBuilder;
         }
 
+        /// <summary>
+        /// Seed to the DB how the intialliztation.
+        /// </summary>
+        /// <param name="modelBuilder">The builder being used to construct the model for this context.</param>
+        /// <returns></returns>
         public static ModelBuilder InjectPrePopulatedData(this ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Airplane>().HasData(PrePopulateData.Airplanes);
