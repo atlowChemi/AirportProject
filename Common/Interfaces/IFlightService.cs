@@ -22,6 +22,7 @@ namespace Common.Interfaces
         /// </summary>
         /// <param name="delayInMS">Amount of delay in MS of the given station.</param>
         /// <returns>An awaitable task untill waiting has complete.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">The delay is negative.</exception>
         Task StartWaitingInStationAsync(int delayInMS);
     }
 }

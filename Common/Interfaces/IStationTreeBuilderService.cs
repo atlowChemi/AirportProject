@@ -1,4 +1,5 @@
 ﻿using Common.Models;
+using System;
 using System.Collections.Generic;
 
 namespace Common.Interfaces
@@ -20,6 +21,8 @@ namespace Common.Interfaces
         /// </summary>
         /// <param name="controlTowers">All of the control towers to build station tree of.</param>
         /// <param name="stations">Stations related to control towers.</param>
+        /// <exception cref="ArgumentNullException">Control tower are null</exception>
+        /// <exception cref="ArgumentNullException">Stations are null</exception>
         public void BuildStationsTree(IEnumerable<ControlTower> controlTowers, IEnumerable<Station> stations);
     }
 }
