@@ -20,19 +20,19 @@ namespace Common.Models
         /// </summary>
         public DateTime? LeaveStationTime { get; set; }
         /// <summary>
-        /// The ID of the <see cref="Flight">Flight</see> this is the history of.
+        /// The ID of the <see cref="Models.Flight">Flight</see> this is the history of.
         /// </summary>
         public virtual Guid FlightId { get; set; }
         /// <summary>
-        /// The <see cref="Flight">Flight</see> this is the history of.
+        /// The <see cref="Models.Flight">Flight</see> this is the history of.
         /// </summary>
         public virtual Flight Flight { get; set; }
         /// <summary>
-        /// The ID of the <see cref="Station">Station</see> this is the history of.
+        /// The ID of the <see cref="Models.Station">Station</see> this is the history of.
         /// </summary>
         public virtual Guid StationId { get; set; }
         /// <summary>
-        /// The <see cref="Station">Station</see> this is the history of.
+        /// The <see cref="Models.Station">Station</see> this is the history of.
         /// </summary>
         public virtual Station Station { get; set; }
     }

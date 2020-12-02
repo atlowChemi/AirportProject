@@ -9,20 +9,36 @@ using Common.Data;
 
 namespace BL.Services
 {
+    /// <summary>
+    /// Logical wrapper of control tower.
+    /// </summary>
     public class ControlTowerService : IControlTowerService
     {
+        /// <summary>
+        /// Enable locking multi-threads, to avoid Malaysian issues.
+        /// </summary>
         private readonly object lockObj = new();
 
+        public event EventHandler<FlightEventArgs> FlightChanged;
         public ControlTower ControlTower { get; init; }
 
         public IEnumerable<IRelatedToStation> NextStations => ControlTower?.FirstStations;
         public IEnumerable<IStationFlightHandler> LandingStations { get; private set; }
         public IEnumerable<IStationFlightHandler> TakeoffStations { get; private set; }
+        /// <summary>
+        /// A Queue to handle flights waiting to land.
+        /// </summary>
         private MyQueue<Flight> LandingFlights { get; set; }
+        /// <summary>
+        /// A Queue to handle flights waiting to takeoff.
+        /// </summary>
         private MyQueue<Flight> TakeoffFlights { get; set; }
-        public event EventHandler<FlightEventArgs> FlightChanged;
 
-
+        /// <summary>
+        /// Generate a new instance of the control tower service.
+        /// </summary>
+        /// <param name="controlTower">The control tower this instance should handle.</param>
+        /// <exception cref="ArgumentNullException">The control tower was null.</exception>
         public ControlTowerService(ControlTower controlTower)
         {
             if (controlTower is null) throw new ArgumentNullException(nameof(controlTower));
@@ -60,6 +76,9 @@ namespace BL.Services
             }
         }
 
+        /// <summary>
+        /// Initialize the queues of the flights from the DB.
+        /// </summary>
         private void InitFlightQueues()
         {
             IEnumerable<Flight> waitingFlights = ControlTower?.FlightsWaiting?.Where(f => f.History?.Count <= 0) ?? Enumerable.Empty<Flight>();
@@ -69,7 +88,12 @@ namespace BL.Services
             LandingFlights = new MyQueue<Flight>(landingFlights);
             TakeoffFlights = new MyQueue<Flight>(takeoffFlights);
         }
-
+        /// <summary>
+        /// Add a flight to the waiting list.
+        /// </summary>
+        /// <param name="flight">The flight that shoul be added to the waiting list.</param>
+        /// <param name="fromWaitingList">Wether the flight has already been in waiting list or not.</param>
+        /// <exception cref="ArgumentNullException">Flight sent was null.</exception>
         private void AddFlightToWaitingList(Flight flight, bool fromWaitingList = false)
         {
             if (flight is null) throw new ArgumentNullException(nameof(flight), "A flight cannot arrive to the control tower as null! This is not Malaysia Airlines!");
@@ -78,10 +102,14 @@ namespace BL.Services
             else relevantFlights.Enqueue(flight);
 
         }
-
+        /// <summary>
+        /// Transfer a flight to the next relevant service.
+        /// </summary>
+        /// <param name="flightService">The service that handles the flight during it travel of the airport.</param>
+        /// <param name="isFromWaitingList">Wethear the flight has come from waiting list or not.</param>
+        /// <exception cref="ArgumentNullException">The flight service was null.</exception>
         private void SendFlightToRelvantStation(IFlightService flightService, bool isFromWaitingList = false)
         {
-            // TODO : If the flight has started out from the queue, we might call it again?
             if (flightService is null) throw new ArgumentNullException(nameof(flightService), "A flight cannot arrive to the control tower as null! This is not Malaysia Airlines!");
             IEnumerable<IStationFlightHandler> relevantFirstStations = GetRelevantFlightHandler(flightService.Flight.Direction);
 
@@ -92,7 +120,9 @@ namespace BL.Services
             }
             else AddFlightToWaitingList(flightService.Flight, isFromWaitingList);
         }
-
+        /// <summary>
+        /// Remove listeners from all the stations, in order to replace them.
+        /// </summary>
         private void SignupOutOfAllStationsEvents()
         {
             IEnumerable<IStationFlightHandler> emptyFallback = Enumerable.Empty<IStationFlightHandler>();
@@ -102,7 +132,9 @@ namespace BL.Services
                 item.FlightChanged -= FlightHandler_FlightChanged;
             }
         }
-
+        /// <summary>
+        /// Start listening to all the stations, in order to transfer flights if a station has turned available.
+        /// </summary>
         private void SignupToAllStationsEvents()
         {
             IEnumerable<IStationFlightHandler> emptyFallback = Enumerable.Empty<IStationFlightHandler>();
@@ -112,7 +144,12 @@ namespace BL.Services
                 item.FlightChanged += FlightHandler_FlightChanged;
             }
         }
-
+        /// <summary>
+        /// Event handler for the event of a flight chnaged - and possibly available station.
+        /// </summary>
+        /// <param name="sender">The station which raised the event.</param>
+        /// <param name="e">The arguments of the event.</param>
+        /// <exception cref="ArgumentException">The event was raised by a none IFlightHandler, and therefore is unusable.</exception>
         private void FlightHandler_FlightChanged(object sender, EventArgs e)
         {
             if (sender is not IStationFlightHandler flightHandler)
@@ -137,10 +174,18 @@ namespace BL.Services
                 SendFlightToRelvantStation(flightService, true);
             }
         }
-
+        /// <summary>
+        /// Get the relevant Flight handlers.
+        /// </summary>
+        /// <param name="direction">The direction to get the flight handlers for.</param>
+        /// <returns>A <see cref="IEnumerable{IStationFlightHandler}"/> of the next stations.</returns>
         private IEnumerable<IStationFlightHandler> GetRelevantFlightHandler(FlightDirection direction) =>
             direction == FlightDirection.Landing ? LandingStations : TakeoffStations;
-
+        /// <summary>
+        /// Get the relevant flight Queue.
+        /// </summary>
+        /// <param name="direction">The direction to get the flight of.</param>
+        /// <returns>A <see cref="MyQueue{Flight}"/> of the flights by given direction.</returns>
         private MyQueue<Flight> GetRelevantFlights(FlightDirection direction) =>
             direction == FlightDirection.Landing ? LandingFlights : TakeoffFlights;
     }

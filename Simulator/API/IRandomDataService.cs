@@ -1,4 +1,5 @@
 ﻿using Common.Enums;
+using System;
 using System.Threading.Tasks;
 
 namespace Simulator.API
@@ -14,6 +15,7 @@ namespace Simulator.API
         /// <param name="minSeconds">Minimal waiting time in seconds.</param>
         /// <param name="maxSeconds">Maximal waiting time in seconds.</param>
         /// <returns>A <see cref="Task"/> that represents the asynchronous delay.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Tha max delay is larger the small one.</exception>
         public Task RandomDelay(int minSeconds = 1, int maxSeconds = 5);
         /// <summary>
         /// Select a random flight direction.
@@ -31,6 +33,7 @@ namespace Simulator.API
         /// <param name="min">Minimal range for created number.</param>
         /// <param name="max">Maximal range for created number.</param>
         /// <returns>Generated number.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Maximal number cannot be smaller than the minimal.</exception>
         public int RandomNumber(int min = 0, int max = int.MaxValue);
     }
 }

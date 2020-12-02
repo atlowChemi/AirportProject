@@ -32,6 +32,7 @@ namespace Common.Interfaces
         /// </summary>
         /// <param name="name">The name of the control tower</param>
         /// <returns>The data of the control tower.</returns>
+        /// <exception cref="KeyNotFoundException">No control tower with given name found.</exception>
         AirportDataDTO GetAirportData(string name);
         /// <summary>
         /// Get the <see cref="FlightHistory"/> of the a <see cref="Station"/> with a given id.
@@ -40,6 +41,7 @@ namespace Common.Interfaces
         /// <param name="startFrom">Row of history to start from. (pagination)</param>
         /// <param name="paginationLimit">The limit of items to fetch.</param>
         /// <returns>The flight history of the station.</returns>
+        /// <exception cref="KeyNotFoundException">There is no station with requested Id.</exception>
         PaginatedDTO<FlightHistoryDTO> GetStationHistory(Guid stationId, int startFrom = 0, int paginationLimit = 15);
     }
 }

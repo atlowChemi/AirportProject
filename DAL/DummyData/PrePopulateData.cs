@@ -4,8 +4,14 @@ using System;
 
 namespace DAL.DummyData
 {
+    /// <summary>
+    /// Data to be seeded into the DB.
+    /// </summary>
     public static class PrePopulateData
     {
+        /// <summary>
+        /// Airplanes to seed.
+        /// </summary>
         public static readonly Airplane[] Airplanes =
         {
             new Airplane{ Id = 1, AirLine = "El Al" },
@@ -19,6 +25,9 @@ namespace DAL.DummyData
             new Airplane{ Id = 9, AirLine = "Turkish Airlines" },
         };
 
+        /// <summary>
+        /// An array of Guid used around the seeds.
+        /// </summary>
         private static readonly Guid[][] guids = {
             new Guid[]
             {
@@ -48,6 +57,9 @@ namespace DAL.DummyData
             },
         };
 
+        /// <summary>
+        /// Flights to seed.
+        /// </summary>
         public static readonly Flight[] Flights =
         {
             new Flight { Id = guids[0][0], AirplaneId = 1, Direction = FlightDirection.Landing, From = "JFK", To = "TLV", PlannedTime = new DateTime(2020, 11, 15, 4, 18, 0), ControlTowerId = guids[2][0] },
@@ -58,6 +70,9 @@ namespace DAL.DummyData
             new Flight { Id = guids[0][5], AirplaneId = 2, Direction = FlightDirection.Takeoff, From = "TLV", To = "LTN", PlannedTime = new DateTime(2020, 11, 15, 4, 36, 29), ControlTowerId = guids[2][0] },
         };
 
+        /// <summary>
+        /// Stations to seed.
+        /// </summary>
         public static readonly Station[] Stations =
         {
             new Station { Id = guids[1][0], ControlTowerId = guids[2][0], Name = "Land port 1", CurrentFlightId = guids[0][2] }, // LandingStations = new List<Guid> { guids[1][1], guids[1][2], }
@@ -72,6 +87,9 @@ namespace DAL.DummyData
             new Station { Id = guids[1][9], ControlTowerId = guids[2][0], Name = "Takeoff", CurrentFlightId = guids[0][5] },
         };
 
+        /// <summary>
+        /// Station relations to seed.
+        /// </summary>
         public static readonly StationRelation[] StationRelations =
         {
             new StationRelation { Direction = FlightDirection.Landing, StationFromId = guids[1][0], StationToId = guids[1][1] },
@@ -87,6 +105,9 @@ namespace DAL.DummyData
             new StationRelation { Direction = FlightDirection.Takeoff, StationFromId = guids[1][8], StationToId = guids[1][9] },
         };
 
+        /// <summary>
+        /// Flight histories to seed.
+        /// </summary>
         public static readonly FlightHistory[] FlightHistories =
         {
 
@@ -127,11 +148,17 @@ namespace DAL.DummyData
             
         };
 
+        /// <summary>
+        /// Control towers to seed.
+        /// </summary>
         public static readonly ControlTower[] ControlTowers =
         {
             new ControlTower{ Id= guids[2][0], Name = "TLV" },
         };
 
+        /// <summary>
+        /// Station and control tower relations to seed.
+        /// </summary>
         public static readonly StationControlTowerRelation[] StationControlTowerRelations =
         {
             new StationControlTowerRelation { Direction = FlightDirection.Landing, ControlTowerId = guids[2][0], StationToId = guids[1][0] },

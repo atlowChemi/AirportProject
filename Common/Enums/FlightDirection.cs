@@ -5,7 +5,13 @@
     /// </summary>
     public enum FlightDirection
     {
+        /// <summary>
+        /// A Landing flight.
+        /// </summary>
         Landing,
+        /// <summary>
+        /// A takeoff flight.
+        /// </summary>
         Takeoff
     }
 }

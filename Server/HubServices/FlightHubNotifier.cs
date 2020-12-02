@@ -10,8 +10,15 @@ namespace Server.HubServices
 {
     public class FlightHubNotifier : INotifier
     {
+        /// <summary>
+        /// The context of the flight hub.
+        /// </summary>
         private readonly IHubContext<FlightHub> hubContext;
 
+        /// <summary>
+        /// Generate a new instance of the flight hub notifier.
+        /// </summary>
+        /// <param name="hubContext">The hub context to use.</param>
         public FlightHubNotifier(IHubContext<FlightHub> hubContext)
         {
             this.hubContext = hubContext;

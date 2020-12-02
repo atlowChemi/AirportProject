@@ -8,9 +8,18 @@ using System.Threading.Tasks;
 
 namespace Simulator.Services
 {
+    /// <summary>
+    /// Service for random data generating.
+    /// </summary>
     public class RandomDataService : IRandomDataService
     {
+        /// <summary>
+        /// The random generator.
+        /// </summary>
         private readonly Random random = new Random(DateTime.UtcNow.Millisecond);
+        /// <summary>
+        /// The available airports.
+        /// </summary>
         private readonly IReadOnlyList<string> airports = Constants.AVAILABLE_AIRPORTS;
 
         public int RandomNumber(int min, int max)
