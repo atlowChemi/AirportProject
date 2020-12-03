@@ -32,7 +32,7 @@ namespace BL.Services
         {
             Flight = flight ??
                     throw new ArgumentNullException(nameof(flight), "A flight cannot be null! This is not Malaysia Airlines!");
-            this.logger = logger;
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task StartWaitingInStationAsync(int delayInMS)

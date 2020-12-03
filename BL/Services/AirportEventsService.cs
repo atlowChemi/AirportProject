@@ -40,7 +40,7 @@ namespace BL.Services
         {
             this.notifier = notifier ?? throw new ArgumentNullException(nameof(notifier));
             this.airportDBService = airportDBService ?? throw new ArgumentNullException(nameof(airportDBService));
-            this.logger = logger;
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public void AddStationsToListenTo(IEnumerable<IFlightChanger> stationServices)

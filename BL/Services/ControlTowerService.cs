@@ -47,13 +47,12 @@ namespace BL.Services
         /// Generate a new instance of the control tower service.
         /// </summary>
         /// <param name="controlTower">The control tower this instance should handle.</param>
-        /// <param name="logger">The logger for this service.</param>
+        /// <param name="loggerFactory">The logger for this service.</param>
         /// <exception cref="ArgumentNullException">The control tower was null.</exception>
         public ControlTowerService(ControlTower controlTower, ILoggerFactory loggerFactory)
         {
-            if (controlTower is null) throw new ArgumentNullException(nameof(controlTower));
-            ControlTower = controlTower;
-            this.loggerFactory = loggerFactory;
+            ControlTower = controlTower ?? throw new ArgumentNullException(nameof(controlTower));
+            this.loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
             logger = loggerFactory.CreateLogger<IControlTowerService>();
             InitFlightQueues();
             logger.LogInformation("Generated control tower service", controlTower.Name);

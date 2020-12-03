@@ -52,8 +52,8 @@ namespace BL.Services
         {
             if (waitingTimeMS <= 0) throw new ArgumentOutOfRangeException(nameof(waitingTimeMS), "Station can't wait less than 1 MS!");
             Station = station ?? throw new ArgumentNullException(nameof(station), "Cannot create service for null station!");
+            this.loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
             WaitingTimeMS = waitingTimeMS;
-            this.loggerFactory = loggerFactory;
             logger = loggerFactory.CreateLogger<IStationService>();
             AddCurrentFlightFromDB();
         }

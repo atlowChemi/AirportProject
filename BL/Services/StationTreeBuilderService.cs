@@ -51,13 +51,14 @@ namespace BL.Services
         /// </summary>
         /// <param name="randomDataGeneratorService">The random data genrator to use.</param>
         /// <param name="airportEventsService">The airport event service to use.</param>
+        /// <param name="loggerFactory">The logger factory to use.</param>
         public StationTreeBuilderService(IRandomDataGeneratorService randomDataGeneratorService,
                                          IAirportEventsService airportEventsService,
                                          ILoggerFactory loggerFactory)
         {
-            this.randomDataGeneratorService = randomDataGeneratorService;
-            this.airportEventsService = airportEventsService;
-            this.loggerFactory = loggerFactory;
+            this.randomDataGeneratorService = randomDataGeneratorService ?? throw new ArgumentNullException(nameof(randomDataGeneratorService));
+            this.airportEventsService = airportEventsService ?? throw new ArgumentNullException(nameof(airportEventsService));
+            this.loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
             logger = loggerFactory.CreateLogger<IStationTreeBuilderService>();
         }
 

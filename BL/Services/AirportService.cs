@@ -69,7 +69,7 @@ namespace BL.Services
         /// <param name="flightRepository">The reposirty to handle the flights.</param>
         /// <param name="stationTreeBuilder">The station tree builder</param>
         /// <param name="notifier">The notifier to update regarding future flights.</param>
-        /// <param name="logger">The logger for this service.</param>
+        /// <param name="loggerFactory">The logger for this service.</param>
         public AirportService(IRepository<Airplane> airplaneRepository,
                               IRepository<Station> stationRepository,
                               IRepository<StationRelation> stationRelationRepository,
@@ -79,14 +79,14 @@ namespace BL.Services
                               INotifier notifier,
                               ILoggerFactory loggerFactory)
         {
-            this.airplaneRepository = airplaneRepository;
-            this.stationRepository = stationRepository;
-            this.stationRelationRepository = stationRelationRepository;
-            this.controlTowerRepository = controlTowerRepository;
-            this.flightRepository = flightRepository;
-            this.stationTreeBuilder = stationTreeBuilder;
-            this.notifier = notifier;
-            this.loggerFactory = loggerFactory;
+            this.airplaneRepository = airplaneRepository ?? throw new ArgumentNullException(nameof(airplaneRepository));
+            this.stationRepository = stationRepository ?? throw new ArgumentNullException(nameof(stationRepository));
+            this.stationRelationRepository = stationRelationRepository ?? throw new ArgumentNullException(nameof(stationRelationRepository));
+            this.controlTowerRepository = controlTowerRepository ?? throw new ArgumentNullException(nameof(controlTowerRepository));
+            this.flightRepository = flightRepository ?? throw new ArgumentNullException(nameof(flightRepository));
+            this.stationTreeBuilder = stationTreeBuilder ?? throw new ArgumentNullException(nameof(stationTreeBuilder));
+            this.notifier = notifier ?? throw new ArgumentNullException(nameof(notifier));
+            this.loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
             logger = loggerFactory.CreateLogger<IAirportService>();
             CreateStationTrees();
             if (InitialCreate) InitializeWaitingFlights();

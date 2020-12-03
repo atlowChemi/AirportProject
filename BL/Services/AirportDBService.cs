@@ -33,8 +33,8 @@ namespace BL.Services
         /// <param name="logger">The logger for this service.</param>
         public AirportDBService(IServiceScopeFactory serviceScopeFactory, ILogger<IAirportDBService> logger)
         {
-            this.serviceScopeFactory = serviceScopeFactory;
-            this.logger = logger;
+            this.serviceScopeFactory = serviceScopeFactory ?? throw new ArgumentNullException(nameof(serviceScopeFactory), "Service scope factory is required.");
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger), "Logger is required.");
         }
 
         public async Task FlightMoved(FlightEventArgs flightEvent)
