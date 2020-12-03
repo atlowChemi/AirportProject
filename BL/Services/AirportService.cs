@@ -3,6 +3,7 @@ using Common.Enums;
 using Common.Interfaces;
 using Common.Models;
 using Common.Repositories;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,50 +80,90 @@ namespace BL.Services
         }
 
 
-        public IEnumerable<AirplaneDTO> GetAirplanes() => airplaneRepository.GetAll().Select(a => AirplaneDTO.FromDBModel(a));
+        public IEnumerable<AirplaneDTO> GetAirplanes()
+        {
+            IEnumerable<Airplane> airplanes;
+            try
+            {
+                airplanes = airplaneRepository.GetAll();
+            }
+            catch (Exception e)
+            {
+                //TODO:log.
+                airplanes = Enumerable.Empty<Airplane>();
+            }
+            return airplanes.Select(a => AirplaneDTO.FromDBModel(a));
+        }
 
         public AirportDataDTO GetAirportData(string name)
         {
-            ControlTower controlTower = stationTreeBuilder[name]?.ControlTower ?? throw new KeyNotFoundException("No control tower with given name found!");
-            IEnumerable<FlightDTO> flights = flightRepository.GetAll()
-                .Where(f => f.History.Count <= 0
-                            && (f.ControlTowerId == controlTower.Id
-                            || (f.ControlTower.Name == f.To && f.Direction == FlightDirection.Landing)
-                            || (f.ControlTower.Name == f.From && f.Direction == FlightDirection.Takeoff)))
-                .Select(f => FlightDTO.FromDBModel(f));
-            IEnumerable<StationDTO> stations = controlTower.Stations.Select(s => new StationDTO
-            {
-                ControlTowerId = s.ControlTowerId,
-                Id = s.Id,
-                Name = s.Name
-            });
-            IEnumerable<StationRelationDTO> stationRelations = stationRelationRepository.GetAll()
-                .AsEnumerable()
-                .Where(sr => controlTower.Stations.Any(s => sr.StationFromId == s.Id))
-                .Select(sr => StationRelationDTO.FromDBModel(sr));
+            ControlTower controlTower = stationTreeBuilder[name]?.ControlTower ??
+                throw new KeyNotFoundException("No control tower with given name found!");
+            IEnumerable<FlightDTO> flights = GetFlightDtos(controlTower.Id, controlTower.Name);
+            IEnumerable<StationDTO> stations = controlTower.Stations.Select(s => StationDTO.FromDBModel(s));
+            IEnumerable<StationRelationDTO> stationRelations = GetStationRelationDtos(controlTower.Stations);
             IEnumerable<StationControlTowerRelationDTO> firstStations = controlTower.FirstStations
                 .Select(sctr => StationControlTowerRelationDTO.FromDBModel(sctr));
             ControlTowerDTO controlTowerDTO = ControlTowerDTO.FromDBModel(controlTower);
-            return new AirportDataDTO { ControlTower = controlTowerDTO, FirstStations = firstStations, Flights = flights, StationRelations = stationRelations, Stations = stations };
+            return new AirportDataDTO
+            {
+                ControlTower = controlTowerDTO,
+                FirstStations = firstStations,
+                Flights = flights,
+                StationRelations = stationRelations,
+                Stations = stations
+            };
         }
 
         public async Task HandleNewFlightArrivedAsync(Flight flight)
         {
-            Flight dbFlight = await flightRepository.AddAsync(flight);
-            notifier.NotifyFutureFlightAdded(dbFlight);
+            try
+            {
+                Flight dbFlight = await flightRepository.AddAsync(flight);
+                notifier.NotifyFutureFlightAdded(dbFlight);
+                SendFlightToControlTowerAtTime(flight);
+            }
+            catch (DbUpdateException e)
+            {
+                //TODO: log.
+                throw;
+            }
+            catch (Exception e)
+            {
+                //TODO: log.
+                throw;
+            }
 
-            SendFlightToControlTowerAtTime(flight);
         }
 
         public IEnumerable<Flight> GetWaitingFlights()
         {
-            return flightRepository.GetAll().Where(f => f.History.Count <= 0 && f.ControlTowerId == null).OrderBy(f => f.PlannedTime);
+            IEnumerable<Flight> flights;
+            try
+            {
+                flights = flightRepository.GetAll();
+            }
+            catch (Exception)
+            {
+                //TODO: log.
+                flights = Enumerable.Empty<Flight>();
+            }
+            return flights.Where(f => f.History.Count <= 0 && f.ControlTowerId == null).OrderBy(f => f.PlannedTime);
         }
 
         public PaginatedDTO<FlightHistoryDTO> GetStationHistory(Guid stationId, int startFrom = 0, int paginationLimit = 15)
         {
-            Station station = stationRepository.GetAll().FirstOrDefault(s => s.Id == stationId) ??
-                throw new KeyNotFoundException("No Station with the given ID was found");
+            Station station;
+            try
+            {
+                station = stationRepository.GetAll().FirstOrDefault(s => s.Id == stationId);
+            }
+            catch (Exception e)
+            {
+                //TODO: log.
+                station = null;
+            }
+            if (station is null) throw new KeyNotFoundException("No Station with the given ID was found");
             IEnumerable<FlightHistoryDTO> flightHistories = station.History
                 .OrderByDescending(fh => fh.EnterStationTime)
                 .Skip(startFrom)
@@ -141,19 +182,26 @@ namespace BL.Services
             IEnumerable<Flight> undeltFlights = GetWaitingFlights();
             foreach (Flight flight in undeltFlights)
             {
-                SendFlightToControlTowerAtTime(flight);
+                try
+                {
+                    SendFlightToControlTowerAtTime(flight);
+                }
+                catch (KeyNotFoundException e)
+                {
+                    //TODO: log.
+                }
             }
         }
         /// <summary>
         /// Hold the flights waiting untill it's there time to shine.
         /// </summary>
         /// <param name="flight">Flight to delay.</param>
-        /// <exception cref="ArgumentOutOfRangeException">Flight is aimed to a non existant control tower.</exception>
+        /// <exception cref="KeyNotFoundException">Flight is aimed to a non existant control tower.</exception>
         private async void SendFlightToControlTowerAtTime(Flight flight)
         {
             string controlTowerName = flight.Direction == FlightDirection.Landing ? flight.To : flight.From;
             IControlTowerService controlTowerService = stationTreeBuilder[controlTowerName] ??
-                throw new ArgumentOutOfRangeException(nameof(flight), "Control tower does not exist");
+                throw new KeyNotFoundException("Control tower does not exist");
             TimeSpan delayUntillFlight = flight.PlannedTime - DateTime.Now;
             flight.ControlTowerId = controlTowerService.ControlTower.Id;
             Task<Flight> dbFlightTask = flightRepository.UpdateAsync(flight);
@@ -168,9 +216,62 @@ namespace BL.Services
         /// </summary>
         private void CreateStationTrees()
         {
-            IEnumerable<ControlTower> controlTowers = controlTowerRepository.GetAll();
-            IEnumerable<Station> stations = stationRepository.GetAll();
-            stationTreeBuilder.BuildStationsTree(controlTowers, stations);
+            try
+            {
+                IEnumerable<ControlTower> controlTowers = controlTowerRepository.GetAll();
+                IEnumerable<Station> stations = stationRepository.GetAll();
+                stationTreeBuilder.BuildStationsTree(controlTowers, stations);
+            }
+            catch (Exception e)
+            {
+                //TODO: log.
+            }
+        }
+        /// <summary>
+        /// Get all the waiting flights relevant for a control tower.
+        /// </summary>
+        /// <param name="controlTowerId">The ID of control tower to check for.</param>
+        /// <param name="controlTowerName">The name of control tower to check for.</param>
+        /// <returns>All waiting flights as a DTO</returns>
+        private IEnumerable<FlightDTO> GetFlightDtos(Guid controlTowerId, string controlTowerName)
+        {
+            IEnumerable<Flight> flights;
+            try
+            {
+                flights = flightRepository.GetAll();
+            }
+            catch (Exception e)
+            {
+                //TODO: log.
+                flights = Enumerable.Empty<Flight>();
+            }
+            return flights
+                .Where(f => f.History.Count <= 0
+                            && (f.ControlTowerId == controlTowerId
+                            || (controlTowerName == f.To && f.Direction == FlightDirection.Landing)
+                            || (controlTowerName == f.From && f.Direction == FlightDirection.Takeoff)))
+                .Select(f => FlightDTO.FromDBModel(f));
+        }
+        /// <summary>
+        /// Get all the station relations relevant for a control tower.
+        /// </summary>
+        /// <param name="stations">The stations of control tower.</param>
+        /// <returns>All station relations as a DTO</returns>
+        private IEnumerable<StationRelationDTO> GetStationRelationDtos(ICollection<Station> stations)
+        {
+            IEnumerable<StationRelation> stationRelations;
+            try
+            {
+                stationRelations = stationRelationRepository.GetAll().AsEnumerable();
+            }
+            catch (Exception e)
+            {
+                //TODO: log.
+                stationRelations = Enumerable.Empty<StationRelation>();
+            }
+            return stationRelations
+                .Where(sr => stations.Any(s => sr.StationFromId == s.Id))
+                .Select(sr => StationRelationDTO.FromDBModel(sr));
         }
     }
 }

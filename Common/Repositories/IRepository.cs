@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,13 +17,12 @@ namespace Common.Repositories
         /// <returns>An <see cref="IQueryable{TEntity}"/> representing the DbSet of the <typeparamref name="TEntity"/> type.</returns>
         /// <exception cref="Exception">An unknown issue happend.</exception>
         IQueryable<TEntity> GetAll();
-#pragma warning disable CS1574 // XML comment has cref attribute that could not be resolved
         /// <summary>
         /// Add a new entity to the DB.
         /// </summary>
         /// <param name="entity">Entity that should be added.</param>
         /// <returns>A <see cref="Task{TEntity}"/> representing the addition to the DB.</returns>
-        /// <exception cref="DbUpdateException">Unhadled DB exception</exception>
+        /// <exception cref="DbException">Unhadled DB exception</exception>
         /// <exception cref="Exception">An unknown issue happend.</exception>
         Task<TEntity> AddAsync(TEntity entity);
 
@@ -31,9 +31,8 @@ namespace Common.Repositories
         /// </summary>
         /// <param name="entity">Entity that should be updated.</param>
         /// <returns>A <see cref="Task{TEntity}"/> representing the update in the DB.</returns>
-        /// <exception cref="DbUpdateException">Unhadled DB exception</exception>
+        /// <exception cref="DbException">Unhadled DB exception</exception>
         /// <exception cref="Exception">An unknown issue happend.</exception>
         Task<TEntity> UpdateAsync(TEntity entity);
-#pragma warning restore CS1574 // XML comment has cref attribute that could not be resolved
     }
 }

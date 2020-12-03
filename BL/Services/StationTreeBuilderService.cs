@@ -77,7 +77,7 @@ namespace BL.Services
         /// <summary>
         /// Create new Service for each of the control towers.
         /// </summary>
-        /// <returns>True if any controlTower was added</returns>
+        /// <returns>True if any controlTower was added.</returns>
         private bool BuildControlTowerServicesForAllControlTowers(IEnumerable<ControlTower> controlTowers)
         {
             bool response = false;
@@ -92,6 +92,7 @@ namespace BL.Services
         /// <summary>
         /// Create new Service for each of the stations.
         /// </summary>
+        /// <returns>True if any Station was added.</returns>
         private bool BuildStationServiceForAllStations(IEnumerable<Station> stations)
         {
             bool response = false;
