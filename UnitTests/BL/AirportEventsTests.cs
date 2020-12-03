@@ -27,7 +27,7 @@ namespace UnitTests.BL
         [Fact]
         public void AirportEventServiceShouldThrowIfLoggerIsNull()
         {
-            Assert.Throws<ArgumentNullException>("airportDBService", () => new AirportEventsService(new NotifierMock(), new AirportDBServiceMock(), null));
+            Assert.Throws<ArgumentNullException>("logger", () => new AirportEventsService(new NotifierMock(), new AirportDBServiceMock(), null));
         }
 
         [Fact]

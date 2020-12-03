@@ -13,6 +13,8 @@ namespace UnitTests.BL
 {
     public class ControlTowerTests
     {
+        private readonly LoggerFactoryMock loggerFactory = new();
+
         [Fact]
         public void ControlTowerServiceShouldThrowIfControlTowerIsNull()
         {
@@ -23,14 +25,13 @@ namespace UnitTests.BL
         public void ControlTowerServiceShouldThrowIfLoggerFactoryIsNull()
         {
             ControlTower controlTower = new();
-            Assert.Throws<ArgumentNullException>("controlTower", () => new ControlTowerService(controlTower, null));
+            Assert.Throws<ArgumentNullException>("loggerFactory", () => new ControlTowerService(controlTower, null));
         }
 
         [Fact]
         public void ControlTowerServiceShouldHaveExpectedControlTower()
         {
             ControlTower controlTower = new();
-            LoggerFactoryMock loggerFactory = new();
             IControlTowerService controlTowerService = new ControlTowerService(controlTower, loggerFactory);
 
             Assert.Equal(controlTower, controlTowerService.ControlTower);
@@ -39,7 +40,6 @@ namespace UnitTests.BL
         [Fact]
         public void ControlTowerServiceShouldHaveExpectedNextStations()
         {
-            LoggerFactoryMock loggerFactory = new();
             IStationFlightHandler[] flightHandlerLanding = new IStationFlightHandler[] { new StationService(new(), 1, loggerFactory) };
             IStationFlightHandler[] flightHandlerTakeoff = new IStationFlightHandler[] { new StationService(new(), 1, loggerFactory) };
             IControlTowerService controlTowerService = new ControlTowerService(new(), loggerFactory);
@@ -52,14 +52,13 @@ namespace UnitTests.BL
         [Fact]
         public void ControlTowerServiceThrowsIfNullFlight()
         {
-            IControlTowerService controlTowerService = new ControlTowerService(new(), new LoggerFactoryMock());
+            IControlTowerService controlTowerService = new ControlTowerService(new(), loggerFactory);
             Assert.Throws<ArgumentNullException>("flightService", () => controlTowerService.FlightArrived(null));
         }
 
         [Fact]
         public void ControlTowerServiceSendsFlightToStation()
         {
-            LoggerFactoryMock loggerFactory = new();
             IStationFlightHandler[] flightHandlerLanding = new IStationFlightHandler[] { new StationService(new(), 1, loggerFactory) };
             IControlTowerService controlTowerService = new ControlTowerService(new(), loggerFactory);
             controlTowerService.ConnectToNextStations(flightHandlerLanding, null);
@@ -77,7 +76,6 @@ namespace UnitTests.BL
         [Fact]
         public void ControlTowerServiceSendsFlightToStationd()
         {
-            LoggerFactoryMock loggerFactory = new();
             StationService station = new(new(), 1, loggerFactory);
             FlightServiceMock preFlight = new() { Flight = new() { Direction = FlightDirection.Landing } };
 
@@ -108,7 +106,6 @@ namespace UnitTests.BL
         [Fact]
         public void ControlTowerWillNotSendSameFlightIfTwoStationsClearAtTheSameTime()
         {
-            LoggerFactoryMock loggerFactory = new();
             IControlTowerService controlTowerService = new ControlTowerService(new(), loggerFactory);
 
             IStationService station1 = new StationService(new(), 1, loggerFactory);

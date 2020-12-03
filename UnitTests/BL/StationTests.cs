@@ -28,7 +28,7 @@ namespace UnitTests.BL
         [Fact]
         public void StationServiceThrowsIfLoggerFactoryIsNull()
         {
-            Assert.Throws<ArgumentNullException>("station", () => new StationService(new(), 1, null));
+            Assert.Throws<ArgumentNullException>("loggerFactory", () => new StationService(new(), 1, null));
         }
 
         [Fact]

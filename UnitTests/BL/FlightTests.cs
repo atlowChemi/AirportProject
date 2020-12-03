@@ -20,7 +20,7 @@ namespace UnitTests.BL
         [Fact]
         public void FlightServiceThrowsIfLoggerIsNull()
         {
-            var ex = Assert.Throws<ArgumentNullException>("flight", () => new FlightService(new(), null));
+            var ex = Assert.Throws<ArgumentNullException>("logger", () => new FlightService(new(), null));
             Assert.NotNull(ex);
         }
 
