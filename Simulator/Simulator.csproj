@@ -4,6 +4,12 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
     <ApplicationIcon>AA.ico</ApplicationIcon>
+    <Authors>AtlowApps</Authors>
+    <Company>AtlowApps</Company>
+    <Product>Airport flight Simulator</Product>
+    <Copyright>AtlowApps</Copyright>
+    <SignAssembly>false</SignAssembly>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
 
   <ItemGroup>
