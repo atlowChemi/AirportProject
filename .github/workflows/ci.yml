@@ -38,7 +38,7 @@ jobs:
           release_name="AirportHandler-$tag-${{ matrix.taeget }}"
 
           # build package
-          dotnet publish Simulator/Simulator.csproj --f net5.0 -r "${{ matrix.target }}" -c Release -o "$release_name"
+          dotnet publish Simulator/Simulator.csproj -f net5.0 -r "${{ matrix.target }}" -c Release -o "$release_name"
 
           # pack files
           if [ "${{ matrix.target }}" == "win10-x64"]; then
