@@ -1,18 +1,14 @@
 name: WIP
 on:
-  push:
-    branches: [ master ]
   pull_request:
+    types: [opened, synchronize, reopened, edited]
 
 
 jobs:
-
   WIP:
-
     runs-on: ubuntu-latest
-    
     steps:
       - name: WIP
         uses: wip/action@v1.1.0
-        with:
+        env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
