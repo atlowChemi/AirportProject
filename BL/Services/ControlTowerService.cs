@@ -59,7 +59,7 @@ namespace BL.Services
 
         public void ConnectToNextStations(IEnumerable<IStationFlightHandler> landingStations, IEnumerable<IStationFlightHandler> takeoffStations)
         {
-            SignupOutOfAllStationsEvents();
+            SignOutOfAllStationsEvents();
             LandingStations = landingStations;
             TakeoffStations = takeoffStations;
             SignupToAllStationsEvents();
@@ -123,7 +123,7 @@ namespace BL.Services
         /// <summary>
         /// Remove listeners from all the stations, in order to replace them.
         /// </summary>
-        private void SignupOutOfAllStationsEvents()
+        private void SignOutOfAllStationsEvents()
         {
             IEnumerable<IStationFlightHandler> emptyFallback = Enumerable.Empty<IStationFlightHandler>();
             IEnumerable<IStationFlightHandler> allStations = (LandingStations ?? emptyFallback).Concat(TakeoffStations ?? emptyFallback);
