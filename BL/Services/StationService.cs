@@ -2,6 +2,7 @@
 using Common.Events;
 using Common.Interfaces;
 using Common.Models;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,15 @@ namespace BL.Services
         /// Enable locking multi-threads, to avoid Malaysian issues.
         /// </summary>
         private readonly object lockObj = new object();
+        /// <summary>
+        /// The logger factory for this service.
+        /// </summary>
+        private readonly ILoggerFactory loggerFactory;
+        /// <summary>
+        /// The logger for this service.
+        /// </summary>
+        private readonly ILogger<IStationService> logger;
+
         public Station Station { get; }
         public IFlightService CurrentFlight { get; private set; }
         public int WaitingTimeMS { get; }
@@ -35,13 +45,16 @@ namespace BL.Services
         /// </summary>
         /// <param name="station">The station this instance should handle.</param>
         /// <param name="waitingTimeMS">The amount of time the flights should wait in this station.</param>
+        /// <param name="loggerFactory">The logger factory for this service.</param>
         /// <exception cref="ArgumentOutOfRangeException">Waiting time is a negative time.</exception>
         /// <exception cref="ArgumentNullException">Station to hande is null.</exception>
-        public StationService(Station station, int waitingTimeMS)
+        public StationService(Station station, int waitingTimeMS, ILoggerFactory loggerFactory)
         {
             if (waitingTimeMS <= 0) throw new ArgumentOutOfRangeException(nameof(waitingTimeMS), "Station can't wait less than 1 MS!");
             Station = station ?? throw new ArgumentNullException(nameof(station), "Cannot create service for null station!");
             WaitingTimeMS = waitingTimeMS;
+            this.loggerFactory = loggerFactory;
+            logger = loggerFactory.CreateLogger<IStationService>();
             AddCurrentFlightFromDB();
         }
 
@@ -51,16 +64,22 @@ namespace BL.Services
             LandingStations = landingStations;
             TakeoffStations = takeoffStations;
             SignupToAllStationsEvents();
+            logger.LogInformation("Station was connected to its next stations.");
         }
 
         public bool FlightArrived(IFlightService flight)
         {
             lock (lockObj)
             {
-                if (CurrentFlight is not null) return false;
+                if (CurrentFlight is not null)
+                {
+                    logger.LogWarning("Attempted to push flight in a busy station.");
+                    return false;
+                }
                 CurrentFlight = flight;
                 CurrentFlight.StartWaitingInStationAsync(WaitingTimeMS);
                 CurrentFlight.ReadyToContinue += CurrentFlight_ReadyToContinue;
+                logger.LogWarning("Pushed flight in to station.");
                 return true;
             }
         }
@@ -73,11 +92,13 @@ namespace BL.Services
         /// <exception cref="ArgumentException">The sender who raised this event is not ctuallt a flight.</exception>
         private void CurrentFlight_ReadyToContinue(object sender, EventArgs e)
         {
+            logger.LogInformation($"Flight {CurrentFlight.Flight.Id} is ready to move out of station {Station.Id}");
             if (sender is not IFlightService) throw new ArgumentException("Sender must be a logical flight", nameof(sender));
             IEnumerable<IStationFlightHandler> nextStationList = GetNextStationListByDirection(CurrentFlight.Flight.Direction);
             // There are no more stations to pass, plane can go bye bye.
             if (nextStationList is null || !nextStationList.Any())
             {
+                logger.LogInformation($"Flight {CurrentFlight.Flight.Id} finished its journey.");
                 ChangeAvailability(null);
                 return;
             }
@@ -85,6 +106,7 @@ namespace BL.Services
             IStationFlightHandler nextFreeStation = nextStationList.FirstOrDefault(station => station.IsHandlerAvailable);
             if (nextFreeStation is not null && nextFreeStation.FlightArrived(CurrentFlight))
             {
+                logger.LogInformation($"Flight {CurrentFlight.Flight.Id} moved to station {nextFreeStation.Station.Id}.");
                 ChangeAvailability(nextFreeStation.Station);
             }
         }
@@ -131,7 +153,8 @@ namespace BL.Services
         {
             if (Station.CurrentFlight?.History?.Any(h => h.Station.Id == Station.Id && !h.LeaveStationTime.HasValue) ?? false)
             {
-                FlightArrived(new FlightService(Station.CurrentFlight));
+                ILogger<IFlightService> flightLogger = loggerFactory.CreateLogger<IFlightService>();
+                FlightArrived(new FlightService(Station.CurrentFlight, flightLogger));
                 FlightChanged?.Invoke(this, new(Station.CurrentFlight, Station, Station));
             }
         }

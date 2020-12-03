@@ -4,6 +4,7 @@ using Common.Models;
 using Common.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,14 +21,20 @@ namespace BL.Services
         /// A scope factory to help this service (Singelton) to reach out to the Db (Scoped).
         /// </summary>
         private readonly IServiceScopeFactory serviceScopeFactory;
+        /// <summary>
+        /// The logger for this service.
+        /// </summary>
+        private readonly ILogger<IAirportDBService> logger;
 
         /// <summary>
         /// Generate a new instance of the Airport DB service.
         /// </summary>
         /// <param name="serviceScopeFactory">The scoping factory.</param>
-        public AirportDBService(IServiceScopeFactory serviceScopeFactory)
+        /// <param name="logger">The logger for this service.</param>
+        public AirportDBService(IServiceScopeFactory serviceScopeFactory, ILogger<IAirportDBService> logger)
         {
             this.serviceScopeFactory = serviceScopeFactory;
+            this.logger = logger;
         }
 
         public async Task FlightMoved(FlightEventArgs flightEvent)
@@ -58,15 +65,15 @@ namespace BL.Services
             }
             catch (InvalidOperationException e)
             {
-                //TODO:log exception.
+                logger.LogError(e, "Error getting flight repository.");
             }
             catch (DbUpdateException e)
             {
-                //TODO:log exception.
+                logger.LogError(e, "Error updating flight in repository.");
             }
             catch (Exception e)
             {
-                //TODO:log exception.
+                logger.LogError(e, "Unknown exception while updating repository.");
             }
         }
 

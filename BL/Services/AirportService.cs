@@ -4,6 +4,7 @@ using Common.Interfaces;
 using Common.Models;
 using Common.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +45,10 @@ namespace BL.Services
         /// The future flight notifier.
         /// </summary>
         private readonly IFutureFlightNotifier notifier;
+        /// <summary>
+        /// The logger for this service.
+        /// </summary>
+        private readonly ILogger<IAirportService> logger;
 
         /// <summary>
         /// Flag and mark if this run is the initial creation of the services.
@@ -60,13 +65,15 @@ namespace BL.Services
         /// <param name="flightRepository">The reposirty to handle the flights.</param>
         /// <param name="stationTreeBuilder">The station tree builder</param>
         /// <param name="notifier">The notifier to update regarding future flights.</param>
+        /// <param name="logger">The logger for this service.</param>
         public AirportService(IRepository<Airplane> airplaneRepository,
-            IRepository<Station> stationRepository,
-            IRepository<StationRelation> stationRelationRepository,
-            IRepository<ControlTower> controlTowerRepository,
-            IRepository<Flight> flightRepository,
-            IStationTreeBuilderService stationTreeBuilder,
-            INotifier notifier)
+                              IRepository<Station> stationRepository,
+                              IRepository<StationRelation> stationRelationRepository,
+                              IRepository<ControlTower> controlTowerRepository,
+                              IRepository<Flight> flightRepository,
+                              IStationTreeBuilderService stationTreeBuilder,
+                              INotifier notifier,
+                              ILogger<IAirportService> logger)
         {
             this.airplaneRepository = airplaneRepository;
             this.stationRepository = stationRepository;
@@ -75,6 +82,7 @@ namespace BL.Services
             this.flightRepository = flightRepository;
             this.stationTreeBuilder = stationTreeBuilder;
             this.notifier = notifier;
+            this.logger = logger;
             CreateStationTrees();
             if (InitialCreate) InitializeWaitingFlights();
         }
@@ -86,10 +94,11 @@ namespace BL.Services
             try
             {
                 airplanes = airplaneRepository.GetAll();
+                logger.LogInformation("Successfully retrieved airplanes");
             }
             catch (Exception e)
             {
-                //TODO:log.
+                logger.LogError(e, "Issue with getting airplanes from DB.");
                 airplanes = Enumerable.Empty<Airplane>();
             }
             return airplanes.Select(a => AirplaneDTO.FromDBModel(a));
@@ -105,6 +114,7 @@ namespace BL.Services
             IEnumerable<StationControlTowerRelationDTO> firstStations = controlTower.FirstStations
                 .Select(sctr => StationControlTowerRelationDTO.FromDBModel(sctr));
             ControlTowerDTO controlTowerDTO = ControlTowerDTO.FromDBModel(controlTower);
+            logger.LogInformation("Successfully built airport data.");
             return new AirportDataDTO
             {
                 ControlTower = controlTowerDTO,
@@ -125,12 +135,12 @@ namespace BL.Services
             }
             catch (DbUpdateException e)
             {
-                //TODO: log.
+                logger.LogCritical(e, "A flight has been lost due to DB updating errors!", flight);
                 throw;
             }
             catch (Exception e)
             {
-                //TODO: log.
+                logger.LogCritical(e, "A flight has been lost due to unknown error!", flight);
                 throw;
             }
 
@@ -143,9 +153,9 @@ namespace BL.Services
             {
                 flights = flightRepository.GetAll();
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                //TODO: log.
+                logger.LogError(e, "Coudln't get flights from db");
                 flights = Enumerable.Empty<Flight>();
             }
             return flights.Where(f => f.History.Count <= 0 && f.ControlTowerId == null).OrderBy(f => f.PlannedTime);
@@ -160,7 +170,7 @@ namespace BL.Services
             }
             catch (Exception e)
             {
-                //TODO: log.
+                logger.LogError(e, "Db failed returning stations.");
                 station = null;
             }
             if (station is null) throw new KeyNotFoundException("No Station with the given ID was found");
@@ -188,7 +198,7 @@ namespace BL.Services
                 }
                 catch (KeyNotFoundException e)
                 {
-                    //TODO: log.
+                    logger.LogCritical(e, "A flight was targeted to an non-existant control tower");
                 }
             }
         }
@@ -209,6 +219,7 @@ namespace BL.Services
             {
                 await Task.Delay(delayUntillFlight);
             }
+            logger.LogInformation("Flight completed waiting and is now moving to control tower");
             controlTowerService.FlightArrived(new FlightService(await dbFlightTask));
         }
         /// <summary>
@@ -224,7 +235,7 @@ namespace BL.Services
             }
             catch (Exception e)
             {
-                //TODO: log.
+                logger.LogError(e, "issues reading from db");
             }
         }
         /// <summary>
@@ -242,7 +253,7 @@ namespace BL.Services
             }
             catch (Exception e)
             {
-                //TODO: log.
+                logger.LogError(e, "Issue getting flights");
                 flights = Enumerable.Empty<Flight>();
             }
             return flights
@@ -266,7 +277,7 @@ namespace BL.Services
             }
             catch (Exception e)
             {
-                //TODO: log.
+                logger.LogError(e, "Issue getting stations from DB");
                 stationRelations = Enumerable.Empty<StationRelation>();
             }
             return stationRelations

@@ -6,6 +6,7 @@ using Common.Events;
 using Common.Interfaces;
 using Common.Models;
 using Common.Data;
+using Microsoft.Extensions.Logging;
 
 namespace BL.Services
 {
@@ -18,6 +19,14 @@ namespace BL.Services
         /// Enable locking multi-threads, to avoid Malaysian issues.
         /// </summary>
         private readonly object lockObj = new();
+        /// <summary>
+        /// The logger factory for this service.
+        /// </summary>
+        private readonly ILoggerFactory loggerFactory;
+        /// <summary>
+        /// The logger for this service.
+        /// </summary>
+        private readonly ILogger<IControlTowerService> logger;
 
         public event EventHandler<FlightEventArgs> FlightChanged;
         public ControlTower ControlTower { get; init; }
@@ -38,12 +47,16 @@ namespace BL.Services
         /// Generate a new instance of the control tower service.
         /// </summary>
         /// <param name="controlTower">The control tower this instance should handle.</param>
+        /// <param name="logger">The logger for this service.</param>
         /// <exception cref="ArgumentNullException">The control tower was null.</exception>
-        public ControlTowerService(ControlTower controlTower)
+        public ControlTowerService(ControlTower controlTower, ILoggerFactory loggerFactory)
         {
             if (controlTower is null) throw new ArgumentNullException(nameof(controlTower));
             ControlTower = controlTower;
+            this.loggerFactory = loggerFactory;
+            logger = loggerFactory.CreateLogger<IControlTowerService>();
             InitFlightQueues();
+            logger.LogInformation("Generated control tower service", controlTower.Name);
         }
 
 
@@ -53,6 +66,7 @@ namespace BL.Services
             MyQueue<Flight> relevantFlights = GetRelevantFlights(flightService.Flight.Direction);
             if (relevantFlights.Count == 0) SendFlightToRelvantStation(flightService);
             else AddFlightToWaitingList(flightService.Flight);
+            logger.LogInformation("Flight added to the control tower.");
             return true;
         }
 
@@ -63,14 +77,16 @@ namespace BL.Services
             TakeoffStations = takeoffStations;
             SignupToAllStationsEvents();
 
+            logger.LogInformation("Control tower service - next stations updated.");
+            ILogger<IFlightService> flightLogger = loggerFactory.CreateLogger<IFlightService>();
             if (LandingFlights.TryDequeue(out Flight landingFlight))
             {
-                IFlightService flightService = new FlightService(landingFlight);
+                IFlightService flightService = new FlightService(landingFlight, flightLogger);
                 SendFlightToRelvantStation(flightService, true);
             }
             if (TakeoffFlights.TryDequeue(out Flight takeoffFlight))
             {
-                IFlightService flightService = new FlightService(takeoffFlight);
+                IFlightService flightService = new FlightService(takeoffFlight, flightLogger);
                 SendFlightToRelvantStation(flightService, true);
             }
         }
@@ -99,6 +115,7 @@ namespace BL.Services
             MyQueue<Flight> relevantFlights = GetRelevantFlights(flight.Direction);
             if (fromWaitingList) relevantFlights.AddToBegining(flight);
             else relevantFlights.Enqueue(flight);
+            logger.LogInformation("Flight was not sent, and is now in waiting list", flight);
 
         }
         /// <summary>
@@ -115,6 +132,7 @@ namespace BL.Services
             IStationFlightHandler avaialabeStation = relevantFirstStations?.FirstOrDefault(ss => ss.IsHandlerAvailable);
             if (avaialabeStation is not null && avaialabeStation.IsHandlerAvailable && avaialabeStation.FlightArrived(flightService))
             {
+                logger.LogInformation("Flight left control tower towards the first station", flightService.Flight, avaialabeStation.Station);
                 FlightChanged?.Invoke(this, new FlightEventArgs(flightService.Flight, null, avaialabeStation.Station));
             }
             else AddFlightToWaitingList(flightService.Flight, isFromWaitingList);
@@ -157,15 +175,16 @@ namespace BL.Services
             bool isTakeoffStation = TakeoffStations?.Contains(flightHandler) ?? false;
 
             IFlightService flightService = null;
+            ILogger<IFlightService> flightLogger = loggerFactory.CreateLogger<IFlightService>();
             lock (lockObj)
             {
                 if (isLandingStation && LandingFlights.TryDequeue(out Flight landingFlight))
                 {
-                    flightService = new FlightService(landingFlight);
+                    flightService = new FlightService(landingFlight, flightLogger);
                 }
                 else if (isTakeoffStation && TakeoffFlights.TryDequeue(out Flight takeoffFlight))
                 {
-                    flightService = new FlightService(takeoffFlight);
+                    flightService = new FlightService(takeoffFlight, flightLogger);
                 }
             }
             if (flightService is not null)

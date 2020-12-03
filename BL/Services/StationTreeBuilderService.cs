@@ -5,6 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Common.Enums;
 using Common.Constants;
+using Microsoft.Extensions.Logging;
 
 namespace BL.Services
 {
@@ -26,6 +27,15 @@ namespace BL.Services
         /// </summary>
         private readonly IAirportEventsService airportEventsService;
         /// <summary>
+        /// The logger factory for this service.
+        /// </summary>
+        private readonly ILoggerFactory loggerFactory;
+        /// <summary>
+        /// The logger for this service.
+        /// </summary>
+        private readonly ILogger<IStationTreeBuilderService> logger;
+
+        /// <summary>
         /// All station services.
         /// </summary>
         private ICollection<IStationService> stationServices;
@@ -41,16 +51,22 @@ namespace BL.Services
         /// </summary>
         /// <param name="randomDataGeneratorService">The random data genrator to use.</param>
         /// <param name="airportEventsService">The airport event service to use.</param>
-        public StationTreeBuilderService(IRandomDataGeneratorService randomDataGeneratorService, IAirportEventsService airportEventsService)
+        public StationTreeBuilderService(IRandomDataGeneratorService randomDataGeneratorService,
+                                         IAirportEventsService airportEventsService,
+                                         ILoggerFactory loggerFactory)
         {
             this.randomDataGeneratorService = randomDataGeneratorService;
             this.airportEventsService = airportEventsService;
+            this.loggerFactory = loggerFactory;
+            logger = loggerFactory.CreateLogger<IStationTreeBuilderService>();
         }
 
         public void BuildStationsTree(IEnumerable<ControlTower> controlTowers, IEnumerable<Station> stations)
         {
             if (controlTowers is null) throw new ArgumentNullException(nameof(controlTowers));
             if (stations is null) throw new ArgumentNullException(nameof(stations));
+
+            logger.LogInformation("Start building station tree.");
 
             lock (builderLock)
             {
@@ -65,6 +81,7 @@ namespace BL.Services
 
                 if (isNewControlTower || isNewStations)
                 {
+                    logger.LogInformation("Added new control towers / stations. currently rebuilding all connections.");
                     ConnectControlTowersWithStationRelations();
                     ConnectStationsWithStationRelations();
 
@@ -84,7 +101,7 @@ namespace BL.Services
             foreach (ControlTower controlTower in controlTowers)
             {
                 response = true;
-                controlTowerServices.Add(new ControlTowerService(controlTower));
+                controlTowerServices.Add(new ControlTowerService(controlTower, loggerFactory));
             }
             return response;
         }
@@ -102,7 +119,7 @@ namespace BL.Services
                 int waitingTimeMS = randomDataGeneratorService.CreateRandomNumber(
                     Constants.MINIMAL_STATION_DELAY,
                     Constants.MAXIMAL_STATION_DELAY);
-                StationService stationService = new StationService(station, waitingTimeMS);
+                StationService stationService = new StationService(station, waitingTimeMS, loggerFactory);
                 stationServices.Add(stationService);
             }
             return response;
