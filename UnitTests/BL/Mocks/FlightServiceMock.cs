@@ -9,16 +9,20 @@ namespace UnitTests.BL.Mocks
     {
         public Flight Flight { get; set; }
 
+        public bool IsReadyToContinue { get; set; }
+
         public event EventHandler<EventArgs> ReadyToContinue;
 
         public Task StartWaitingInStationAsync(int delayInMS)
         {
+            IsReadyToContinue = false;
             return null;
         }
 
         public void StopWaiting()
         {
             ReadyToContinue?.Invoke(this, EventArgs.Empty);
+            IsReadyToContinue = true;
         }
     }
 }

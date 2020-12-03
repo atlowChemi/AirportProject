@@ -19,7 +19,7 @@ namespace UnitTests.BL
         [Fact]
         public void FlightServiceThrowsIfNegativeTime()
         {
-            IFlightService flight = new FlightService(new Flight());
+            IFlightService flight = new FlightService(new());
             var ex = Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => flight.StartWaitingInStationAsync(-1));
             Assert.NotNull(ex);
 
@@ -28,12 +28,22 @@ namespace UnitTests.BL
         [Fact]
         public void FlightServiceNotifiesAfterAmountOfTime()
         {
-            IFlightService flight = new FlightService(new Flight());
+            IFlightService flight = new FlightService(new());
 
             var evt = Assert.RaisesAsync<EventArgs>(
                 xHandler => flight.ReadyToContinue += xHandler,
                 xHandler => flight.ReadyToContinue -= xHandler,
                 () => flight.StartWaitingInStationAsync(0));
+        }
+
+        [Fact]
+        public void FlightServiceIsFlaggedAsReadyOnlyWhenReady()
+        {
+
+            IFlightService flight = new FlightService(new());
+            Assert.False(flight.IsReadyToContinue);
+            flight.StartWaitingInStationAsync(0);
+            Assert.True(flight.IsReadyToContinue);
         }
     }
 }
