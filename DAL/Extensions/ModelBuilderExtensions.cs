@@ -7,7 +7,7 @@ namespace DAL.Extensions
     public static class ModelBuilderExtensions
     {
         /// <summary>
-        /// Defince the control tower model, and set it's name unique.
+        /// Define the control tower model, and set it's name unique.
         /// </summary>
         /// <param name="modelBuilder">The builder being used to construct the model for this context.</param>
         public static ModelBuilder SetControlTowerNameToBeUnique(this ModelBuilder modelBuilder)
