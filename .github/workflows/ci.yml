@@ -1,58 +1,58 @@
 name: publish
 
 on:
-    release:
-        types: [published]
-    pull_request:
+  release:
+    types: [published]
+  pull_request:
 
 jobs:
-    release:
-        name: Release
-        strategy:
-            matrix:
-                kind: ["linux", "windows", "macOS"]
-                include:
-                    - kind: linux
-                      os: ubuntu-latest
-                      target: linux-x64
-                    - kind: windows
-                      os: windows-latest
-                      target: win10-x64
-                    - kind: macOS
-                      os: macos-latest
-                      target: osx-x64
-        runs-on: ${{ matrix.os }}
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v2
+  release:
+    name: Release
+    strategy:
+        matrix:
+            kind: ["linux", "windows", "macOS"]
+            include:
+                - kind: linux
+                  os: ubuntu-latest
+                  target: linux-x64
+                - kind: windows
+                  os: windows-latest
+                  target: win10-x64
+                - kind: macOS
+                  os: macos-latest
+                  target: osx-x64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
-            - name: Setup .Net
-              uses: actions/setup-dotnet@v1
-              with:
-                dotnet-version: 5.0.100
+      - name: Setup .Net
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.100
 
-            - name: Build simulator
-                shell: bash
-                run: |
-                    tag=$(git describe --tags --abbrev=0)
-                    release_name="AirportHandler-$tag-${{ matrix.taeget }}"
+      - name: Build simulator
+        shell: bash
+        run: |
+          tag=$(git describe --tags --abbrev=0)
+          release_name="AirportHandler-$tag-${{ matrix.taeget }}"
 
-                    # build package
-                    dotnet publish Simulator/Simulator.csproj --f net5.0 -r "${{ matrix.target }}" -c Release -o "$release_name"
+          # build package
+          dotnet publish Simulator/Simulator.csproj --f net5.0 -r "${{ matrix.target }}" -c Release -o "$release_name"
 
-                    # pack files
-                    if [ "${{ matrix.target }}" == "win10-x64"]; then
-                        7z a =tzip "${ release_name }.zip" "./${release_name}/*"
-                    else
-                        tar czvf "${ release_name }.tar.gz" "$release_name"
-                    fi
+          # pack files
+          if [ "${{ matrix.target }}" == "win10-x64"]; then
+              7z a =tzip "${ release_name }.zip" "./${release_name}/*"
+          else
+              tar czvf "${ release_name }.tar.gz" "$release_name"
+          fi
 
-                    # remove output dir
-                    rm -r "$releas_name"
+          # remove output dir
+          rm -r "$releas_name"
 
-            - name: Publish
-                uses: softprops/action-gh-release@v1
-                with:
-                    files: "AirportHandler*"
-                env:
-                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish
+        uses: softprops/action-gh-release@v1
+        with:
+          files: "AirportHandler*"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
