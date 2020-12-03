@@ -15,19 +15,25 @@ namespace UnitTests.BL
         [Fact]
         public void AirportEventServiceShouldThrowIfNotifierIsNull()
         {
-            Assert.Throws<ArgumentNullException>("notifier", () => new AirportEventsService(null, null));
+            Assert.Throws<ArgumentNullException>("notifier", () => new AirportEventsService(null, null, null));
         }
 
         [Fact]
         public void AirportEventServiceShouldThrowIfDBServiceIsNull()
         {
-            Assert.Throws<ArgumentNullException>("airportDBService", () => new AirportEventsService(new NotifierMock(), null));
+            Assert.Throws<ArgumentNullException>("airportDBService", () => new AirportEventsService(new NotifierMock(), null, null));
+        }
+
+        [Fact]
+        public void AirportEventServiceShouldThrowIfLoggerIsNull()
+        {
+            Assert.Throws<ArgumentNullException>("logger", () => new AirportEventsService(new NotifierMock(), new AirportDBServiceMock(), null));
         }
 
         [Fact]
         public void AirportEventServiceShouldThrowIfStationServicesAreNull()
         {
-            AirportEventsService airportEventsService = new(new NotifierMock(), new AirportDBServiceMock());
+            AirportEventsService airportEventsService = new(new NotifierMock(), new AirportDBServiceMock(), new LoggerMock<IAirportEventsService>());
 
             Assert.Throws<ArgumentNullException>("stationServices", () => airportEventsService.AddStationsToListenTo(null));
         }
@@ -37,7 +43,8 @@ namespace UnitTests.BL
         {
             NotifierMock notifier = new();
             AirportDBServiceMock airportDBServiceMock = new();
-            AirportEventsService airportEventsService = new(notifier, airportDBServiceMock);
+            LoggerMock<IAirportEventsService> logger = new();
+            AirportEventsService airportEventsService = new(notifier, airportDBServiceMock, logger);
 
             StationServiceMock stationServiceMock = new();
             IFlightChanger[] flightChangers = { stationServiceMock };

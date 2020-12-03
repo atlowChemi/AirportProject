@@ -4,6 +4,7 @@ using Common.Interfaces;
 using Common.Models;
 using Common.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +45,14 @@ namespace BL.Services
         /// The future flight notifier.
         /// </summary>
         private readonly IFutureFlightNotifier notifier;
+        /// <summary>
+        /// The logger factory for this service.
+        /// </summary>
+        private readonly ILoggerFactory loggerFactory;
+        /// <summary>
+        /// The logger for this service.
+        /// </summary>
+        private readonly ILogger<IAirportService> logger;
 
         /// <summary>
         /// Flag and mark if this run is the initial creation of the services.
@@ -60,21 +69,25 @@ namespace BL.Services
         /// <param name="flightRepository">The reposirty to handle the flights.</param>
         /// <param name="stationTreeBuilder">The station tree builder</param>
         /// <param name="notifier">The notifier to update regarding future flights.</param>
+        /// <param name="loggerFactory">The logger for this service.</param>
         public AirportService(IRepository<Airplane> airplaneRepository,
-            IRepository<Station> stationRepository,
-            IRepository<StationRelation> stationRelationRepository,
-            IRepository<ControlTower> controlTowerRepository,
-            IRepository<Flight> flightRepository,
-            IStationTreeBuilderService stationTreeBuilder,
-            INotifier notifier)
+                              IRepository<Station> stationRepository,
+                              IRepository<StationRelation> stationRelationRepository,
+                              IRepository<ControlTower> controlTowerRepository,
+                              IRepository<Flight> flightRepository,
+                              IStationTreeBuilderService stationTreeBuilder,
+                              INotifier notifier,
+                              ILoggerFactory loggerFactory)
         {
-            this.airplaneRepository = airplaneRepository;
-            this.stationRepository = stationRepository;
-            this.stationRelationRepository = stationRelationRepository;
-            this.controlTowerRepository = controlTowerRepository;
-            this.flightRepository = flightRepository;
-            this.stationTreeBuilder = stationTreeBuilder;
-            this.notifier = notifier;
+            this.airplaneRepository = airplaneRepository ?? throw new ArgumentNullException(nameof(airplaneRepository));
+            this.stationRepository = stationRepository ?? throw new ArgumentNullException(nameof(stationRepository));
+            this.stationRelationRepository = stationRelationRepository ?? throw new ArgumentNullException(nameof(stationRelationRepository));
+            this.controlTowerRepository = controlTowerRepository ?? throw new ArgumentNullException(nameof(controlTowerRepository));
+            this.flightRepository = flightRepository ?? throw new ArgumentNullException(nameof(flightRepository));
+            this.stationTreeBuilder = stationTreeBuilder ?? throw new ArgumentNullException(nameof(stationTreeBuilder));
+            this.notifier = notifier ?? throw new ArgumentNullException(nameof(notifier));
+            this.loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
+            logger = loggerFactory.CreateLogger<IAirportService>();
             CreateStationTrees();
             if (InitialCreate) InitializeWaitingFlights();
         }
@@ -86,10 +99,11 @@ namespace BL.Services
             try
             {
                 airplanes = airplaneRepository.GetAll();
+                logger.LogInformation("Successfully retrieved airplanes");
             }
             catch (Exception e)
             {
-                //TODO:log.
+                logger.LogError(e, "Issue with getting airplanes from DB.");
                 airplanes = Enumerable.Empty<Airplane>();
             }
             return airplanes.Select(a => AirplaneDTO.FromDBModel(a));
@@ -105,6 +119,7 @@ namespace BL.Services
             IEnumerable<StationControlTowerRelationDTO> firstStations = controlTower.FirstStations
                 .Select(sctr => StationControlTowerRelationDTO.FromDBModel(sctr));
             ControlTowerDTO controlTowerDTO = ControlTowerDTO.FromDBModel(controlTower);
+            logger.LogInformation("Successfully built airport data.");
             return new AirportDataDTO
             {
                 ControlTower = controlTowerDTO,
@@ -125,12 +140,12 @@ namespace BL.Services
             }
             catch (DbUpdateException e)
             {
-                //TODO: log.
+                logger.LogCritical(e, "A flight has been lost due to DB updating errors!", flight);
                 throw;
             }
             catch (Exception e)
             {
-                //TODO: log.
+                logger.LogCritical(e, "A flight has been lost due to unknown error!", flight);
                 throw;
             }
 
@@ -143,9 +158,9 @@ namespace BL.Services
             {
                 flights = flightRepository.GetAll();
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                //TODO: log.
+                logger.LogError(e, "Coudln't get flights from db");
                 flights = Enumerable.Empty<Flight>();
             }
             return flights.Where(f => f.History.Count <= 0 && f.ControlTowerId == null).OrderBy(f => f.PlannedTime);
@@ -160,7 +175,7 @@ namespace BL.Services
             }
             catch (Exception e)
             {
-                //TODO: log.
+                logger.LogError(e, "Db failed returning stations.");
                 station = null;
             }
             if (station is null) throw new KeyNotFoundException("No Station with the given ID was found");
@@ -188,7 +203,7 @@ namespace BL.Services
                 }
                 catch (KeyNotFoundException e)
                 {
-                    //TODO: log.
+                    logger.LogCritical(e, "A flight was targeted to an non-existant control tower");
                 }
             }
         }
@@ -209,7 +224,9 @@ namespace BL.Services
             {
                 await Task.Delay(delayUntillFlight);
             }
-            controlTowerService.FlightArrived(new FlightService(await dbFlightTask));
+            logger.LogInformation("Flight completed waiting and is now moving to control tower");
+            ILogger<IFlightService> flightLogger = loggerFactory.CreateLogger<IFlightService>();
+            controlTowerService.FlightArrived(new FlightService(await dbFlightTask, flightLogger));
         }
         /// <summary>
         /// Build the station tree of all control towers and stations.
@@ -224,7 +241,7 @@ namespace BL.Services
             }
             catch (Exception e)
             {
-                //TODO: log.
+                logger.LogError(e, "issues reading from db");
             }
         }
         /// <summary>
@@ -242,7 +259,7 @@ namespace BL.Services
             }
             catch (Exception e)
             {
-                //TODO: log.
+                logger.LogError(e, "Issue getting flights");
                 flights = Enumerable.Empty<Flight>();
             }
             return flights
@@ -266,7 +283,7 @@ namespace BL.Services
             }
             catch (Exception e)
             {
-                //TODO: log.
+                logger.LogError(e, "Issue getting stations from DB");
                 stationRelations = Enumerable.Empty<StationRelation>();
             }
             return stationRelations

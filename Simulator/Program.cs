@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Simulator.API;
 using Simulator.Services;
 using System;
@@ -26,6 +27,7 @@ namespace Simulator
                 .AddSingleton<IAirplaneSelectorService, AirplaneSelectorService>()
                 .AddSingleton<IWebClientService, WebClientService>()
                 .AddSingleton<IHubConnectionService, HubConnectionService>()
+                .AddLogging(logging => logging.AddConsole())
                 .BuildServiceProvider();
 
 
