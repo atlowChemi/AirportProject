@@ -17,7 +17,7 @@ jobs:
                       target: linux-x64
                     - kind: windows
                       os: windows-latest
-                      target: win-x64
+                      target: win10-x64
                     - kind: macOS
                       os: macos-latest
                       target: osx-x64
@@ -25,5 +25,34 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v2
-            - name: test
-              run: echo Hello, world!
+
+            - name: Setup .Net
+              uses: actions/setup-dotnet@v1
+              with:
+                dotnet-version: 5.0.100
+
+            - name: Build simulator
+                shell: bash
+                run: |
+                    tag=$(git describe --tags --abbrev=0)
+                    release_name="AirportHandler-$tag-${{ matrix.taeget }}"
+
+                    # build package
+                    dotnet publish Simulator/Simulator.csproj --f net5.0 -r "${{ matrix.target }}" -c Release -o "$release_name"
+
+                    # pack files
+                    if [ "${{ matrix.target }}" == "win10-x64"]; then
+                        7z a =tzip "${ release_name }.zip" "./${release_name}/*"
+                    else
+                        tar czvf "${ release_name }.tar.gz" "$release_name"
+                    fi
+
+                    # remove output dir
+                    rm -r "$releas_name"
+
+            - name: Publish
+                uses: softprops/action-gh-release@v1
+                with:
+                    files: "AirportHandler*"
+                env:
+                    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
