@@ -1,0 +1,28 @@
+name: publish
+
+on:
+    release:
+        types: [published]
+
+jobs:
+    release:
+        name: Release
+        strategy:
+            matrix:
+                kind: ["linux", "windows", "macOS"]
+                include:
+                    - kind: linux
+                      os: ubuntu-latest
+                      target: linux-x64
+                    - kind: windows
+                      os: windows-latest
+                      target: win-x64
+                    - kind: macOS
+                      os: macos-latest
+                      target: osx-x64
+        runs-on: ${{ matrix.os }}
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+            - name: test
+              run: echo Hello, world!
