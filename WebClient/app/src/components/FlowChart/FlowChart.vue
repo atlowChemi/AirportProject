@@ -67,5 +67,15 @@ export default component;
         width: 100%;
         height: 100%;
     }
+
+    .fly-enter-active,
+    .fly-leave-active {
+        transition: opacity 400ms ease-out 200ms, transform 600ms ease-out;
+    }
+    .fly-enter-from,
+    .fly-leave-to {
+        opacity: 0;
+        transform: translate(600%, 600%) scale(8);
+    }
 }
 </style>

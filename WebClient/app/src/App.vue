@@ -81,16 +81,6 @@ body {
     .scroll-leave-to {
         transform: translateY(100%);
     }
-
-    .fly-enter-active,
-    .fly-leave-active {
-        transition: all 600ms ease;
-    }
-    .fly-enter-from,
-    .fly-leave-to {
-        opacity: 0;
-        transform: scale(8);
-    }
 }
 </style>
 
