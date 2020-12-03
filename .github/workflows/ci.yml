@@ -41,10 +41,10 @@ jobs:
           dotnet publish Simulator/Simulator.csproj -f net5.0 -r "${{ matrix.target }}" -c Release -o "$release_name"
 
           # pack files
-          if [ "${{ matrix.target }}" == "win10-x64"]; then
+          if [ "${{ matrix.target }}" == "win10-x64" ]; then
               7z a =tzip "${ release_name }.zip" "./${release_name}/*"
           else
-              tar czvf "${ release_name }.tar.gz" "$release_name"
+              tar czvf "${release_name}.tar.gz" "$release_name"
           fi
 
           # remove output dir
