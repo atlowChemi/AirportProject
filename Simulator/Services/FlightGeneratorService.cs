@@ -48,7 +48,8 @@ namespace Simulator.Services
                     Constants.MINIMAL_FLIGHT_CREATION_DELAY,
                     Constants.MAXIMAL_FLIGHT_CREATION_DELAY);
                 Flight flight = await SendFlightToAPI();
-                action?.Invoke(FlightToMessage(flight));
+                if (flight is not null)
+                    action?.Invoke(FlightToMessage(flight));
             }
         }
         
