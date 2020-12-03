@@ -12,6 +12,8 @@ namespace BL.Services
     {
         public Flight Flight { get; }
 
+        public bool IsReadyToContinue { get; private set; }
+
         public event EventHandler<EventArgs> ReadyToContinue;
 
         /// <summary>
@@ -28,7 +30,9 @@ namespace BL.Services
         public async Task StartWaitingInStationAsync(int delayInMS)
         {
             if (delayInMS < 0) throw new ArgumentOutOfRangeException(nameof(delayInMS), "Delay time cannot be negative!");
+            IsReadyToContinue = false;
             await Task.Delay(delayInMS);
+            IsReadyToContinue = true;
             ReadyToContinue?.Invoke(this, EventArgs.Empty);
         }
     }

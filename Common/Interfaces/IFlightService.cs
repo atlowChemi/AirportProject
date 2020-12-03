@@ -14,6 +14,10 @@ namespace Common.Interfaces
         /// </summary>
         public Flight Flight { get; }
         /// <summary>
+        /// Flag marking if the flight is done waiting in a station.
+        /// </summary>
+        public bool IsReadyToContinue { get; }
+        /// <summary>
         /// Raised when flight is done waiting in a station.
         /// </summary>
         public event EventHandler<EventArgs> ReadyToContinue;
