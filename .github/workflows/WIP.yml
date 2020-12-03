@@ -1,0 +1,16 @@
+name: WIP
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+
+
+jobs:
+
+  WIP:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: WIP
+        uses: wip/action@v1.1.0
