@@ -2,6 +2,7 @@
 using Common.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Threading.Tasks;
 
 namespace Common.Interfaces
@@ -21,6 +22,8 @@ namespace Common.Interfaces
         /// </summary>
         /// <param name="flight">The flight that has arrived.</param>
         /// <returns>A <see cref="Task"/> that represents the asynchronous <see cref="Flight"/> handeling</returns>
+        /// <exception cref="DbException">An error happened while attempting to save flight.</exception>
+        /// <exception cref="Exception">An unknown error happened while attempting to save flight.</exception>
         Task HandleNewFlightArrivedAsync(Flight flight);
         /// <summary>
         /// Get all <see cref="Flight">Flights</see> which did not yet start the land/takeoff procedure.

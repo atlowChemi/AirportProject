@@ -1,4 +1,5 @@
 ﻿using Common.Events;
+using System;
 
 namespace Common.Interfaces
 {
@@ -11,6 +12,7 @@ namespace Common.Interfaces
         /// Notify that a <see cref="Models.Flight">flight</see> has changed (moved between stations).
         /// </summary>
         /// <param name="flightEvent">The Flight event arguments.</param>
+        /// <exception cref="ArgumentNullException">Args are null.</exception>
         void NotifyFlightChanges(FlightEventArgs flightEvent);
     }
 }

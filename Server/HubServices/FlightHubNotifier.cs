@@ -5,6 +5,7 @@ using Common.Interfaces;
 using Common.Models;
 using Microsoft.AspNetCore.SignalR;
 using Server.Hubs;
+using System;
 
 namespace Server.HubServices
 {
@@ -26,6 +27,7 @@ namespace Server.HubServices
 
         public void NotifyFlightChanges(FlightEventArgs e)
         {
+            if (e is null) throw new ArgumentNullException(nameof(e), "The event args are required");
             Flight flight = e.Flight;
 
             FlightDTO flightDto = FlightDTO.FromDBModel(flight);
@@ -41,6 +43,7 @@ namespace Server.HubServices
 
         public void NotifyFutureFlightAdded(Flight flight)
         {
+            if (flight is null) throw new ArgumentNullException(nameof(flight), "Flight is required");
             string controlTowerName = flight.Direction == FlightDirection.Landing ? flight.To : flight.From;
             FlightDTO flightDto = FlightDTO.FromDBModel(flight);
             hubContext.Clients.Group($"CT-{controlTowerName}").SendAsync("FutureFlightAdded", flightDto);

@@ -44,7 +44,6 @@ namespace BL.Services
             if (controlTower is null) throw new ArgumentNullException(nameof(controlTower));
             ControlTower = controlTower;
             InitFlightQueues();
-            SignupToAllStationsEvents();
         }
 
 

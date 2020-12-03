@@ -2,6 +2,7 @@
 using Common.Interfaces;
 using Common.Models;
 using Common.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -50,8 +51,23 @@ namespace BL.Services
             }
             flight.StationId = flightEvent.StationTo?.Id;
             using IServiceScope scope = serviceScopeFactory.CreateScope();
-            IRepository<Flight> repo = scope.ServiceProvider.GetRequiredService<IRepository<Flight>>();
-            await repo.UpdateAsync(flight);
+            try
+            {
+                IRepository<Flight> repo = scope.ServiceProvider.GetRequiredService<IRepository<Flight>>();
+                await repo.UpdateAsync(flight);
+            }
+            catch (InvalidOperationException e)
+            {
+                //TODO:log exception.
+            }
+            catch (DbUpdateException e)
+            {
+                //TODO:log exception.
+            }
+            catch (Exception e)
+            {
+                //TODO:log exception.
+            }
         }
 
         /// <summary>

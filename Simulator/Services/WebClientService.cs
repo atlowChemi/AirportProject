@@ -36,10 +36,23 @@ namespace Simulator.Services
         public async Task<ICollection<Airplane>> GetAirplanes()
         {
             ICollection<Airplane> airplanes = null;
-            HttpResponseMessage response = await client.GetAsync("api/Airport/airplanes");
-            if (response.IsSuccessStatusCode)
+            try
             {
-                airplanes = await response.Content.ReadAsAsync<ICollection<Airplane>>();
+                HttpResponseMessage response = await client.GetAsync("api/Airport/airplanes");
+                if (response.IsSuccessStatusCode)
+                {
+                    airplanes = await response.Content.ReadAsAsync<ICollection<Airplane>>();
+                }
+            }
+            catch (HttpRequestException e)
+            {
+                //TODO: log.
+                airplanes = Array.Empty<Airplane>();
+            }
+            catch (TaskCanceledException e)
+            {
+                //TODO: log.
+                airplanes = Array.Empty<Airplane>();
             }
             return airplanes;
         }
