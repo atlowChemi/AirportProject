@@ -16,7 +16,7 @@ jobs:
                   target: linux-x64
                 - kind: windows
                   os: windows-latest
-                  target: win10-x64
+                  target: win-x64
                 - kind: macOS
                   os: macos-latest
                   target: osx-x64
@@ -37,17 +37,17 @@ jobs:
           release_name="Simulator-$tag-${{ matrix.target }}"
 
           # build package
-          dotnet publish Simulator/Simulator.csproj -f net5.0 -r "${{ matrix.target }}" -c Release -o "$release_name"
+          dotnet publish Simulator/Simulator.csproj -f net5.0 -r "${{ matrix.target }}" -c Release -o "$release_name" -p:PublishSingleFile=true
 
           # pack files
-          if [ "${{ matrix.target }}" == "win10-x64" ]; then
+          if [ "${{ matrix.target }}" == "win-x64" ]; then
               7z a -tzip "${release_name}.zip" "./${release_name}/*"
           else
               tar czvf "${release_name}.tar.gz" "$release_name"
           fi
 
           # remove output dir
-          rm -r "$release_name"
+          # rm -r "$release_name"
 
       - name: Publish
         uses: softprops/action-gh-release@v1
