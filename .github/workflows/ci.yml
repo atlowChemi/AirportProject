@@ -35,7 +35,7 @@ jobs:
         shell: bash
         run: |
           tag=$(git describe --tags --abbrev=0)
-          release_name="AirportHandler-$tag-${{ matrix.taeget }}"
+          release_name="AirportHandler-$tag-${{ matrix.target }}"
 
           # build package
           dotnet publish Simulator/Simulator.csproj -f net5.0 -r "${{ matrix.target }}" -c Release -o "$release_name"
@@ -48,7 +48,7 @@ jobs:
           fi
 
           # remove output dir
-          rm -r "$releas_name"
+          rm -r "$release_name"
 
       - name: Publish
         uses: softprops/action-gh-release@v1
