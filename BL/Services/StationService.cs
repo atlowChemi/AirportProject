@@ -47,8 +47,10 @@ namespace BL.Services
 
         public void ConnectToNextStations(IEnumerable<IStationFlightHandler> landingStations, IEnumerable<IStationFlightHandler> takeoffStations)
         {
+            SignOutOfAllStationsEvents();
             LandingStations = landingStations;
             TakeoffStations = takeoffStations;
+            SignupToAllStationsEvents();
         }
 
         public bool FlightArrived(IFlightService flight)
@@ -79,18 +81,11 @@ namespace BL.Services
                 ChangeAvailability(null);
                 return;
             }
-            // Attempt finding an available station, and if needed sign up to all.
+            // Attempt finding an available station.
             IStationFlightHandler nextFreeStation = nextStationList.FirstOrDefault(station => station.IsHandlerAvailable);
             if (nextFreeStation is not null && nextFreeStation.FlightArrived(CurrentFlight))
             {
                 ChangeAvailability(nextFreeStation.Station);
-            }
-            else
-            {
-                foreach (IStationFlightHandler station in nextStationList)
-                {
-                    station.FlightChanged += Next_Station_FlightChanged; ;
-                }
             }
         }
         /// <summary>
@@ -101,21 +96,19 @@ namespace BL.Services
         /// <exception cref="ArgumentException">Sender of the event was not a station.</exception>
         private void Next_Station_FlightChanged(object sender, EventArgs e)
         {
-            if (CurrentFlight is null) return;
+            if (CurrentFlight is null || !CurrentFlight.IsReadyToContinue) return;
 
             // This was not called by a station, that's bad!
             if (sender is not IStationFlightHandler availableStation)
                 throw new ArgumentException("Sender must be a station service!", nameof(sender));
+            //Make sure the station goes to the flights direction.
+            IEnumerable<IStationFlightHandler> stations = GetNextStationListByDirection(CurrentFlight.Flight.Direction);
+            bool IsStationInTheFlightDirection = stations.Contains(availableStation);
+            if (!IsStationInTheFlightDirection) return;
 
-            //If manages to move to next station, unsubscribe, otherwise wait for next available.
+            //If manages to move to next station, otherwise wait for next available.
             if (availableStation.IsHandlerAvailable && availableStation.FlightArrived(CurrentFlight))
             {
-                // Unregister from all from all stations.
-                IEnumerable<IStationFlightHandler> nextStations = GetNextStationListByDirection(CurrentFlight.Flight.Direction);
-                foreach (IStationFlightHandler station in nextStations)
-                {
-                    station.FlightChanged -= Next_Station_FlightChanged;
-                }
                 ChangeAvailability(availableStation.Station);
             }
 
@@ -149,5 +142,30 @@ namespace BL.Services
         /// <returns>A <see cref="IEnumerable{IStationFlightHandler}"/> of the next stations.</returns>
         private IEnumerable<IStationFlightHandler> GetNextStationListByDirection(FlightDirection direction) =>
             direction == FlightDirection.Landing ? LandingStations : TakeoffStations;
+
+        /// <summary>
+        /// Remove listeners from all the stations, in order to replace them.
+        /// </summary>
+        private void SignOutOfAllStationsEvents()
+        {
+            IEnumerable<IStationFlightHandler> emptyFallback = Enumerable.Empty<IStationFlightHandler>();
+            IEnumerable<IStationFlightHandler> allStations = (LandingStations ?? emptyFallback).Concat(TakeoffStations ?? emptyFallback);
+            foreach (IStationFlightHandler item in allStations)
+            {
+                item.FlightChanged -= Next_Station_FlightChanged;
+            }
+        }
+        /// <summary>
+        /// Start listening to all the stations, in order to transfer flights if a station has turned available.
+        /// </summary>
+        private void SignupToAllStationsEvents()
+        {
+            IEnumerable<IStationFlightHandler> emptyFallback = Enumerable.Empty<IStationFlightHandler>();
+            IEnumerable<IStationFlightHandler> allStations = (LandingStations ?? emptyFallback).Concat(TakeoffStations ?? emptyFallback);
+            foreach (IStationFlightHandler item in allStations)
+            {
+                item.FlightChanged += Next_Station_FlightChanged;
+            }
+        }
     }
 }
