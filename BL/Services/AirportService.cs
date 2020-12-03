@@ -46,6 +46,10 @@ namespace BL.Services
         /// </summary>
         private readonly IFutureFlightNotifier notifier;
         /// <summary>
+        /// The logger factory for this service.
+        /// </summary>
+        private readonly ILoggerFactory loggerFactory;
+        /// <summary>
         /// The logger for this service.
         /// </summary>
         private readonly ILogger<IAirportService> logger;
@@ -73,7 +77,7 @@ namespace BL.Services
                               IRepository<Flight> flightRepository,
                               IStationTreeBuilderService stationTreeBuilder,
                               INotifier notifier,
-                              ILogger<IAirportService> logger)
+                              ILoggerFactory loggerFactory)
         {
             this.airplaneRepository = airplaneRepository;
             this.stationRepository = stationRepository;
@@ -82,7 +86,8 @@ namespace BL.Services
             this.flightRepository = flightRepository;
             this.stationTreeBuilder = stationTreeBuilder;
             this.notifier = notifier;
-            this.logger = logger;
+            this.loggerFactory = loggerFactory;
+            logger = loggerFactory.CreateLogger<IAirportService>();
             CreateStationTrees();
             if (InitialCreate) InitializeWaitingFlights();
         }
@@ -220,7 +225,8 @@ namespace BL.Services
                 await Task.Delay(delayUntillFlight);
             }
             logger.LogInformation("Flight completed waiting and is now moving to control tower");
-            controlTowerService.FlightArrived(new FlightService(await dbFlightTask));
+            ILogger<IFlightService> flightLogger = loggerFactory.CreateLogger<IFlightService>();
+            controlTowerService.FlightArrived(new FlightService(await dbFlightTask, flightLogger));
         }
         /// <summary>
         /// Build the station tree of all control towers and stations.
