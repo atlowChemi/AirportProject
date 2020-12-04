@@ -3,6 +3,7 @@ WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0-alpine AS build
 WORKDIR /src
+RUN apk add --update nodejs npm
 COPY ["WebClient/WebClient.csproj", "WebClient/"]
 RUN dotnet restore "WebClient/WebClient.csproj"
 COPY . .
