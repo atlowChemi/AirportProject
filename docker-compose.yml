@@ -1,23 +1,23 @@
 version: "3"
 services:
-    airport-backend:
-        build: ./Server
+    airport-back:
+        build: 
+            constext: .
+            dockerfile: ./Server/Dockerfile
         container_name: airport-back
-        ports:
-            - 8080:8080
 
-    airport-frontend:
-        build: ./WebClient
-        container_name: airport-ui
-        ports:
-            - 8976:8976
-        links:
-            - airport-back
+    airport-front:
+        build: .
+            context: .
+            dockerfile: ./WebClient/Dockerfile
+        container_name: airport-front
+
     nginx-api:
+        restart: always
         build: ./Nginx
-        container_name: api
+        container_name: airport
         ports:
             - 80:80
         depeneds_on:
-            - "airport-back"
-            - "airport-ui"
+            - 'airport-back'
+            - 'airport-front'

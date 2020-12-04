@@ -24,8 +24,7 @@ namespace WebClient
             services.AddControllers();
             services.Configure<ForwardedHeadersOptions>(options =>
             {
-                options.ForwardedHeaders =
-                    ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
             });
         }
 
@@ -38,23 +37,23 @@ namespace WebClient
             {
                 app.UseDeveloperExceptionPage();
             }
-            
+
             app.UseSpaStaticFiles();
+
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "app";
+                if (env.IsDevelopment())
+                {
+                    spa.UseVueCli();
+                }
+            });
 
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-
-#if DEBUG
-                endpoints.MapToVueCliProxy(
-                    "{*path}",
-                    new SpaOptions { SourcePath = "app" },
-                    npmScript: Debugger.IsAttached ? "serve" : null,
-                    regex: "Compiled successfully",
-                    forceKill: true);
-#endif
             });
         }
     }
