@@ -1,13 +1,13 @@
 version: "3"
 services:
     airport-back:
-        build: 
+        build:
             constext: .
             dockerfile: ./Server/Dockerfile
         container_name: airport-back
 
     airport-front:
-        build: .
+        build:
             context: .
             dockerfile: ./WebClient/Dockerfile
         container_name: airport-front
@@ -19,5 +19,5 @@ services:
         ports:
             - 80:80
         depeneds_on:
-            - 'airport-back'
-            - 'airport-front'
+            - "airport-back"
+            - "airport-front"
