@@ -80,7 +80,7 @@ namespace Server
                 var currentAssembly = Assembly.GetExecutingAssembly();
                 var xmlDocs = currentAssembly.GetReferencedAssemblies()
                                              .Union(new AssemblyName[] { currentAssembly.GetName() })
-                                             .Select(a => Path.Combine(Path.GetDirectoryName(currentAssembly.Location), $"{a.Name}.xml"))
+                                             .Select(a => Path.Combine(Path.GetDirectoryName(currentAssembly.Location) ?? "", $"{a.Name}.xml"))
                                              .Where(f => File.Exists(f))
                                              .ToArray();
                 Array.ForEach(xmlDocs, doc => c.IncludeXmlComments(doc));
