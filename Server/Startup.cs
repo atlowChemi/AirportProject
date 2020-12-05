@@ -47,8 +47,11 @@ namespace Server
             }));
             services.AddDbContext<AirportContext>(opt =>
             {
-                string relativeDataSource = Path.Combine(Environment.CurrentDirectory, @"..\", "DAL", Constants.DATABASE_NAME);
-                string dataSource = Path.GetFullPath(relativeDataSource);
+                string dataSource = Constants.DATABASE_NAME;
+#if DEBUG
+                string relativeDataSource = Path.Combine(Environment.CurrentDirectory, "..", "DAL", Constants.DATABASE_NAME);
+                dataSource = Path.GetFullPath(relativeDataSource);
+#endif
                 opt
                     .UseSqlite($"Data Source={dataSource}")
                     .UseLazyLoadingProxies()
