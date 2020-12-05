@@ -1,0 +1,94 @@
+name: publish
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  release:
+    name: Release
+    strategy:
+      matrix:
+        kind: ["linux", "windows", "macOS"]
+        include:
+          - kind: linux
+            os: ubuntu-latest
+            target: linux-x64
+          - kind: windows
+            os: windows-latest
+            target: win-x64
+          - kind: macOS
+            os: macos-latest
+            target: osx-x64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup .Net
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.100
+
+      - name: Build Server
+        shell: bash
+        run: |
+          tag=$(git describe --tags --abbrev=0)
+          release_name="Server-$tag-${{ matrix.target }}"
+
+          # build package
+          dotnet publish Server/Server.csproj -f net5.0 -r "${{ matrix.target }}" -c Release -o "$release_name" -p:PublishSingleFile=true
+
+          # pack files
+          if [ "${{ matrix.target }}" == "win-x64" ]; then
+              7z a -tzip "${release_name}.zip" "./${release_name}/*"
+          else
+              tar czvf "${release_name}.tar.gz" "$release_name"
+          fi
+
+          # remove output dir
+          rm -r "$release_name"
+
+      - name: Build WebClient
+        shell: bash
+        run: |
+          tag=$(git describe --tags --abbrev=0)
+          release_name="WebClient-$tag-${{ matrix.target }}"
+
+          # build package
+          dotnet publish WebClient/WebClient.csproj -f net5.0 -r "${{ matrix.target }}" -c Release -o "$release_name" -p:PublishSingleFile=true
+
+          # pack files
+          if [ "${{ matrix.target }}" == "win-x64" ]; then
+              7z a -tzip "${release_name}.zip" "./${release_name}/*"
+          else
+              tar czvf "${release_name}.tar.gz" "$release_name"
+          fi
+
+          # remove output dir
+          rm -r "$release_name"
+
+      - name: Build simulator
+        shell: bash
+        run: |
+          tag=$(git describe --tags --abbrev=0)
+          release_name="Simulator-$tag-${{ matrix.target }}"
+
+          # build package
+          dotnet publish Simulator/Simulator.csproj -f net5.0 -r "${{ matrix.target }}" -c Release -o "$release_name" -p:PublishSingleFile=true
+
+          # pack files
+          if [ "${{ matrix.target }}" == "win-x64" ]; then
+              7z a -tzip "${release_name}.zip" "./${release_name}/*"
+          else
+              tar czvf "${release_name}.tar.gz" "$release_name"
+          fi
+
+          # remove output dir
+          rm -r "$release_name"
+
+      - name: Publish
+        uses: AButler/upload-release-assets@v2.0
+        with:
+          files: '*.{zip,tar.gz}'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}

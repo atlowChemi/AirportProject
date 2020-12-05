@@ -1,0 +1,23 @@
+version: "3"
+services:
+    airport-back:
+        build:
+            context: .
+            dockerfile: ./Server/Dockerfile
+        container_name: airport-back
+
+    airport-front:
+        build:
+            context: .
+            dockerfile: ./WebClient/Dockerfile
+        container_name: airport-front
+
+    nginx-api:
+        restart: always
+        build: ./Nginx
+        container_name: airport
+        ports:
+            - 80:80
+        depends_on:
+            - "airport-back"
+            - "airport-front"

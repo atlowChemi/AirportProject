@@ -10,6 +10,7 @@ using DAL;
 using DAL.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
@@ -35,6 +36,10 @@ namespace Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+            });
             services.AddCors(options => options.AddPolicy(Constants.CORS_POLICY_NAME, builder =>
             {
                 builder.WithOrigins("http://localhost:8080", "http://localhost:56673")
@@ -42,8 +47,11 @@ namespace Server
             }));
             services.AddDbContext<AirportContext>(opt =>
             {
-                string relativeDataSource = Path.Combine(Environment.CurrentDirectory, @"..\", "DAL", Constants.DATABASE_NAME);
-                string dataSource = Path.GetFullPath(relativeDataSource);
+                string dataSource = Constants.DATABASE_NAME;
+#if DEBUG
+                string relativeDataSource = Path.Combine(Environment.CurrentDirectory ?? "", "..", "DAL", Constants.DATABASE_NAME);
+                dataSource = Path.GetFullPath(relativeDataSource);
+#endif
                 opt
                     .UseSqlite($"Data Source={dataSource}")
                     .UseLazyLoadingProxies()
@@ -72,7 +80,7 @@ namespace Server
                 var currentAssembly = Assembly.GetExecutingAssembly();
                 var xmlDocs = currentAssembly.GetReferencedAssemblies()
                                              .Union(new AssemblyName[] { currentAssembly.GetName() })
-                                             .Select(a => Path.Combine(Path.GetDirectoryName(currentAssembly.Location), $"{a.Name}.xml"))
+                                             .Select(a => Path.Combine(Path.GetDirectoryName(currentAssembly.Location) ?? "", $"{a.Name}.xml"))
                                              .Where(f => File.Exists(f))
                                              .ToArray();
                 Array.ForEach(xmlDocs, doc => c.IncludeXmlComments(doc));
