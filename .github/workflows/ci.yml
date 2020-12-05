@@ -90,9 +90,6 @@ jobs:
       - name: Publish
         uses: softprops/action-gh-release@v1
         with:
-          files: |
-            Server*
-            WebClient*
-            Simulator*
+          files: "{Server,WebClient,Simulator}*"
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
