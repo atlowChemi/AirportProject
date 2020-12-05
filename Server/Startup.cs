@@ -49,7 +49,7 @@ namespace Server
             {
                 string dataSource = Constants.DATABASE_NAME;
 #if DEBUG
-                string relativeDataSource = Path.Combine(Environment.CurrentDirectory, "..", "DAL", Constants.DATABASE_NAME);
+                string relativeDataSource = Path.Combine(Environment.CurrentDirectory ?? "", "..", "DAL", Constants.DATABASE_NAME);
                 dataSource = Path.GetFullPath(relativeDataSource);
 #endif
                 opt

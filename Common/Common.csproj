@@ -4,7 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <Authors>AtlowApps</Authors>
     <Company>AtlowApps</Company>
-    <Product>Airport flight Coommon assembly</Product>
+    <Product>Airport flight Commmon assembly</Product>
     <Copyright>AtlowApps</Copyright>
     <SignAssembly>false</SignAssembly>
     <DebugType>embedded</DebugType> 
