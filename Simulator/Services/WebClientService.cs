@@ -26,7 +26,7 @@ namespace Simulator.Services
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             client = new HttpClient();
-            string serverUrl = Environment.GetEnvironmentVariable("SERVER_URL");
+            string serverUrl = Environment.GetEnvironmentVariable("SERVER_URL") ?? "";
             client.BaseAddress = new Uri(serverUrl);
         }
 
