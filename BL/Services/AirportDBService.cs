@@ -66,11 +66,10 @@ namespace BL.Services
             {
                 IRepository<Flight> flightRepo = scope.ServiceProvider.GetRequiredService<IRepository<Flight>>();
                 IRepository<Station> stationRepo = scope.ServiceProvider.GetRequiredService<IRepository<Station>>();
-                Task.WaitAll(
-                    flightRepo.UpdateAsync(flight),
-                    stationRepo.UpdateAsync(stationFrom),
-                    stationRepo.UpdateAsync(stationTo)
-                );
+                List<Task> tasks = new() { flightRepo.UpdateAsync(flight) };
+                if (stationFrom is not null) tasks.Add(stationRepo.UpdateAsync(stationFrom));
+                if (stationTo is not null) tasks.Add(stationRepo.UpdateAsync(stationTo));
+                Task.WaitAll(tasks.ToArray());
                 await flightRepo.UpdateAsync(flight);
             }
             catch (InvalidOperationException e)
