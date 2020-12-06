@@ -4,6 +4,7 @@ using Common.Events;
 using Common.Interfaces;
 using Common.Models;
 using System;
+using UnitTests.Mocks;
 using UnitTests.BL.Mocks;
 using Xunit;
 

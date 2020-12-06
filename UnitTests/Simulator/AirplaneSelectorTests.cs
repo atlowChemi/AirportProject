@@ -1,6 +1,8 @@
 ﻿using Common.Models;
+using Microsoft.Extensions.Logging;
 using Simulator.API;
 using Simulator.Services;
+using UnitTests.Mocks;
 using UnitTests.Simulator.Mocks;
 using Xunit;
 
@@ -8,6 +10,7 @@ namespace UnitTests.Simulator
 {
     public class AirplaneSelectorTests
     {
+        ILogger<IAirplaneSelectorService> logger = new LoggerMock<IAirplaneSelectorService>();
         [Fact]
         public void GettingAirplaneReturnsExpectedAirplane()
         {
@@ -15,7 +18,7 @@ namespace UnitTests.Simulator
             IHubConnectionService hubConnectionService = new HubConnectionServiceMock();
             IWebClientService webClientService = new WebClientMock(airplanes);
             IRandomDataService randomDataService = new RandomDataServiceMock();
-            IAirplaneSelectorService airplaneSelectorService = new AirplaneSelectorService(webClientService, hubConnectionService, randomDataService);
+            IAirplaneSelectorService airplaneSelectorService = new AirplaneSelectorService(webClientService, hubConnectionService, randomDataService, logger);
 
             Airplane airplane = airplaneSelectorService.GetAirplane();
 
@@ -29,7 +32,7 @@ namespace UnitTests.Simulator
             IHubConnectionService hubConnectionService = new HubConnectionServiceMock();
             IWebClientService webClientService = new WebClientMock(null);
             IRandomDataService randomDataService = new RandomDataServiceMock();
-            IAirplaneSelectorService airplaneSelectorService = new AirplaneSelectorService(webClientService, hubConnectionService, randomDataService);
+            IAirplaneSelectorService airplaneSelectorService = new AirplaneSelectorService(webClientService, hubConnectionService, randomDataService, logger);
 
             Airplane airplane = airplaneSelectorService.GetAirplane();
 
@@ -44,7 +47,7 @@ namespace UnitTests.Simulator
             IWebClientService webClientService = new WebClientMock(airplanes);
             IHubConnectionService hubConnectionService = new HubConnectionServiceMock();
             IRandomDataService randomDataService = new RandomDataServiceMock();
-            IAirplaneSelectorService airplaneSelectorService = new AirplaneSelectorService(webClientService, hubConnectionService, randomDataService);
+            IAirplaneSelectorService airplaneSelectorService = new AirplaneSelectorService(webClientService, hubConnectionService, randomDataService, logger);
 
             Airplane airplane = airplaneSelectorService.GetAirplane();
 

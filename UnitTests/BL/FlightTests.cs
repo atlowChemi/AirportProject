@@ -1,7 +1,7 @@
 ﻿using BL.Services;
 using Common.Interfaces;
 using System;
-using UnitTests.BL.Mocks;
+using UnitTests.Mocks;
 using Xunit;
 
 namespace UnitTests.BL

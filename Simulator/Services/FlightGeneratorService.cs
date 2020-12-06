@@ -1,6 +1,7 @@
 ﻿using Common.Constants;
 using Common.Enums;
 using Common.Models;
+using Microsoft.Extensions.Logging;
 using Simulator.API;
 using System;
 using System.Threading.Tasks;
@@ -24,6 +25,10 @@ namespace Simulator.Services
         /// The airpleane selector service.
         /// </summary>
         private readonly IAirplaneSelectorService airplaneSelectorService;
+        /// <summary>
+        /// The logger the service will use.
+        /// </summary>
+        private readonly ILogger<IFlightGeneratorService> logger;
 
         /// <summary>
         /// Generate a new flight generator service.
@@ -31,13 +36,16 @@ namespace Simulator.Services
         /// <param name="randomDataService">The random data generator.</param>
         /// <param name="webClientService">The WebAPI client service.</param>
         /// <param name="airplaneSelectorService">The airpleane selector service.</param>
+        /// <param name="logger">The logger the service will use.</param>
         public FlightGeneratorService(IRandomDataService randomDataService,
             IWebClientService webClientService,
-            IAirplaneSelectorService airplaneSelectorService)
+            IAirplaneSelectorService airplaneSelectorService,
+            ILogger<IFlightGeneratorService> logger)
         {
             this.randomDataService = randomDataService;
             this.webClientService = webClientService;
             this.airplaneSelectorService = airplaneSelectorService;
+            this.logger = logger;
         }
 
         public async Task StartGeneratingRandomFlights(Action<string> action)
@@ -74,6 +82,11 @@ namespace Simulator.Services
         private async Task<Flight> SendFlightToAPI()
         {
             Flight flight = CreateFlight();
+            if (flight is null)
+            {
+                logger.LogError("Generated flight was null, and not sent to server!");
+                return null;
+            }
             await webClientService.CreateFlight(flight);
             return flight;
         }

@@ -38,6 +38,11 @@ namespace BL.Services
         /// </summary>
         private readonly IRepository<Flight> flightRepository;
         /// <summary>
+        /// The repository to handle the flight histories.
+        /// </summary>
+        private readonly IRepository<FlightHistory> flightHistoryRepository;
+
+        /// <summary>
         /// The Station tree builder.
         /// </summary>
         private readonly IStationTreeBuilderService stationTreeBuilder;
@@ -55,11 +60,6 @@ namespace BL.Services
         private readonly ILogger<IAirportService> logger;
 
         /// <summary>
-        /// Flag and mark if this run is the initial creation of the services.
-        /// </summary>
-        private static bool InitialCreate = true;
-
-        /// <summary>
         /// Generate a new instance of the Airport service.
         /// </summary>
         /// <param name="airplaneRepository">The reposirty to handle the airplanes.</param>
@@ -67,6 +67,7 @@ namespace BL.Services
         /// <param name="stationRelationRepository">The reposirty to handle the station relations.</param>
         /// <param name="controlTowerRepository">The reposirty to handle the control towers.</param>
         /// <param name="flightRepository">The reposirty to handle the flights.</param>
+        /// <param name="flightHistoryRepository">The reposirty to handle the flight histories.</param>
         /// <param name="stationTreeBuilder">The station tree builder</param>
         /// <param name="notifier">The notifier to update regarding future flights.</param>
         /// <param name="loggerFactory">The logger for this service.</param>
@@ -75,6 +76,7 @@ namespace BL.Services
                               IRepository<StationRelation> stationRelationRepository,
                               IRepository<ControlTower> controlTowerRepository,
                               IRepository<Flight> flightRepository,
+                              IRepository<FlightHistory> flightHistoryRepository,
                               IStationTreeBuilderService stationTreeBuilder,
                               INotifier notifier,
                               ILoggerFactory loggerFactory)
@@ -84,14 +86,18 @@ namespace BL.Services
             this.stationRelationRepository = stationRelationRepository ?? throw new ArgumentNullException(nameof(stationRelationRepository));
             this.controlTowerRepository = controlTowerRepository ?? throw new ArgumentNullException(nameof(controlTowerRepository));
             this.flightRepository = flightRepository ?? throw new ArgumentNullException(nameof(flightRepository));
+            this.flightHistoryRepository = flightHistoryRepository;
             this.stationTreeBuilder = stationTreeBuilder ?? throw new ArgumentNullException(nameof(stationTreeBuilder));
             this.notifier = notifier ?? throw new ArgumentNullException(nameof(notifier));
             this.loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
             logger = loggerFactory.CreateLogger<IAirportService>();
             CreateStationTrees();
-            if (InitialCreate) InitializeWaitingFlights();
+            if (!stationTreeBuilder.WasInitialized)
+            {
+                InitializeFlightsFromStations();
+                InitializeWaitingFlights();
+            }
         }
-
 
         public IEnumerable<AirplaneDTO> GetAirplanes()
         {
@@ -113,7 +119,7 @@ namespace BL.Services
         {
             ControlTower controlTower = stationTreeBuilder[name]?.ControlTower ??
                 throw new KeyNotFoundException("No control tower with given name found!");
-            IEnumerable<FlightDTO> flights = GetFlightDtos(controlTower.Id, controlTower.Name);
+            IEnumerable<FlightDTO> flights = GetFlightDtos(controlTower.Id);
             IEnumerable<StationDTO> stations = controlTower.Stations.Select(s => StationDTO.FromDBModel(s));
             IEnumerable<StationRelationDTO> stationRelations = GetStationRelationDtos(controlTower.Stations);
             IEnumerable<StationControlTowerRelationDTO> firstStations = controlTower.FirstStations
@@ -134,8 +140,11 @@ namespace BL.Services
         {
             try
             {
+                string controlTowerName = flight.Direction == FlightDirection.Landing ? flight.To : flight.From;
+                IControlTowerService controlTowerService = stationTreeBuilder[controlTowerName] ??
+                    throw new KeyNotFoundException("Control tower does not exist");
+                flight.ControlTowerId = controlTowerService.ControlTower.Id;
                 Flight dbFlight = await flightRepository.AddAsync(flight);
-                notifier.NotifyFutureFlightAdded(dbFlight);
                 SendFlightToControlTowerAtTime(flight);
             }
             catch (DbUpdateException e)
@@ -149,21 +158,6 @@ namespace BL.Services
                 throw;
             }
 
-        }
-
-        public IEnumerable<Flight> GetWaitingFlights()
-        {
-            IEnumerable<Flight> flights;
-            try
-            {
-                flights = flightRepository.GetAll();
-            }
-            catch (Exception e)
-            {
-                logger.LogError(e, "Coudln't get flights from db");
-                flights = Enumerable.Empty<Flight>();
-            }
-            return flights.Where(f => f.History.Count <= 0 && f.ControlTowerId == null).OrderBy(f => f.PlannedTime);
         }
 
         public PaginatedDTO<FlightHistoryDTO> GetStationHistory(Guid stationId, int startFrom = 0, int paginationLimit = 15)
@@ -189,11 +183,28 @@ namespace BL.Services
         }
 
         /// <summary>
+        /// Get all <see cref="Flight">Flights</see> which did not yet start the land/takeoff procedure.
+        /// </summary>
+        /// <returns>A <see cref="IEnumerable{Flight}"/> with waiting flights.</returns>
+        private IEnumerable<Flight> GetWaitingFlights()
+        {
+            IEnumerable<Flight> flights;
+            try
+            {
+                flights = flightRepository.GetAll();
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Coudln't get flights from db");
+                flights = Enumerable.Empty<Flight>();
+            }
+            return flights.Where(f => f.History.Count <= 0).OrderBy(f => f.PlannedTime);
+        }
+        /// <summary>
         /// Initialize the flights waiting to enter control towers.
         /// </summary>
         private void InitializeWaitingFlights()
         {
-            InitialCreate = false;
             IEnumerable<Flight> undeltFlights = GetWaitingFlights();
             foreach (Flight flight in undeltFlights)
             {
@@ -208,25 +219,40 @@ namespace BL.Services
             }
         }
         /// <summary>
+        /// Initialize the flights currently at stations.
+        /// </summary>
+        private void InitializeFlightsFromStations()
+        {
+            IEnumerable<FlightHistory> currentlyInStationFlights = flightHistoryRepository
+                .GetAll()
+                .AsEnumerable()
+                .GroupBy(fh => fh.StationId)
+                .Where(grp => grp.All(fh => !fh.LeaveStationTime.HasValue))
+                .Select(grp => grp.Last());
+            stationTreeBuilder.ConnectExistingFlightsToStations(currentlyInStationFlights);
+        }
+        /// <summary>
         /// Hold the flights waiting untill it's there time to shine.
         /// </summary>
         /// <param name="flight">Flight to delay.</param>
+        /// <exception cref="ArgumentNullException">Flight is null.</exception>
         /// <exception cref="KeyNotFoundException">Flight is aimed to a non existant control tower.</exception>
         private async void SendFlightToControlTowerAtTime(Flight flight)
         {
+            if (flight is null)
+                throw new ArgumentNullException(nameof(flight), "Flight must not be null, we are not Malaysia airlines!");
             string controlTowerName = flight.Direction == FlightDirection.Landing ? flight.To : flight.From;
             IControlTowerService controlTowerService = stationTreeBuilder[controlTowerName] ??
                 throw new KeyNotFoundException("Control tower does not exist");
             TimeSpan delayUntillFlight = flight.PlannedTime - DateTime.Now;
-            flight.ControlTowerId = controlTowerService.ControlTower.Id;
-            Task<Flight> dbFlightTask = flightRepository.UpdateAsync(flight);
+            notifier.NotifyFutureFlightAdded(flight);
             if (delayUntillFlight > TimeSpan.Zero)
             {
                 await Task.Delay(delayUntillFlight);
             }
-            logger.LogInformation("Flight completed waiting and is now moving to control tower");
+            logger.LogInformation($"Flight completed waiting and is now moving to control tower {controlTowerName}");
             ILogger<IFlightService> flightLogger = loggerFactory.CreateLogger<IFlightService>();
-            controlTowerService.FlightArrived(new FlightService(await dbFlightTask, flightLogger));
+            controlTowerService.FlightArrived(new FlightService(flight, flightLogger));
         }
         /// <summary>
         /// Build the station tree of all control towers and stations.
@@ -250,23 +276,10 @@ namespace BL.Services
         /// <param name="controlTowerId">The ID of control tower to check for.</param>
         /// <param name="controlTowerName">The name of control tower to check for.</param>
         /// <returns>All waiting flights as a DTO</returns>
-        private IEnumerable<FlightDTO> GetFlightDtos(Guid controlTowerId, string controlTowerName)
+        private IEnumerable<FlightDTO> GetFlightDtos(Guid controlTowerId)
         {
-            IEnumerable<Flight> flights;
-            try
-            {
-                flights = flightRepository.GetAll();
-            }
-            catch (Exception e)
-            {
-                logger.LogError(e, "Issue getting flights");
-                flights = Enumerable.Empty<Flight>();
-            }
-            return flights
-                .Where(f => f.History.Count <= 0
-                            && (f.ControlTowerId == controlTowerId
-                            || (controlTowerName == f.To && f.Direction == FlightDirection.Landing)
-                            || (controlTowerName == f.From && f.Direction == FlightDirection.Takeoff)))
+            return GetWaitingFlights()
+                .Where(f => f.ControlTowerId == controlTowerId)
                 .Select(f => FlightDTO.FromDBModel(f));
         }
         /// <summary>

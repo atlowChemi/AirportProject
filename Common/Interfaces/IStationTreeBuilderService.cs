@@ -10,6 +10,11 @@ namespace Common.Interfaces
     public interface IStationTreeBuilderService
     {
         /// <summary>
+        /// Flag and mark if this run is the initial creation of the services.
+        /// </summary>
+        public bool WasInitialized { get; }
+
+        /// <summary>
         /// Indexer to return the controlTowerService by its name.
         /// </summary>
         /// <param name="name">Name of control tower to get.</param>
@@ -24,5 +29,13 @@ namespace Common.Interfaces
         /// <exception cref="ArgumentNullException">Control tower are null</exception>
         /// <exception cref="ArgumentNullException">Stations are null</exception>
         public void BuildStationsTree(IEnumerable<ControlTower> controlTowers, IEnumerable<Station> stations);
+
+        /// <summary>
+        /// Connect flights which were left in stations back to theire stations.
+        /// </summary>
+        /// <param name="flights">The flights and stations to connect between.</param>
+        /// <exception cref="ArgumentNullException">The flight history of flights which dod not leave a station.</exception>
+        /// <exception cref="KeyNotFoundException">The flight is connected to a non existant station.</exception>
+        public void ConnectExistingFlightsToStations(IEnumerable<FlightHistory> flights);
     }
 }

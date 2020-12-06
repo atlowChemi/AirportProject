@@ -55,7 +55,6 @@ namespace BL.Services
             this.loggerFactory = loggerFactory ?? throw new ArgumentNullException(nameof(loggerFactory));
             WaitingTimeMS = waitingTimeMS;
             logger = loggerFactory.CreateLogger<IStationService>();
-            AddCurrentFlightFromDB();
         }
 
         public void ConnectToNextStations(IEnumerable<IStationFlightHandler> landingStations, IEnumerable<IStationFlightHandler> takeoffStations)
@@ -67,19 +66,21 @@ namespace BL.Services
             logger.LogInformation("Station was connected to its next stations.");
         }
 
-        public bool FlightArrived(IFlightService flight)
+        public bool FlightArrived(IFlightService flight, bool fromDb = false)
         {
             lock (lockObj)
             {
                 if (CurrentFlight is not null)
                 {
-                    logger.LogWarning("Attempted to push flight in a busy station.");
+                    logger.LogWarning($"Attempted to push flight {flight.Flight.Id} in a busy station - {Station.Id}.");
                     return false;
                 }
                 CurrentFlight = flight;
+                if (fromDb)
+                    FlightChanged?.Invoke(this, new(Station.CurrentFlight, Station, Station));
                 CurrentFlight.StartWaitingInStationAsync(WaitingTimeMS);
                 CurrentFlight.ReadyToContinue += CurrentFlight_ReadyToContinue;
-                logger.LogWarning("Pushed flight in to station.");
+                logger.LogWarning($"Pushed flight {flight.Flight.Id} in to station {Station.Id}.");
                 return true;
             }
         }
@@ -145,18 +146,6 @@ namespace BL.Services
             CurrentFlight.ReadyToContinue -= CurrentFlight_ReadyToContinue;
             CurrentFlight = null;
             FlightChanged?.Invoke(this, new FlightEventArgs(flight, Station, stationTo));
-        }
-        /// <summary>
-        /// Populate the current flight which is in DB - if such exists.
-        /// </summary>
-        private void AddCurrentFlightFromDB()
-        {
-            if (Station.CurrentFlight?.History?.Any(h => h.Station.Id == Station.Id && !h.LeaveStationTime.HasValue) ?? false)
-            {
-                ILogger<IFlightService> flightLogger = loggerFactory.CreateLogger<IFlightService>();
-                FlightArrived(new FlightService(Station.CurrentFlight, flightLogger));
-                FlightChanged?.Invoke(this, new(Station.CurrentFlight, Station, Station));
-            }
         }
         /// <summary>
         /// Get the relevant Flight handlers.

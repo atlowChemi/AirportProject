@@ -1,4 +1,5 @@
 ﻿using Common.Models;
+using Microsoft.Extensions.Logging;
 using Simulator.API;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,10 @@ namespace Simulator.Services
         /// The random data generator.
         /// </summary>
         private readonly IRandomDataService randomDataService;
+        /// <summary>
+        /// The logger the service will use.
+        /// </summary>
+        private readonly ILogger<IAirplaneSelectorService> logger;
 
         /// <summary>
         /// Generate a new instance of the airplane selector service.
@@ -31,10 +36,15 @@ namespace Simulator.Services
         /// <param name="webClientService">The Web API service.</param>
         /// <param name="hubConnectionService">The hub connection</param>
         /// <param name="randomDataService">The random data generator.</param>
-        public AirplaneSelectorService(IWebClientService webClientService, IHubConnectionService hubConnectionService, IRandomDataService randomDataService)
+        /// <param name="logger">The logger the service will use.</param>
+        public AirplaneSelectorService(IWebClientService webClientService,
+                                       IHubConnectionService hubConnectionService,
+                                       IRandomDataService randomDataService,
+                                       ILogger<IAirplaneSelectorService> logger)
         {
             this.webClientService = webClientService;
             this.randomDataService = randomDataService;
+            this.logger = logger;
             Task.WaitAll(GetAirplanesFromAPI());
             hubConnectionService.Listen<ICollection<Airplane>>("AirplaneUpdates", a => airplanes = a);
         }
@@ -53,7 +63,11 @@ namespace Simulator.Services
         /// <returns>A task representing all the time I was eating better.</returns>
         private async Task GetAirplanesFromAPI()
         {
-            airplanes = await webClientService.GetAirplanes() ?? Array.Empty<Airplane>();
+            airplanes = await webClientService.GetAirplanes();
+            if (airplanes is null) {
+                logger.LogError("Airplanes returned null from API!");
+                airplanes = Array.Empty<Airplane>();
+            }
         }
     }
 }

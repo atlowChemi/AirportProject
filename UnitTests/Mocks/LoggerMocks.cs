@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
 
-namespace UnitTests.BL.Mocks
+namespace UnitTests.Mocks
 {
     public class LoggerFactoryMock : ILoggerFactory
     {

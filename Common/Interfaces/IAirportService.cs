@@ -26,11 +26,6 @@ namespace Common.Interfaces
         /// <exception cref="Exception">An unknown error happened while attempting to save flight.</exception>
         Task HandleNewFlightArrivedAsync(Flight flight);
         /// <summary>
-        /// Get all <see cref="Flight">Flights</see> which did not yet start the land/takeoff procedure.
-        /// </summary>
-        /// <returns>A <see cref="IEnumerable{Flight}"/> with waiting flights.</returns>
-        IEnumerable<Flight> GetWaitingFlights();
-        /// <summary>
         /// Get the relavent data of a <see cref="ControlTower"/> with the a given name.
         /// </summary>
         /// <param name="name">The name of the control tower</param>
