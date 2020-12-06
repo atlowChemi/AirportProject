@@ -54,10 +54,11 @@ export const removeMovingFlight = (flight: Flight) =>
     ));
 
 const moveFlightToStation = (flight: Flight, station: Station) => {
-    const flightInd = _data.value.movingFlights.findIndex(
-        f => f.id == flight.id,
-    );
+    let flightInd = _data.value.movingFlights.findIndex(f => f.id == flight.id);
     const stationInd = _data.value.stations.findIndex(s => s.id == station.id);
+    if (flightInd < 0) {
+        flightInd = addMovingFlight(flight) - 1;
+    }
     if (flightInd >= 0) {
         _data.value.movingFlights[flightInd].isWaiting = false;
         _data.value.movingFlights[flightInd].stationId = station.id;
