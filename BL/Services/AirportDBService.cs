@@ -40,6 +40,10 @@ namespace BL.Services
         public async Task FlightMoved(FlightEventArgs flightEvent)
         {
             Flight flight = flightEvent.Flight;
+            Station stationFrom = flightEvent.StationFrom;
+            if (stationFrom is not null) stationFrom.CurrentFlightId = null;
+            Station stationTo = flightEvent.StationTo;
+            if (stationTo is not null) stationTo.CurrentFlightId = flight.Id;
             if (flightEvent.IsStationSelfInvoke)
             {
                 return;
@@ -60,8 +64,14 @@ namespace BL.Services
             using IServiceScope scope = serviceScopeFactory.CreateScope();
             try
             {
-                IRepository<Flight> repo = scope.ServiceProvider.GetRequiredService<IRepository<Flight>>();
-                await repo.UpdateAsync(flight);
+                IRepository<Flight> flightRepo = scope.ServiceProvider.GetRequiredService<IRepository<Flight>>();
+                IRepository<Station> stationRepo = scope.ServiceProvider.GetRequiredService<IRepository<Station>>();
+                Task.WaitAll(
+                    flightRepo.UpdateAsync(flight),
+                    stationRepo.UpdateAsync(stationFrom),
+                    stationRepo.UpdateAsync(stationTo)
+                );
+                await flightRepo.UpdateAsync(flight);
             }
             catch (InvalidOperationException e)
             {
