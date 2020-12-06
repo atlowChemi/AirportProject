@@ -278,13 +278,8 @@ namespace BL.Services
         /// <returns>All waiting flights as a DTO</returns>
         private IEnumerable<FlightDTO> GetFlightDtos(Guid controlTowerId)
         {
-            return flightRepository
-                .GetAll()
-                .AsEnumerable()
-                .Where(f =>
-                    f.ControlTowerId == controlTowerId &&
-                    (f.History.Count <= 0 || f.History.Any(fh => !fh.LeaveStationTime.HasValue))
-                )
+            return GetWaitingFlights()
+                .Where(f => f.ControlTowerId == controlTowerId)
                 .Select(f => FlightDTO.FromDBModel(f));
         }
         /// <summary>
