@@ -29,7 +29,7 @@ namespace UnitTests.BL.Mocks
             throw new NotImplementedException();
         }
 
-        public bool FlightArrived(IFlightService flight)
+        public bool FlightArrived(IFlightService flight, bool fromDb)
         {
             throw new NotImplementedException();
         }
