@@ -7,6 +7,7 @@ import {
     PaginatedData,
     Station,
 } from '@/models';
+import axios from 'axios';
 import { name, addFlight, setData } from './';
 import { moveFlight } from './AirportService';
 import { hubService } from './HubService';
@@ -18,21 +19,23 @@ const API_URL = `${SERVER_URL}/${API_PREFIX}`;
 const registerAndGetFlights = async () => {
     await hubService.install(HUB_URL);
 
-    const hubRegistration = hubService.invokeFlightHub<AirportData>(
+    const hubRegistration = hubService.invokeFlightHub(
         'RegisterToControlTower',
         name,
     );
 
-    const getAirportData = fetch(`${API_URL}/controlTower/${name}`);
-
-    const [airportData] = await Promise.all([getAirportData, hubRegistration]);
-
-    if (airportData.status === 200) {
-        setData(await airportData.json());
-    } else {
-        console.error(
-            `Something went wrong with the fetch request. return with ${airportData.status} status code.`,
-        );
+    const getAirportData = axios.get<AirportData>(
+        `${API_URL}/controlTower/${name}`,
+    );
+    try {
+        const [airportData] = await Promise.all([
+            getAirportData,
+            hubRegistration,
+        ]);
+        setData(airportData.data);
+    } catch (error) {
+        console.warn(error);
+        console.error('Something went wrong with the fetch request.', error);
     }
     hubService.registerFlightHubListener(
         'FutureFlightAdded',
@@ -63,23 +66,26 @@ const getStationFlightHistory = async (stationId: guid, page = 1) => {
         paginationLimit: `${PAGINATION_LIMIT}`,
     });
 
-    const history = await fetch(`${API_URL}/history?` + urlParams);
+    let paginatedStationHistory: PaginatedData<FlightHistory>;
 
-    let paginatedStationHistory: PaginatedData<FlightHistory> = {
-        total: 0,
-        maxPage: 1,
-        elements: [],
-    };
-
-    if (history.status === 200) {
-        paginatedStationHistory = await history.json();
+    try {
+        const history = await axios.get<PaginatedData<FlightHistory>>(
+            `${API_URL}/history?${urlParams}`,
+        );
+        paginatedStationHistory = history.data;
         paginatedStationHistory.maxPage = Math.ceil(
-            paginatedStationHistory.total / PAGINATION_LIMIT,
+            history.data.total / PAGINATION_LIMIT,
         );
-    } else {
+    } catch (error) {
+        console.warn(error);
         console.error(
-            `Something went wrong with the fetch request. return with ${history.status} status code.`,
+            `Something went wrong with the fetch request. return with ${500} status code.`,
         );
+        paginatedStationHistory = {
+            total: 0,
+            maxPage: 1,
+            elements: [],
+        };
     }
     return paginatedStationHistory;
 };
