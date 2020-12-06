@@ -23,7 +23,7 @@ version-resolver:
       - 'patch'
   default: patch
 template: |
-  ## Changes since - $PREVIOUS_TAG
+  # Changes since - $PREVIOUS_TAG
 
   $CHANGES
 
