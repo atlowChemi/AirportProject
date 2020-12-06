@@ -17,16 +17,25 @@ namespace Simulator.Services
         /// The HTTP client to send request over.
         /// </summary>
         private readonly HttpClient client;
+        /// <summary>
+        /// The logger the service will use.
+        /// </summary>
         private readonly ILogger<WebClientService> logger;
 
         /// <summary>
         /// Generate a new instance 
         /// </summary>
+        /// <param name="logger">The logger the service will use.</param>
         public WebClientService(ILogger<WebClientService> logger)
         {
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             client = new HttpClient();
-            string serverUrl = Environment.GetEnvironmentVariable("SERVER_URL") ?? "";
+            string serverUrl = Environment.GetEnvironmentVariable("SERVER_URL");
+            if (serverUrl is null)
+            {
+                logger.LogError("Issue getting the SERVER_URL env variable.");
+                serverUrl = "";
+            }
             client.BaseAddress = new Uri(serverUrl);
         }
 
@@ -36,8 +45,8 @@ namespace Simulator.Services
             logger.LogInformation("Attempting to send flight to API");
             try
             {
-            await client.PostAsJsonAsync("api/Airport", flight);
-            logger.LogInformation("Flight sent!");
+                await client.PostAsJsonAsync("api/Airport", flight);
+                logger.LogInformation("Flight sent!");
             }
             catch (HttpRequestException e)
             {
