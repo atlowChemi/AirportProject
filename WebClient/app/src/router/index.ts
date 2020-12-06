@@ -4,14 +4,14 @@ import FlowChart from '@/components/FlowChart/FlowChart.vue';
 
 const routes: Array<RouteRecordRaw> = [
     {
-        path: '/',
-        name: 'ListView',
-        component: StationTable,
-    },
-    {
         path: '/flow',
         name: 'FlowView',
         component: FlowChart,
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'ListView',
+        component: StationTable,
     },
 ];
 
