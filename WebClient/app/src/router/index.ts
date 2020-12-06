@@ -13,6 +13,11 @@ const routes: Array<RouteRecordRaw> = [
         name: 'ListView',
         component: StationTable,
     },
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'ListView',
+        component: StationTable,
+    },
 ];
 
 const router = createRouter({

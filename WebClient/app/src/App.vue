@@ -2,9 +2,13 @@
     <h1 class="airport__title">Welcome To {{ name }} Airport</h1>
     <div class="airport__grid">
         <div class="airport__grid-station__container">
-            <StationSection>
-                <router-view />
-            </StationSection>
+            <router-view v-slot="{ Component }">
+                <StationSection>
+                    <keep-alive>
+                        <component :is="Component" />
+                    </keep-alive>
+                </StationSection>
+            </router-view>
         </div>
         <FlightTables />
     </div>
