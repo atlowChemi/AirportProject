@@ -4,6 +4,8 @@ categories:
   - title: '🚀 Features'
     labels:
       - 'feature'
+  - title: '🔥 Enhancements'
+    labels:
       - 'enhancement'
   - title: '🐛 Bug Fixes'
     labels:
@@ -23,7 +25,7 @@ version-resolver:
       - 'patch'
   default: patch
 template: |
-  ## Changes since - $PREVIOUS_TAG
+  # Changes since - $PREVIOUS_TAG
 
   $CHANGES
 
