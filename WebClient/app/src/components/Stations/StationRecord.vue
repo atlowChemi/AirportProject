@@ -96,5 +96,10 @@ export default component;
     &:not(.available) {
         color: $error;
     }
+    &.list-leave-to,
+    &.list-enter-from {
+        opacity: 0;
+        height: 0;
+    }
 }
 </style>
