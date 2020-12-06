@@ -44,6 +44,8 @@ namespace BL.Services
         /// </summary>
         private ICollection<IControlTowerService> controlTowerServices;
 
+        public bool WasInitialized { get; private set; } = false;
+
         public IControlTowerService this[string name] => controlTowerServices?.FirstOrDefault(cst => cst.ControlTower.Name == name);
 
         /// <summary>
@@ -89,6 +91,24 @@ namespace BL.Services
                     IEnumerable<IFlightChanger> flightChangers = stationServices.AsEnumerable<IFlightChanger>().Concat(controlTowerServices);
                     airportEventsService.AddStationsToListenTo(flightChangers);
                 }
+            }
+        }
+
+        public void ConnectExistingFlightsToStations(IEnumerable<FlightHistory> flights)
+        {
+            WasInitialized = true;
+            foreach (FlightHistory fh in flights)
+            {
+                IStationService stationService = stationServices.FirstOrDefault(ss => ss.Station.Id == fh.StationId);
+
+                if (stationService is null)
+                {
+                    logger.LogError($"Flight {fh.FlightId} is connected to a non existing station!");
+                    throw new KeyNotFoundException("Invlid Flight!");
+                }
+                ILogger<IFlightService> flLogger = loggerFactory.CreateLogger<IFlightService>();
+                IFlightService flightService = new FlightService(fh.Flight, flLogger);
+                stationService.FlightArrived(flightService);
             }
         }
 
