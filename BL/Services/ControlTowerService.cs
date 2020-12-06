@@ -59,7 +59,7 @@ namespace BL.Services
         }
 
 
-        public bool FlightArrived(IFlightService flightService)
+        public bool FlightArrived(IFlightService flightService, bool fromDb)
         {
             if (flightService is null) throw new ArgumentNullException(nameof(flightService), "A flight cannot arrive to the control tower as null! This is not Malaysia Airlines!");
             MyQueue<Flight> relevantFlights = GetRelevantFlights(flightService.Flight.Direction);
@@ -95,12 +95,8 @@ namespace BL.Services
         /// </summary>
         private void InitFlightQueues()
         {
-            IEnumerable<Flight> waitingFlights = ControlTower?.FlightsWaiting?.Where(f => f.History?.Count <= 0) ?? Enumerable.Empty<Flight>();
-            IEnumerable<Flight> landingFlights = waitingFlights.Where(f => f.Direction == FlightDirection.Landing);
-            IEnumerable<Flight> takeoffFlights = waitingFlights.Where(f => f.Direction == FlightDirection.Takeoff);
-
-            LandingFlights = new MyQueue<Flight>(landingFlights);
-            TakeoffFlights = new MyQueue<Flight>(takeoffFlights);
+            LandingFlights = new MyQueue<Flight>();
+            TakeoffFlights = new MyQueue<Flight>();
         }
         /// <summary>
         /// Add a flight to the waiting list.
