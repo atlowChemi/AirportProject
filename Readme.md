@@ -4,6 +4,7 @@
   - [1.3. Tech & frameworks used](#13-tech--frameworks-used)
     - [1.3.1. Backend](#131-backend)
     - [1.3.2. Frontend](#132-frontend)
+    - [1.3.3. General](#133-general)
   - [1.4. Structure](#14-structure)
     - [1.4.1. Server](#141-server)
     - [1.4.2. UI](#142-ui)
@@ -38,6 +39,10 @@ Built as the final project for the Fullstack studies in Sela college.
 -   [Typescript](https://github.com/microsoft/TypeScript).
 -   [SASS](https://github.com/sass/sass).
 -   [Vue 3](https://github.com/vuejs/vue-next).
+
+### 1.3.3. General
+- [Docker](https://github.com/docker).
+- [Nginx](https://github.com/nginx/nginx).
 
 ## 1.4. Structure
 
