@@ -23,8 +23,8 @@ Built as the final project for the Fullstack studies in Sela college.
 
 ## 1.2. Build status
 
-![workflow state](https://github.com/ChemiAtlow/AirportProject/workflows/Build%20and%20Run%20tests./badge.svg?event=push)
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/ChemiAtlow/AirportProject?label=latest%20version&style=flat-square)](https://github.com/ChemiAtlow/AirportProject/releases/latest)
+[![workflow state](https://github.com/ChemiAtlow/AirportProject/workflows/Build%20and%20Run%20tests./badge.svg?event=push "Build status")](https://github.com/ChemiAtlow/AirportProject/actions?query=workflow%3A%22Build+and+Run+tests.%22)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/ChemiAtlow/AirportProject?label=latest%20version&style=flat-square "Latest version")](https://github.com/ChemiAtlow/AirportProject/releases/latest)
 
 ## 1.3. Tech & frameworks used
 
