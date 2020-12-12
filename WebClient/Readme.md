@@ -25,8 +25,8 @@ In addition, the UI has a list of all the stations related to the control tower,
 
 The project is built of two building blocks:
 
--   [Server](#141-server).
--   [SPA Vue app](#142-ui).
+-   [Server](#131-server).
+-   [SPA Vue app](#132-SPA-Vue-app).
 
 ### 1.3.1. Server
 
