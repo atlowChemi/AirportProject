@@ -4,7 +4,7 @@
   - [1.3. Structure](#13-structure)
     - [1.3.1. API controller](#131-api-controller)
     - [1.3.2. Open API and Swagger](#132-open-api-and-swagger)
-  - [1.3.3. SignalR hub](#133-signalr-hub)
+    - [1.3.3. SignalR hub](#133-signalr-hub)
   - [1.4. Installation](#14-installation)
 
 # 1. Airport Project - Server
@@ -43,7 +43,7 @@ A Simple .Net controller which is an API controller and exposes the following en
 
 A Swagger UI to show the existing endpoints, with the required request bodies, and the possible API responses.
 
-## 1.3.3. SignalR hub
+### 1.3.3. SignalR hub
 
 A SignalR hub that is incharge of real-time updates to the UI regarding flights moving through out the airport and flights which were added and will be landing / taking off in the future.
 
