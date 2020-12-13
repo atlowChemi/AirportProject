@@ -12,6 +12,7 @@ A [NGINX](https://github.com/nginx/nginx) server to be used as a reverse proxy a
 ## 1.1. Motivation
 
 In order to have only one server exposed, we use the Nginx server as a reverse proxy to expose the UI and the server through a reverse proxy.
+
 This could later be used for load balancing.
 
 ## 1.2. Tech & frameworks used
@@ -29,6 +30,7 @@ The project is built of two simple files:
 ## 1.4. How to use
 
 This projext has no meaning as a standalone, and should only be used via the [docker-compose](https://github.com/ChemiAtlow/AirportProject/blob/master/docker-compose.yml) file in the root.
+
 Simply go to root and run the following command.
 ```bash
 docker-compose up
