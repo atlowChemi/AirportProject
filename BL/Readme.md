@@ -20,7 +20,7 @@ The BL contains all the services that actually run and manage the airports.
 
 ## 1.1. Motivation
 
-In order to keep things readable and simple, the project is broken down to small units.
+In order to keep things readable and simple, the project is broken down to small units [(SOC)](https://en.wikipedia.org/wiki/Separation_of_concerns).
 
 The server doesn't actually do anything on it's own, and any request it gets will be fully handled by a service which lives in this project.
 
