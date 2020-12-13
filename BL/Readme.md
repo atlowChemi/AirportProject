@@ -42,7 +42,17 @@ The project is built of multiple services:
     -   [AirportDBService](#136-airport-db-service).
     -   [RandomDataGeneratorService](#137-random-data-generator-service).
     -   [StationTreeBuilderService](#138-station-tree-builder-service).
-  
+
+Service life-cycle table:
+
+| Singelton                                                        | Scoped                                                                                       | Transient                                   |
+| ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| [AirportEventService](#135-airport-events-service)               | [AirportService](#134-airport-service)                                                       | [Flight](#131-flight-service)               |
+| [AirportDBService](#136-airport-db-service)                      | [Repositories](https://github.com/ChemiAtlow/AirportProject/tree/master/Common/Repositories) | [Station](#132-station-service)             |
+| [RandomDataGeneratorService](#137-random-data-generator-service) |                                                                                              | [Control tower](#133-control-tower-service) |
+| [StationTreeBuilderService](#138-station-tree-builder-service)   |                                                                                              |                                             |
+
+
 ### 1.3.1. Flight Service
 
 A transient service which is the loggical wrapper of the flights.
