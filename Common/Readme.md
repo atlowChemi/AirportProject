@@ -34,10 +34,10 @@ The project is built of multiple parts:
 
 
 -   [Constants](#131-constants)
--   [Data structeres](#132-data)
+-   [Data Structeres](#132-data)
 -   [Data Transfer Objects](#133-dto)
 -   [Enums](#134-enums)
--   [Event](#135-events)
+-   [Event Argumanets](#135-events)
 -   [Interfaces](#136-interfaces)
 -   [Models](#137-models)
 -   [Repositories](#138-repositories)
