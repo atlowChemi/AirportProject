@@ -15,11 +15,13 @@
 # 1. Airport Project - BL
 
 An ASP.NET Core 5.0 project that is the actual magic of the whole project.
+
 The BL contains all the services that actually run and manage the airports.
 
 ## 1.1. Motivation
 
 In order to keep things readable and simple, the project is broken down to small units.
+
 The server doesn't actually do anything on it's own, and any request it gets will be fully handled by a service which lives in this project.
 
 ## 1.2. Tech & frameworks used
@@ -47,35 +49,45 @@ The project is built of multiple services:
 ### 1.3.1. Flight Service
 
 A transient service which is the loggical wrapper of the flights.
+
 Created for each flight which leaves the control-tower and starts the journey through the airport's stations.
 
 ### 1.3.2. Station Service
 
 A transient service which is the loggical wrapper of the airport's stations.
+
 Created for each station from the DB, and connected to the continuation stations for both directions (land & takeoff), if any exist.
+
 Handles the arrival of a flight to the station, and the movement of the flight to the next station, once the flight is ready to move, and a next station is available.
 
 ### 1.3.3. Control Tower Service
 
 A transient service which is the loggical wrapper of the control towers.
+
 Created for each control tower from the DB, and connected to the first stations for both directions (land & takeoff).
+
 Handles the flights which have arrived to the airport and are now waiting to start the journey in the airport's stations.
+
 Queues landing and taking-off flights to enable them to pass to next stations.
 
 ### 1.3.4. Airport Service
 
 The conductor of the airport.
+
 A scoped service, which is the only service the API reaches out to.
+
 This service handles all the requests related to the airport, and runs all the required services.
 
 ### 1.3.5. Airport Events Service
 
 The manager of flight movement events.
+
 A singelton service which registers to all stations, and invokes the [DB updating service](#135-airport-db-service) as well as the SignalR hub to notify the UI as well as the DB.  
 
 ### 1.3.6. Airport DB Service
 
 The manager of DB updates.
+
 A singelton service which is the only service which reaches to the repository for writing and updating data.
 
 ### 1.3.7. Random Data Generator Service
@@ -89,6 +101,7 @@ A singelton service which handles the creation of all the **logical** Control to
 ## 1.4. Installation
 
 The BL project is not a standalone project, and is simply the engine for the Server project.
+
 In order to run the server you could:
 
 1.  Go to the [releases page](https://github.com/ChemiAtlow/AirportProject/releases/latest) and download the latest Server asset for your OS.
