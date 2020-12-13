@@ -26,10 +26,7 @@ The server doesn't actually do anything on it's own, and any request it gets wil
 
 ## 1.2. Tech & frameworks used
 
--   [C# 9.0](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-9) and [.Net 5.](https://github.com/dotnet/core/tree/master/release-notes/5.0)
--   [Entity Framework Core](https://github.com/dotnet/efcore)
--   [SQLite](https://www.sqlite.org/index.html)
--   [SignalR](https://github.com/dotnet/aspnetcore/tree/master/src/SignalR).
+-   [C# 9.0](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-9) and [.Net 5](https://github.com/dotnet/core/tree/master/release-notes/5.0).
 
 ## 1.3. Structure
 
