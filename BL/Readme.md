@@ -90,7 +90,7 @@ This service handles all the requests related to the airport, and runs all the r
 
 The manager of flight movement events.
 
-A singelton service which registers to all stations, and invokes the [DB updating service](#135-airport-db-service) as well as the SignalR hub to notify the UI as well as the DB.  
+A singelton service which registers to all stations, and invokes the [DB updating service](#35-airport-db-service) as well as the SignalR hub to notify the UI as well as the DB.  
 
 ### 3.6. Airport DB Service
 
