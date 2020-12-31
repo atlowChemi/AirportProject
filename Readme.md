@@ -1,3 +1,14 @@
+# 1. Airport Project 🛫
+
+A e2e project that handles incoming/outgoing flights from control towers.
+
+Includes:
+
+👓 Rest API that handles all the logic (in Asp.Net core).
+🎚 Simulator that generate new flights and sends them to the API (.Net Console app).
+🖥 Web app for displaying the movement of the flights (Vue 3).
+💾 Database (in Sqlite)
+
 - [1. Airport Project](#1-airport-project)
   - [1.1. Motivation](#11-motivation)
   - [1.2. Build status](#12-build-status)
@@ -11,10 +22,6 @@
     - [1.4.3. Simulator](#143-simulator)
   - [1.5. Installation](#15-installation)
   - [1.6. License](#16-license)
-
-# 1. Airport Project
-
-A e2e project that handles incoming/outgoing flights from control towers.
 
 ## 1.1. Motivation
 
@@ -69,7 +76,7 @@ The project is built of three main building blocks:
 ### 1.4.3. Simulator
 
 -   Console app.
--   Generate random fkights, with random delays.
+-   Generate random flights, with random delays.
 -   Sends flight to the API.
 -   Prints the flight data.
 
