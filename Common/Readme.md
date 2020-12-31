@@ -1,22 +1,24 @@
-- [1. Airport Project - Common](#1-airport-project---common)
-  - [1.1. Motivation](#11-motivation)
-  - [1.2. Tech & frameworks used](#12-tech--frameworks-used)
-  - [1.3. Structure](#13-structure)
-    - [1.3.1. Constants](#131-constants)
-    - [1.3.2. Data](#132-data)
-    - [1.3.3. DTO](#133-dto)
-    - [1.3.4. Enums](#134-enums)
-    - [1.3.5. Events](#135-events)
-    - [1.3.6. Interfaces](#136-interfaces)
-    - [1.3.7. Models](#137-models)
-    - [1.3.8. Repositories](#138-repositories)
-  - [1.4. Installation](#14-installation)
-
-# 1. Airport Project - Common
+# Airport Project - Common 👨‍👩‍👦
 
 An ASP.NET Core 5.0 project that is the handler of all the objects which are common to multiple projects.
 
-## 1.1. Motivation
+## Table of Contents
+
+  - [1. Motivation](#1-motivation)
+  - [2. Tech & frameworks used](#2-tech--frameworks-used)
+  - [3. Structure](#3-structure)
+    - [3.1. Constants](#31-constants)
+    - [3.2. Data](#32-data)
+    - [3.3. DTO](#33-dto)
+    - [3.4. Enums](#34-enums)
+    - [3.5. Events](#35-events)
+    - [3.6. Interfaces](#36-interfaces)
+    - [3.7. Models](#37-models)
+    - [3.8. Repositories](#38-repositories)
+  - [4. Installation](#4-installation)
+
+
+## 1. Motivation
 
 In order to keep things readable and simple, the project is broken down to small units [(SOC)](https://en.wikipedia.org/wiki/Separation_of_concerns).
 
@@ -24,59 +26,59 @@ The Common project is the center of the SoC, as it depends on nothing, but every
 
 This means that the Common project is the base of all the shared parts in the project.
 
-## 1.2. Tech & frameworks used
+## 2. Tech & frameworks used
 
 -   [C# 9.0](https://docs.microsoft.com/en-us/dotnet/csharp/whats-new/csharp-9) and [.Net 5](https://github.com/dotnet/core/tree/master/release-notes/5.0).
 
-## 1.3. Structure
+## 3. Structure
 
 The project is built of multiple parts:
 
 
--   [Constants](#131-constants)
--   [Data Structeres](#132-data)
--   [Data Transfer Objects](#133-dto)
--   [Enums](#134-enums)
--   [Event Argumanets](#135-events)
--   [Interfaces](#136-interfaces)
--   [Models](#137-models)
--   [Repositories](#138-repositories)
+-   [Constants](#31-constants)
+-   [Data Structeres](#32-data)
+-   [Data Transfer Objects](#33-dto)
+-   [Enums](#34-enums)
+-   [Event Argumanets](#35-events)
+-   [Interfaces](#36-interfaces)
+-   [Models](#37-models)
+-   [Repositories](#38-repositories)
   
-### 1.3.1. Constants
+### 3.1. Constants
 
 Constant data which should be used through out the app instead of hardcoded values.
 
-### 1.3.2. Data
+### 3.2. Data
 
 Data structers built to handle edge cases of the app:
 
 -   A Queue which enables adding to front of line, to secure flight moving in to station more than once.
 
-### 1.3.3. DTO
+### 3.3. DTO
 
 Data Transfer Objects to enable passing data on to the UI without recursive object relations.
 
-### 1.3.4. Enums
+### 3.4. Enums
 
 Enums used through out the project.
 
-### 1.3.5. Events
+### 3.5. Events
 
 Event arguments used through out the project.
 
-### 1.3.6. Interfaces
+### 3.6. Interfaces
 
 The Interfaces that make the API of the BL, as well as define some of the types of the DB models.
 
-### 1.3.7. Models
+### 3.7. Models
 
 The Models for the DB, which are also used widely through out the app.
 
-### 1.3.8. Repositories
+### 3.8. Repositories
 
 The interfaces of the repositories used through out the app.
 
-## 1.4. Installation
+## 4. Installation
 
 The Common project is not a standalone project, and is simply the smallest building block of the project.
 
